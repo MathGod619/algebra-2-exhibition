@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Car value and loan calculator | Algebra 2 Exhibition</title>
+<style>
+*{box-sizing:border-box}body{margin:auto;max-width:850px;padding:24px clamp(14px,4vw,42px) 50px;background:#fbfaf5;color:#182e2a;font:16px/1.5 system-ui,sans-serif}h1,h2{font-family:Georgia,serif;line-height:1.06;font-weight:500}h1{font-size:clamp(2.4rem,6vw,4rem);margin:.3em 0}h2{font-size:1.75rem;margin:1.3em 0 .4em}header{border-bottom:2px solid #344f47;margin-bottom:18px}p{max-width:70ch}label{display:grid;gap:4px;font-weight:600;font-size:.9rem}.inputs,.readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:12px}input,select,button{font:inherit;padding:9px;border:1px solid #9ea9a2;border-radius:6px;background:#fff;color:inherit;max-width:100%}button{cursor:pointer}button:hover,button:focus-visible{outline:2px solid #376956}.readouts{margin:18px 0;background:#e7efdf;border-radius:8px;padding:16px}.readouts b{display:block;font-size:1.5rem}.graph{width:100%;height:auto;background:white;display:block;border:1px solid #cfd7d1;border-radius:8px}table{border-collapse:collapse;width:100%;font-size:.93rem}td,th{border-bottom:1px solid #ced7ce;padding:6px;text-align:right}th:first-child,td:first-child{text-align:left}th{font-weight:650}.year{display:flex;align-items:center;gap:.8em;margin:.8em 0}.year input{flex:1}.fine{color:#466157;font-size:.92rem}.actions{display:flex;flex-wrap:wrap;gap:8px}.actions button:first-child{background:#214b3e;color:white}.tablewrap{overflow:auto}[hidden]{display:none!important}.toggle{display:flex;align-items:center;gap:.45rem;margin:1em 0}
+</style>
+<header><h1>Would I still buy it?</h1><p>Compare the car’s value with what you would still owe. Enter the listing price once and try a different loan on the same car.</p></header>
+<div class="inputs"><label>Car name<input id="car" maxlength="65" placeholder="Example car"></label><label>Asking price ($)<input id="price" type="number" min="1" max="10000000" step=".01" placeholder="Enter price"></label><label>Annual rate (%)<input id="apr" type="number" min="0" max="40" step=".01" value="7"></label><label>Down payment (%)<input id="down" type="number" min="0" max="100" step=".01" value="0"></label><label>Loan length<select id="term"><option value="3">3 years</option><option value="5" selected>5 years</option><option value="7">7 years</option><option value="10">10 years</option></select></label></div>
+<p id="guide" role="status">Enter your listing price or try a worked example.</p><button id="example" type="button">Try a $20,000 example</button>
+<main id="results" hidden><h2>What does the loan cost?</h2><div class="readouts" id="summary"></div><p id="split"></p>
+<div class="tablewrap"><table><thead><tr><th>Loan term</th><th>Monthly payment</th><th>Total interest</th><th>Total loan payments</th></tr></thead><tbody id="offers"></tbody></table></div>
+<h2>If you sold the car…</h2><p>Move to a year. The gap between the red value and the blue debt is what you could keep, or would still need to pay.</p>
+<label class="year">Year <output id="when">3</output><input id="year" type="range" min="0" max="10" step="1" value="3"></label>
+<canvas class="graph" id="graph" width="1260" height="710" aria-label="Car value and loan balance over ten years" role="img"></canvas><p id="sale" aria-live="polite"></p>
+<div class="actions"><button id="savegraph">Save graph as PNG</button><button id="copydata">Copy yearly table</button></div><span id="message" role="status"></span>
+<h2>Fit the curves</h2><p>The red dots use the project’s ten-year depreciation schedule. Try fitting an exponential rule to them. The blue points are balances from the loan schedule. For a quadratic fit over the full ten years, select the ten-year loan.</p><label class="toggle"><input type="checkbox" id="fit">Overlay the fitted models</label><div id="formulas"></div>
+<div class="tablewrap"><table><thead><tr><th>Year</th><th>Car value</th><th>Loan balance</th><th>Value − debt</th></tr></thead><tbody id="years"></tbody></table></div>
+<p class="fine">Classroom estimates use a fixed annual loan rate divided by 12, monthly payments and no taxes, fees or trade-in. The price is the starting value. Sum-of-years’-digits depreciation distributes 75% of that price over ten years using weights 10, 9, …, 1. The remaining 25% is the assumed resale value in year ten. An actual offer may differ.</p></main>
+<script>
+function payment(principal,annualRate,months){if(principal===0)return 0;const r=annualRate/1200;return r===0?principal/months:principal*r/(1-(1+r)**(-months));}
+function amortize(principal,annualRate,months){const r=annualRate/1200,p=payment(principal,annualRate,months),rows=[{month:0,opening:principal,interest:0,payment:0,principal:0,balance:principal}];let balance=principal;for(let m=1;m<=120;m++){const interest=balance*r,paid=Math.min(p,balance+interest),repaid=paid-interest;rows.push({month:m,opening:balance,interest,payment:paid,principal:repaid,balance:Math.max(0,balance-repaid)});balance=rows.at(-1).balance;}return rows;}
+const $=id=>document.getElementById(id);
+const terms=[3,5,7,10], ids=['car','price','apr','down','term','year','fit'];
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(Math.abs(n)<.005?0:n);
+function schedule(price,apr,down,term){
+ const principal=price*(1-down/100),loan=amortize(principal,apr,term*12);
+ return Array.from({length:11},(_,t)=>({t,value:price*(1-.75*t*(21-t)/110),debt:t>=term?0:loan[t*12].balance}));
+}
+function models(rows,term){
+ const n=rows.length,mean=rows.reduce((s,r)=>s+Math.log(r.value),0)/n;
+ const slope=rows.reduce((s,r)=>s+(r.t-5)*(Math.log(r.value)-mean),0)/110;
+ const a=Math.exp(mean-5*slope),b=Math.exp(slope),exp=t=>a*b**t;
+ const points=rows.slice(0,term+1),mid=term/2,second=points.reduce((s,r)=>s+(r.t-mid)**2,0)/points.length;
+ let lin=0,quad=0,den=0;const avg=points.reduce((s,r)=>s+r.debt,0)/points.length;
+ for(const {t,debt} of points){const x=t-mid,z=x*x-second;lin+=x*debt;quad+=z*debt;den+=z*z;}
+ lin/=points.length*second;quad/=den;
+ const q2=quad,q1=lin-2*mid*quad,q0=avg-lin*mid+quad*(mid*mid-second);
+ const meanValue=rows.reduce((s,r)=>s+r.value,0)/n;
+ const r2=1-rows.reduce((s,r)=>s+(r.value-exp(r.t))**2,0)/rows.reduce((s,r)=>s+(r.value-meanValue)**2,0);
+ return {a,b,q2,q1,q0,r2,exp,debt:t=>q2*t*t+q1*t+q0};
+}
+let current=[];
+function draw(rows,model,year,term,show){
+ const canvas=$('graph'),g=canvas.getContext('2d'),W=canvas.width,H=canvas.height,L=120,R=W-35,T=120,B=H-88;
+ const peak=Math.max(rows[0].value,show?model.a:0)*1.06, X=t=>L+(R-L)*t/10,Y=n=>B-(B-T)*n/peak;
+ g.fillStyle='#fff';g.fillRect(0,0,W,H);g.fillStyle='#19372e';g.font='bold 32px system-ui';g.fillText(($('car').value.trim()||'My car')+' · value and loan balance',28,44,W-56);
+ g.font='21px system-ui';g.fillStyle='#ad4034';g.fillText('Red • car value',30,83);g.fillStyle='#20548a';g.fillText('Blue ■ loan balance',270,83);g.fillStyle='#384a43';g.fillText(show?'Dashed lines = fitted models':'',570,83);
+ for(let i=0;i<5;i++){let v=peak*i/4,y=Y(v);g.strokeStyle='#dae1dd';g.beginPath();g.moveTo(L,y);g.lineTo(R,y);g.stroke();g.fillStyle='#41544b';g.textAlign='right';g.fillText('$'+Math.round(v).toLocaleString('en-US'),L-10,y+6);}
+ g.textAlign='center';for(const r of rows)g.fillText(r.t,X(r.t),B+32);g.fillText('Years since purchase',W/2,H-18);
+ function curve(values,color,dash){g.setLineDash(dash?[11,8]:[]);g.lineWidth=dash?3:4;g.strokeStyle=color;g.beginPath();values.forEach(([x,y],i)=>i?g.lineTo(X(x),Y(y)):g.moveTo(X(x),Y(y)));g.stroke();g.setLineDash([]);}
+ g.save();g.beginPath();g.rect(L-8,T-8,R-L+16,B-T+16);g.clip();
+ for(const [key,color] of [['value','#ad4034'],['debt','#20548a']]){curve(rows.map(r=>[r.t,r[key]]),color,false);g.fillStyle=color;for(const r of rows){if(key==='debt')g.fillRect(X(r.t)-5,Y(r[key])-5,10,10);else{g.beginPath();g.arc(X(r.t),Y(r[key]),6,0,Math.PI*2);g.fill();}}}
+ if(show){for(const [fn,end,color] of [[model.exp,10,'#ad4034'],[model.debt,term,'#20548a']])curve(Array.from({length:end*10+1},(_,i)=>[i/10,fn(i/10)]),color,true);}
+ g.strokeStyle='#31463d';g.lineWidth=2;g.setLineDash([4,5]);g.beginPath();g.moveTo(X(year),T);g.lineTo(X(year),B);g.stroke();g.setLineDash([]);g.restore();g.textAlign='left';
+}
+function update(){
+ const invalid=['price','apr','down'].some(k=>!$(k).value||!$(k).validity.valid);
+ $('results').hidden=invalid;$('guide').textContent=invalid?'Enter a positive price, an annual rate from 0–40%, and a down payment from 0–100%.':'Changes update the same graph. Your figures stay in this browser.';
+ if(invalid)return;
+ const price=+$('price').value,apr=+$('apr').value,down=+$('down').value,term=+$('term').value,year=+$('year').value;
+ const p=price*(1-down/100),pay=payment(p,apr,term*12),interest=p*apr/1200;current=schedule(price,apr,down,term);const m=models(current,term),r=current[year],equity=r.value-r.debt;
+ $('summary').innerHTML=[['Down payment',price-p],['Amount borrowed',p],['Monthly payment',pay]].map(([l,v])=>'<div>'+l+'<b>'+money(v)+'</b></div>').join('');
+ $('split').textContent='First month: '+money(p)+' × '+String(Number((apr/100).toFixed(4)))+' ÷ 12 = '+money(interest)+' in interest. The other '+money(pay-interest)+' repays principal.';
+ $('offers').innerHTML=terms.map(t=>{let v=payment(p,apr,t*12);return '<tr><th>'+t+' years</th><td>'+money(v)+'</td><td>'+money(v*t*12-p)+'</td><td>'+money(v*t*12)+'</td></tr>';}).join('');
+ $('years').innerHTML=current.map(r=>'<tr><th>'+r.t+'</th><td>'+money(r.value)+'</td><td>'+money(r.debt)+'</td><td>'+money(r.value-r.debt)+'</td></tr>').join('');
+ $('when').textContent=year;$('sale').textContent='Year '+year+' • Value '+money(r.value)+' less debt '+money(r.debt)+'. '+(Math.abs(equity)<.005?'You would break even.':equity>=0?'You could keep '+money(equity)+' before selling fees.':'You would still owe '+money(-equity)+' after selling.');
+ const signed=n=>(n<0?' − ':' + ')+Math.abs(n).toFixed(2);
+ $('formulas').innerHTML=$('fit').checked?'<p><b>Car value</b> V(t) ≈ '+m.a.toFixed(2)+'('+m.b.toFixed(4)+')<sup>t</sup> &nbsp; R² ≈ '+m.r2.toFixed(3)+'. Each year the model keeps '+(m.b*100).toFixed(1)+'% of the previous value.</p><p><b>Debt fit</b> D(t) ≈ '+m.q2.toFixed(2)+'t²'+signed(m.q1)+'t'+signed(m.q0)+', for years 0 through '+term+'. Use the actual loan balance from the table for a sale.</p>':'';
+ draw(current,m,year,term,$('fit').checked);
+}
+const storage='exhibition-car-lab-v1';
+try{const saved=JSON.parse(localStorage.getItem(storage)||'{}');for(const id of ids)if(Object.hasOwn(saved,id)){if(id==='fit')$(id).checked=saved[id]===true;else $(id).value=saved[id];}}catch{}
+function changed(){try{localStorage.setItem(storage,JSON.stringify(Object.fromEntries(ids.map(id=>[id,id==='fit'?$(id).checked:$(id).value]))));}catch{}$('message').textContent='';update();}
+ids.forEach(id=>$(id).addEventListener('input',changed));
+$('example').onclick=()=>{if($('price').value&&$('price').value!=='20000'&&!confirm('Replace the current car figures with the worked example?'))return;Object.assign($('car'),{value:'Example car'});for(const [id,v] of Object.entries({price:20000,apr:7,down:10,term:5,year:3}))$(id).value=v;changed();};
+$('savegraph').onclick=()=>{const a=document.createElement('a');a.download='my-car-value-and-loan.png';a.href=$('graph').toDataURL('image/png');a.click();};
+$('copydata').onclick=async()=>{try{await navigator.clipboard.writeText(['Year\tCar value\tLoan balance\tValue less debt',...current.map(r=>[r.t,r.value.toFixed(2),r.debt.toFixed(2),(r.value-r.debt).toFixed(2)].join('\t'))].join('\n'));$('message').textContent='Table copied.';}catch{$('message').textContent='Select the yearly table below and copy it.';}};
+update();
+</script></html>
