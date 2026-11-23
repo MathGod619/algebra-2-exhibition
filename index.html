@@ -62,6 +62,11 @@ body:has(.walk-main){background:#faf9f5;color:#19352c}
 .job-paystub>small,.job-receipt>small{font-size:.7rem;letter-spacing:.1em;font-weight:700;color:#486249}.job-consider{font:italic 1.15rem/1.45 Georgia,serif}
 .job-actions{justify-content:flex-start}.job-current{padding:.6rem 0 1rem;justify-content:flex-start;font-size:.9rem}
 @media(max-width:650px){.job-open{grid-template-columns:2.6rem 1fr;column-gap:.6rem;row-gap:.22rem}.job-row-pay{grid-column:2;text-align:left}.job-logo{width:2.4rem;height:2.4rem}.job-row-name strong{font-size:1rem}.job-bookmark{font-size:.78rem;padding:.4rem .55rem}.jobs-controls{grid-template-columns:1fr}.jobs-mast{gap:.35rem}.job-tabs{margin-top:.7rem}}
+
+.inline-lesson,.micro,.experiment,.calc{margin:1.4rem 0;padding:1.2rem 0;border-top:1px solid #c6d5c8}.inline-lesson h3,.micro h3,.calc h3{margin:0 0 .65rem}.micro,.experiment{padding:clamp(16px,3vw,30px);border:0;background:#eaf0e4;border-radius:12px}.micro .choice-set,.experiment .choice-set{margin:.75rem 0 0}.split-bar{display:flex;border-radius:8px;overflow:hidden;margin:1em 0}.split-bar span,.split-bar b{padding:12px 4px;text-align:center;color:white}.split-bar span{background:#89502a;flex:24}.split-bar b{background:#21634c;flex:76}.payment-ticket,.cover{background:#133e33;color:#fff;padding:clamp(20px,4vw,40px);border-radius:12px}.payment-ticket>*{display:block}.payment-ticket strong,.trial-pair strong{font-size:clamp(1.4rem,4vw,2.3rem);font-variant-numeric:tabular-nums}.calc{background:#f2f0e6;padding:18px;border-radius:12px}.calc input,.calc output{display:block;width:100%;margin:5px 0}.calc output{font-weight:bold;font-size:1.3rem}.calc-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;max-width:400px}.calc-keys button,.year-picks button{background:white;color:#153d31;border:1px solid #c5d1c4;border-radius:7px;padding:.5em}.calc-keys button:nth-last-child(-n+2){grid-column:span 2}.math-composer{font:clamp(1.4rem,4vw,2.1rem) Georgia,serif;display:flex;align-items:center;gap:.15em;flex-wrap:wrap;padding:1.2em 0 .7em}.math-composer input{font:inherit;text-align:center;width:4.2em;padding:4px 0;background:#fffef8;border:0;border-bottom:2px solid #427f60;border-radius:0}.math-composer sup{align-self:flex-start;font-size:.65em;transform:translateY(-.3em)}.math-composer sup input{width:1.9em}.market-list{display:grid;gap:8px}.market-list button{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;background:#fffefa;color:inherit;border:1px solid #b5c7b7;border-radius:10px;padding:14px}.market-list button[aria-pressed=true]{border:2px solid #20513f}.market-list span>*{display:block}.trial-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.trial-pair>div{background:#fffefa;border:1px solid #c8d4c4;border-radius:10px;padding:14px;display:grid;gap:10px}.experiment small,.cover small{font-weight:700;letter-spacing:.12em}.studio nav{display:flex;gap:4px;border-bottom:1px solid #bacbbe}.studio nav button{flex:1;color:#3e5848;background:transparent;border:0;border-bottom:3px solid transparent;font-weight:650;padding:12px 4px}.studio nav button[aria-current=step]{border-color:#285e46;color:#153c2a}.studio-body{padding:20px 0}.cover{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:14px;margin-bottom:22px}.cover h2{font:clamp(2rem,6vw,4rem)/1.02 Georgia,serif;margin:.25em 0;color:#fff}.cover>*{min-width:0}.cover img{max-width:100%;max-height:210px;object-fit:contain}.cover p,.cover small{color:#d8e8d5}.studio-links,.year-picks{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.studio-links{justify-content:space-between;padding:14px 0;border-top:1px solid #c3cfc1}.year-picks button[aria-pressed=true]{background:#194e38;color:white}.evidence-slip{border-left:4px solid #4f8056;background:#eef2e6;padding:12px 16px}.print-copy{display:none}.exhibit-plot svg{width:100%;height:auto}
+@media(max-width:520px){.trial-pair{grid-template-columns:1fr}.cover{grid-template-columns:1fr}.studio nav button{font-size:.84rem}.math-composer{font-size:1.32rem}.market-list button{font-size:.9rem}}
+@media print{.print-copy{display:block!important}.studio,.micro,.calc,.experiment,.no-print{display:none!important}}
+.live-jobs article{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid #c6d5c8;padding:12px 0}.live-jobs article div{flex:1;min-width:170px}.live-jobs{margin:16px 0}.studio-body .cover .image-frame{background:transparent}
 </style></head>
 <body><a class="skip" href="#main">Skip to project</a><div id="app"></div><div id="toast" class="toast" role="status" aria-live="polite"></div><input id="import-file" type="file" accept=".json,application/json" hidden><script>const garage = [
   {id:'civic', name:'2019 Honda Civic', short:'Civic', shape:'Compact sedan', price:18500, mpg:32, insight:'How much room does a compact sedan leave in your monthly budget?'},
@@ -189,7 +194,8 @@ const localJobs=[
    work:'Coordinate venues, caterers and audiovisual equipment for conferences and workshops. Track attendance and costs after the event.',
    entry:'A related bachelor’s degree or four years of relevant experience, education or training. Some event planning experience is required.',
    question:'Would the event schedule fit the commute and routine you want?',keywords:'media music events audio production planning hospitality',
-   url:'https://employment.ucsd.edu/events-specialist-i-cancer-center-142102/job/BC9633E3EDEFF3B043FD0A8229ACBDDA'}
+   url:'https://employment.ucsd.edu/events-specialist-i-cancer-center-142102/job/BC9633E3EDEFF3B043FD0A8229ACBDDA'},{id:'teacher',title:'High School Math Teacher',employer:'San Diego Neighborhood of Schools',area:'San Diego',field:'Education',mark:'ED',tone:'events',schedule:'Full-time',salaried:true,rate:66352,high:99407.61,hours:40,weeks:52,shift:'187 workdays across 11 months.',work:'Plan math instruction, teach classes and assess student work.',entry:'Bachelor’s degree and an appropriate California teaching credential.',question:'What credential would you need before budgeting this salary?',keywords:'teacher teaching school educator high school algebra math',url:'https://www.edjoin.org/Home/JobPosting/2287758'},
+ {id:'middle-math',title:'Middle School Math Teacher',employer:'Sacred Heart Parish School',area:'Coronado',field:'Education',mark:'MS',tone:'events',schedule:'Part-time',rate:22,high:24,hours:15,weeks:43,shift:'15 hours a week over 10 months. Budget estimate uses 43 paid weeks.',work:'Teach mathematics to seventh and eighth graders.',entry:'Check the school’s posting for education and credential requirements.',question:'How would a school-year schedule affect your budget in summer?',keywords:'teacher teaching school educator math part time',url:'https://www.edjoin.org/Home/JobPosting/2279958'}
 ];
 function budgetSalary(job){return job.salaried?job.rate:Math.round(job.rate*job.hours*job.weeks*100)/100;}
 function findJobs(words,schedule,savedOnly,savedIds){
@@ -220,13 +226,14 @@ function calculate(s){const a=s.assumptions,c=s.cars[s.selected],hasIncome=Numbe
  const waitPay=waitingDown!==null?payment(c.price-waitingDown,s.rate,s.term):null;
  const loan=hasCar?amortize(principal,s.rate,s.term):null;
  const carData=hasCar?Array.from({length:61},(_,m)=>({x:m/12,value:c.price*(1-s.depreciation/100)**(m/12),debt:loan[m].balance})):[];
- const rentData=hasRent?Array.from({length:61},(_,m)=>({x:m/12,exponential:s.rent*(1+s.rentGrowth/100)**(m/12),linear:s.rent+s.rentDollars*m/12})):[];
+ const rentBase=s.rent===0&&s.rentTotal>0?s.rentTotal:s.rent;
+ const rentData=hasRent?Array.from({length:61},(_,m)=>({x:m/12,exponential:rentBase*(1+s.rentGrowth/100)**(m/12),linear:rentBase+s.rentDollars*m/12})):[];
  const savingsData=saved?saved.map((r,m)=>({x:m/12,lump:initial*(1+s.apy/100)**(m/12),deposits:r.balance})):[];
  const comparisons=hasCar?[36,60,84].map(term=>({term,down,pay:payment(principal,s.rate,term),interest:payment(principal,s.rate,term)*term-principal,total:down+a.fees+payment(principal,s.rate,term)*term})):[];
  if(hasCar){const d=c.price*.2,p=c.price-d,mp=payment(p,s.rate,60);comparisons.push({term:60,down:d,pay:mp,interest:mp*60-p,total:d+a.fees+mp*60,larger:true});}
  return {income,living,down,principal,pay,fuel,transport,remainder,upfront,cashLeft,initial,saved,waitingDown,waitPay,loan,carData,rentData,savingsData,comparisons,interest:hasCar?pay*s.term-principal:null,ready:hasIncome&&hasRent&&hasCar&&hasMpg};}
 function safeURL(s){try{const u=new URL(s);return ['http:','https:'].includes(u.protocol)?u.href:null;}catch{return null;}}
-function progress(s){const c=s.cars[s.selected];return [!!(s.career&&s.city&&s.salary>0&&s.rent>=0&&s.rent!==null&&safeURL(s.careerSource)&&safeURL(s.rentSource)&&s.notes.career.trim()),s.cars.every(c=>c.name&&c.price>0&&c.mpg>0&&safeURL(c.source))&&!!(s.notes.car.trim()||s.comparedCar===true),!!(c.price>0&&(s.notes.finance.trim()||['monthly','interest','time'].includes(s.financePriority))&&s.checks.payment),['depreciation','savings','rent'].every(k=>s.notes[k].trim()&&s.checks[k]),!!(s.decision&&s.notes.decision.trim()&&s.notes.revision.trim()&&s.baseline)];}
+function progress(s){const c=s.cars[s.selected];return [!!(s.career&&s.city&&s.salary>0&&s.propertyVerified===true&&s.rentTotal>0&&s.propertyName&&s.rent>=0&&s.rent!==null&&safeURL(s.careerSource)&&safeURL(s.rentSource)&&s.notes.career.trim()),s.cars.every(c=>c.name&&c.price>0&&c.mpg>0&&safeURL(c.source))&&!!(s.notes.car.trim()||s.comparedCar===true),!!(c.price>0&&(s.notes.finance.trim()||['monthly','interest','time'].includes(s.financePriority))&&s.checks.payment),['depreciation','savings','rent'].every(k=>s.notes[k].trim()&&s.checks[k]),!!(s.decision&&s.notes.decision.trim()&&s.notes.revision.trim()&&s.baseline)];}
 // A small arithmetic parser for student equations. No JavaScript evaluation.
 function expression(input,x){let s=input.trim().toLowerCase().replace(/[−–]/g,'-').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/\*\*/g,'^');if(s.includes('='))s=s.slice(s.indexOf('=')+1);s=s.replace(/,/g,'').replace(/\s/g,'').replace(/t/g,'x');if(s.length>180||/[^0-9x.+*/^()\-]/.test(s))throw Error('Use numbers, x or t, parentheses and arithmetic.');const tokens=s.match(/(?:\d*\.\d+|\d+\.?\d*)|[x()+*/^\-]/g)||[];let i=0;
  function atom(){let tok=tokens[i++];if(tok==='('){let v=sum();if(tokens[i++]!==')')throw Error('Close each parenthesis.');return v;}if(tok==='x')return x;if(tok!==undefined&&/^\d*\.?\d/.test(tok))return Number(tok);throw Error('Check the equation format.');}
@@ -238,7 +245,7 @@ function expression(input,x){let s=input.trim().toLowerCase().replace(/[−–]/
 function checkEquation(text,initial,factor){if(!Number.isFinite(initial)||!Number.isFinite(factor))return {ok:false,message:'Add the research numbers first.'};try{const ok=[0,1,2,3,5].every(x=>Math.abs(expression(text,x)-initial*factor**x)<=Math.max(.03,Math.abs(initial*factor**x)*1e-5));return {ok,message:ok?'Your model matches the starting value and percentage change.':'Check the starting value and growth or decay factor. Use x or t for years.'};}catch(e){return {ok:false,message:e.message};}}
 function restore(raw){if(!raw||raw.version!==VERSION)throw Error('This file is not a Life & Car project.');const base=fresh();const s={...base,...raw,assumptions:{...base.assumptions,...raw.assumptions},notes:{...base.notes,...raw.notes},equations:{...base.equations,...raw.equations},checks:{...base.checks,...raw.checks}};if(!Array.isArray(s.cars)||s.cars.length!==2)throw Error('The two car records are missing.');s.cars=s.cars.map(c=>({...base.cars[0],...c}));if(![0,1].includes(s.selected)||![36,60,84].includes(s.term))throw Error('Invalid car or term selection.');for(const [k,v]of Object.entries(s.assumptions)){if(!Number.isFinite(v)||v<0||v>1e8)throw Error('Invalid cost or assumption.');}if(s.assumptions.deductions>80)throw Error('Invalid deduction estimate.');for(const k of ['rate','down','depreciation','apy','rentGrowth','rentDollars'])if(!Number.isFinite(s[k])||s[k]<0||s[k]>{rate:30,down:100,depreciation:99,apy:30,rentGrowth:30,rentDollars:10000}[k])throw Error('Invalid model rate.');for(const k of ['salary','rent'])if(s[k]!==null&&(!Number.isFinite(s[k])||s[k]<0))throw Error('Invalid research value.');for(const c of s.cars)for(const k of ['price','mpg'])if(c[k]!==null&&(!Number.isFinite(c[k])||c[k]<0))throw Error('Invalid car number.');for(const obj of [s,s.notes,s.equations,...s.cars])for(const [key,v] of Object.entries(obj))if(key!=='photo'&&typeof v==='string'&&v.length>20000)throw Error('A text field is too long.');for(const c of s.cars){if(c.photo&&!validPhoto(c.photo))throw Error('Invalid listing photo.');}
 for(const obj of [s.notes,s.equations])if(Object.values(obj).some(v=>typeof v!=='string'))throw Error('Invalid project writing.');
-if(s.rentMode!==undefined&&!['1','2','3','share'].includes(s.rentMode))throw Error('Invalid household choice.');
+if(s.rentMode!==undefined&&!['1','2','3','family','share'].includes(s.rentMode))throw Error('Invalid household choice.');
 for(const k of ['rentTotal','manualRent'])if(s[k]!=null&&(!Number.isFinite(s[k])||s[k]<0))throw Error('Invalid housing amount.');
 for(const pick of [s.firstDraft,s.firstPick])if(pick&&(typeof pick.name!=='string'||typeof pick.reason!=='string'||pick.name.length>20000||pick.reason.length>20000||(pick.photo&&!validPhoto(pick.photo))))throw Error('Invalid first car record.');
 if(s.saleCall&&(!['cash','even','owe'].includes(s.saleCall.guess)||![36,60,84].includes(s.saleCall.term)||!Number.isFinite(s.saleCall.net)))throw Error('Invalid year-three prediction.');
@@ -247,8 +254,10 @@ return s;}
 
 
 
-const KEY='life-car-project-v1',app=document.querySelector('#app');let state=fresh(),page=location.hash.slice(1)||'life',modelTab='depreciation',withDeposits=false,saveError=false,feedback={},toastTimer;
-try{const saved=localStorage.getItem(KEY);if(saved)state=restore(JSON.parse(saved));}catch{saveError=true;}
+const isolatedDemo=typeof location.search==='string'&&/(?:^|[?&])demo=1(?:&|$)/.test(location.search);
+const projectStore=isolatedDemo?(typeof sessionStorage!=='undefined'?sessionStorage:null):localStorage;
+const KEY=isolatedDemo?'life-car-exhibition-demo':'life-car-project-v1',app=document.querySelector('#app');let state=fresh(),page=location.hash.slice(1)||'life',modelTab='depreciation',withDeposits=false,saveError=false,feedback={},toastTimer;
+try{const saved=projectStore?.getItem(KEY);if(saved)state=restore(JSON.parse(saved));else if(isolatedDemo){state=example();Object.assign(state,{name:'Exhibition demo',decision:'wait',exhibitModel:'depreciation',propertyName:'Example apartment',rentTotal:2500,rentMode:'2'});state.notes.decision='I would save first so I could borrow less for the Civic.';}}catch{saveError=true;}
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=(x,d=0)=>x===null||!Number.isFinite(x)?'—':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:d,minimumFractionDigits:d}).format(Math.abs(x)<.00001?0:x);
 const num=x=>x===null||!Number.isFinite(x)?'—':new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(x);
@@ -383,16 +392,16 @@ function note(key,label,placeholder){return `<div class="field row-spaced"><labe
 function value(name,amount,dec=0){return `<span data-value="${name}" data-dec="${dec}">${money(amount,dec)}</span>`;}
 function range(label,key,min,max,step,suffix){return `<div class="range-control"><div class="range-label"><label for="range-${key}">${label}</label><output for="range-${key}" data-range-output="${key}">${state[key]}${suffix}</output></div><input id="range-${key}" data-field="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${state[key]}" aria-label="${label}"></div>`;}
 function comparisonTable(c){return `<table><thead><tr><th>Loan</th><th>Down</th><th>Monthly</th><th>Interest</th><th>Purchase total</th></tr></thead><tbody>${c.comparisons.length?c.comparisons.map(r=>`<tr class="${r.term===state.term&&!r.larger?'selected-row':''}"><td>${r.term/12} years${r.larger?' · 20% down':''}</td><td>${money(r.down)}</td><td>${money(r.pay,2)}</td><td>${money(r.interest)}</td><td>${money(r.total)}</td></tr>`).join(''):'<tr><td colspan="5">Add a selected car price to compare financing.</td></tr>'}</tbody></table>`;}
-function chart(data,series,label){if(!data.length)return `<div class="empty-graph">Add the research numbers to see this model.</div>`;const W=680,H=270,L=67,R=18,T=20,B=43;const all=data.flatMap(d=>series.map(s=>d[s.key])).filter(Number.isFinite);const max=Math.max(...all,1)*1.12;const x=x=>L+x/5*(W-L-R),y=v=>H-B-v/max*(H-T-B);let svg=`<svg class="graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}"><title>${esc(label)}</title>`;for(let n=0;n<5;n++){const v=max*n/4,Y=y(v);svg+=`<line x1="${L}" y1="${Y}" x2="${W-R}" y2="${Y}" stroke="#e7edf5"/><text x="${L-9}" y="${Y+5}" text-anchor="end">${v>=1000?'$'+num(v/1000)+'k':'$'+Math.round(v)}</text>`;}for(let n=0;n<=5;n++)svg+=`<text x="${x(n)}" y="${H-19}" text-anchor="middle">${n}</text>`;svg+=`<text x="${L}" y="12" class="axis">Dollars</text><text x="${W-R}" y="${H-2}" text-anchor="end" class="axis">Years after starting</text>`;for(const s of series){let points=data.map(d=>`${x(d.x).toFixed(2)},${y(d[s.key]).toFixed(2)}`).join(' ');if(s.fill)svg+=`<polygon points="${x(0)},${y(0)} ${points} ${x(5)},${y(0)}" fill="${s.color}" opacity=".06"/>`;svg+=`<polyline points="${points}" fill="none" stroke="${s.color}" stroke-width="3" ${s.dash?'stroke-dasharray="7 5"':''} stroke-linejoin="round"/>`;}if(['savings','rent','depreciation'].includes(page)){const d=data[exploreYear*12];if(d){svg+=`<line x1="${x(exploreYear)}" y1="${T}" x2="${x(exploreYear)}" y2="${H-B}" stroke="#64746d" stroke-dasharray="2 4"/>${series.map(s=>`<circle cx="${x(exploreYear)}" cy="${y(d[s.key])}" r="5" fill="${s.color}" stroke="white" stroke-width="2"/>`).join('')}`;}}return svg+`</svg><div class="legend">${series.map(s=>`<span><i class="swatch" style="background:${s.color}"></i>${s.name}</span>`).join('')}</div>`;}
-function graphFor(key,c=calculate(state)){if(key==='depreciation')return chart(c.carData,[{key:'value',name:'Car value',color:'#2455de',fill:true},{key:'debt',name:'Remaining debt',color:'#b4712a',dash:true}],'Car value and remaining loan debt over five years');if(key==='savings')return chart(c.savingsData,[{key:'lump',name:'Starting savings with interest',color:'#167b61',fill:true},...(withDeposits?[{key:'deposits',name:'With monthly deposits',color:'#2455de',dash:true}]:[])],'Savings over five years');return chart(c.rentData,[{key:'exponential',name:'Fixed percentage increase',color:'#2455de',fill:true},{key:'linear',name:'Fixed dollar increase',color:'#b4712a',dash:true}],'Monthly rent under percentage and dollar increase models');}
-function equationBlock(key,formula){return `<div class="formula">${formula}</div><label class="label" for="equation-${key}">Write your equation using your numbers</label><span class="help">Use t for years. Type ^ for an exponent, as in (1.05)^t.</span><div class="equation-row"><input id="equation-${key}" class="equation-input" data-field="equations.${key}" value="${esc(state.equations[key])}" placeholder="Write your model…"><button class="btn quiet small" data-check="${key}">Check model</button></div><p class="feedback ${state.checks[key]?'success':''}" data-feedback="${key}">${esc(feedback[key]|| (state.checks[key]?'Your model was checked.':''))}</p>`;}
+function chart(data,series,label){if(!data.length)return `<div class="empty-graph">Add the research numbers to see this model.</div>`;const W=680,H=270,L=67,R=18,T=20,B=43;const all=data.flatMap(d=>series.map(s=>d[s.key])).filter(Number.isFinite);const max=Math.max(...all,1)*1.12;const x=x=>L+x/5*(W-L-R),y=v=>H-B-v/max*(H-T-B);let svg=`<svg class="graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}"><title>${esc(label)}</title>`;for(let n=0;n<5;n++){const v=max*n/4,Y=y(v);svg+=`<line x1="${L}" y1="${Y}" x2="${W-R}" y2="${Y}" stroke="#e7edf5"/><text x="${L-9}" y="${Y+5}" text-anchor="end">${v>=1000?'$'+num(v/1000)+'k':'$'+Math.round(v)}</text>`;}for(let n=0;n<=5;n++)svg+=`<text x="${x(n)}" y="${H-19}" text-anchor="middle">${n}</text>`;svg+=`<text x="${L}" y="12" class="axis">Dollars</text><text x="${W-R}" y="${H-2}" text-anchor="end" class="axis">Years after starting</text>`;for(const s of series){let points=data.map(d=>`${x(d.x).toFixed(2)},${y(d[s.key]).toFixed(2)}`).join(' ');if(s.fill)svg+=`<polygon points="${x(0)},${y(0)} ${points} ${x(5)},${y(0)}" fill="${s.color}" opacity=".06"/>`;svg+=`<polyline points="${points}" fill="none" stroke="${s.color}" stroke-width="3" ${s.dash?'stroke-dasharray="7 5"':''} stroke-linejoin="round"/>`;}if(['savings','rent','depreciation','report'].includes(page)){const marker=page==='report'?exhibitYear:exploreYear;const d=data[marker*12];if(d){svg+=`<line x1="${x(marker)}" y1="${T}" x2="${x(marker)}" y2="${H-B}" stroke="#64746d" stroke-dasharray="2 4"/>${series.map(s=>`<circle cx="${x(marker)}" cy="${y(d[s.key])}" r="5" fill="${s.color}" stroke="white" stroke-width="2"/>`).join('')}`;}}return svg+`</svg><div class="legend">${series.map(s=>`<span><i class="swatch" style="background:${s.color}"></i>${s.name}</span>`).join('')}</div>`;}
+function graphFor(key,c=calculate(state)){if(key==='depreciation')return chart(c.carData,[{key:'value',name:'Car value',color:'#2455de',fill:true},{key:'debt',name:'Remaining debt',color:'#b4712a',dash:true}],'Car value and remaining loan debt over five years');if(key==='savings')return chart(c.savingsData,[{key:'lump',name:'Starting savings with interest',color:'#167b61',fill:true},...(withDeposits||page==='report'||page==='present'?[{key:'deposits',name:'With monthly deposits',color:'#2455de',dash:true}]:[])],'Savings over five years');return chart(c.rentData,[{key:'exponential',name:'Fixed percentage increase',color:'#2455de',fill:true},{key:'linear',name:'Fixed dollar increase',color:'#b4712a',dash:true}],'Monthly rent under percentage and dollar increase models');}
+
 function yearTable(key,c){if(!c.carData.length&&key==='depreciation')return '<p>Add a car price first.</p>';return `<table><thead><tr><th>Year</th><th>Car value</th><th>Debt</th><th>Equity</th></tr></thead><tbody>${c.carData.filter((_,i)=>i%12===0).map(d=>`<tr><td>${d.x}</td><td>${money(d.value,2)}</td><td>${money(d.debt,2)}</td><td>${money(d.value-d.debt,2)}</td></tr>`).join('')}</tbody></table>`;}
 function revisionTable(c){const b=state.baseline;return `<table><thead><tr><th>Measure</th><th>Before</th><th>Current</th></tr></thead><tbody><tr><td>Selected car</td><td>${esc(b?.car||'Not saved yet')}</td><td>${esc(state.cars[state.selected].name||'Choose a car')}</td></tr><tr><td>Left each month</td><td>${money(b?.remainder??null)}</td><td>${money(c.remainder)}</td></tr><tr><td>Cash after setup</td><td>${money(b?.cashLeft??null)}</td><td>${money(c.cashLeft)}</td></tr><tr><td>Loan term</td><td>${b?b.term/12+' years':'—'}</td><td>${state.term/12} years</td></tr></tbody></table>`;}
 function reportPage(){const c=calculate(state),p=progress(state),complete=p.every(Boolean),a=state.assumptions;return `<div class="report"><div class="toolbar"><button class="btn" data-action="print">Print or save PDF</button><button class="btn secondary" data-action="export">Download project backup</button><button class="btn secondary" data-action="import">Open project backup</button></div>${!complete?`<div class="report-warning">Draft report · ${p.filter(Boolean).length} of 5 project sections complete. You can print a draft; unfinished work is labeled below.</div>`:''}<div class="report-top"><div class="eyebrow">Algebra 2 · Exhibition project</div><h1>My life. My car. My decision.</h1><p>${esc(state.name||'Your name')} ${state.city?'· '+esc(state.city):''}</p><div class="no-print">${field('Name for your report','name',{placeholder:'First name or project name'})}</div></div>
-${state.cars[state.selected].name?`<figure class="report-photo">${portrait(state.cars[state.selected])}<figcaption><strong>${esc(state.cars[state.selected].name)}</strong> ${creditLine(state.cars[state.selected])}</figcaption></figure>`:''}<section class="report-section"><h2>The life I researched</h2>${jobReport()}<table><tbody><tr><td>Career</td><td>${esc(state.career||'Not entered')}</td></tr><tr><td>Annual gross pay</td><td>${money(state.salary)}</td></tr><tr><td>Monthly take-home estimate</td><td>${money(c.income)}</td></tr>${state.rentMode&&homes.some(([k])=>k===state.rentMode)?'<tr><td>Living arrangement</td><td>'+esc(homes.find(([k])=>k===state.rentMode)[1])+'</td></tr>':''}<tr><td>Monthly rent share</td><td>${money(state.rent)}</td></tr><tr><td>Selected car</td><td>${esc(state.cars[state.selected].name||'Not selected')}</td></tr><tr><td>Car price</td><td>${money(state.cars[state.selected].price)}</td></tr></tbody></table><p class="quote">${esc(state.notes.career||'Career and housing explanation not entered.')}</p><p class="quote">${esc(state.notes.car||(state.comparedCar?'I selected '+state.cars[state.selected].name+' after comparing the two listings.':'Car comparison in progress.'))}</p></section>
+${state.cars[state.selected].name?`<figure class="report-photo">${portrait(state.cars[state.selected])}<figcaption><strong>${esc(state.cars[state.selected].name)}</strong> ${creditLine(state.cars[state.selected])}</figcaption></figure>`:''}<section class="report-section"><h2>The life I researched</h2>${jobReport()}<table><tbody><tr><td>Career</td><td>${esc(state.career||'Not entered')}</td></tr><tr><td>Annual gross pay</td><td>${money(state.salary)}</td></tr><tr><td>Monthly take-home estimate</td><td>${money(c.income)}</td></tr>${state.rentMode&&homes.some(([k])=>k===state.rentMode)?'<tr><td>Living arrangement</td><td>'+esc(homes.find(([k])=>k===state.rentMode)[1])+'</td></tr>':''}<tr><td>Researched property</td><td>${esc(state.propertyName||'Not recorded')} · ${money(state.rentTotal)} advertised monthly</td></tr><tr><td>Monthly rent share</td><td>${money(state.rent)}</td></tr><tr><td>Selected car</td><td>${esc(state.cars[state.selected].name||'Not selected')}</td></tr><tr><td>Car price</td><td>${money(state.cars[state.selected].price)}</td></tr></tbody></table><p class="quote">${esc(state.notes.career||'Career and housing explanation not entered.')}</p><p class="quote">${esc(state.notes.car||(state.comparedCar?'I selected '+state.cars[state.selected].name+' after comparing the two listings.':'Car comparison in progress.'))}</p></section>
 <section class="report-section"><h2>My affordability analysis</h2><table><tbody>${[['Take-home pay',c.income],['Living expenses',c.living],['Transportation including loan',c.transport],['Planned savings',a.deposit],['Money left per month',c.remainder],['Cash after setup and emergency reserve',c.cashLeft]].map(([k,v])=>`<tr><td>${k}</td><td>${money(v,2)}</td></tr>`).join('')}</tbody></table><p class="meta">Loan: ${state.term/12} years, ${state.rate}% annual interest, ${state.down}% down. Monthly payment ${money(c.pay,2)}; total interest ${money(c.interest,2)}.</p><p class="quote">${Object.hasOwn(financingGoals,state.financePriority)?'<strong>My priority: '+esc(financingGoals[state.financePriority])+'</strong><br>'+esc(loanEvidence(c))+' ':''}${esc(state.notes.finance||(Object.hasOwn(financingGoals,state.financePriority)?'':'Financing explanation not entered.'))}</p><p class="meta">First payment calculation: ${state.checks.payment?'checked':'not checked'}.</p></section>
-<section class="report-section"><h2>My exponential models</h2><div class="graphs">${[['depreciation','Car depreciation'],['savings','Compound savings'],['rent','Future monthly rent']].map(([key,label])=>`<article class="graph-card"><h3>${label}</h3>${graphFor(key,c)}<p class="student-equation">My equation: ${esc(state.equations[key]||'Not entered')}</p><p class="meta">${state.checks[key]?'Model checked':'Model not checked'}</p><p class="quote">${esc(state.notes[key]||'Interpretation not entered.')}</p></article>`).join('')}</div></section>
-<section class="report-section"><h2>My final decision</h2>${state.firstPick?`<p>My first pick was <strong>${esc(state.firstPick.name)}</strong>. “${esc(state.firstPick.reason)}”</p>`:''}${state.saleCall?`<p>My original year-three prediction: ${esc(saleLabels[state.saleCall.guess])}. My estimated cash after payoff was ${money(state.saleCall.net,2)}.</p>`:''}<p><strong>${{buy:'Buy now',wait:'Save first',revise:'Revise further'}[state.decision]||'Recommendation not selected'}</strong></p>${revisionTable(c)}<p class="quote">${esc(state.notes.revision||'Revision explanation not entered.')}</p><p class="quote">${esc(state.notes.decision||'Final recommendation not entered.')}</p></section>
+<section class="report-section"><h2>My exponential models</h2><div class="graphs">${[['depreciation','Car depreciation'],['savings','Compound savings'],['rent','Future monthly rent']].map(([key,label])=>`<article class="graph-card"><h3>${label}</h3>${graphFor(key,c)}<p class="student-equation">My equation: ${displayEquation(key)}</p><p class="meta">${state.checks[key]?'Model checked':'Model not checked'}</p><p class="quote">${esc(state.notes[key]||'Interpretation not entered.')}</p></article>`).join('')}</div></section>
+<section class="report-section"><h2>My final decision</h2>${pinnedEvidence()}${state.firstPick?`<p>My first pick was <strong>${esc(state.firstPick.name)}</strong>. “${esc(state.firstPick.reason)}”</p>`:''}${state.saleCall?`<p>My original year-three prediction: ${esc(saleLabels[state.saleCall.guess])}. My estimated cash after payoff was ${money(state.saleCall.net,2)}.</p>`:''}<p><strong>${{buy:'Buy now',wait:'Save first',revise:'Revise further'}[state.decision]||'Recommendation not selected'}</strong></p>${revisionTable(c)}<p class="quote">${esc(state.notes.revision||'Revision explanation not entered.')}</p><p class="quote">${esc(state.notes.decision||'Final recommendation not entered.')}</p></section>
 <section class="report-section"><h2>Research and assumptions</h2>${[['Career',state.careerSource,state.careerDate],['Housing',state.rentSource,state.rentDate],...state.cars.map((car,i)=>['Car '+(i+1),car.source,car.date])].map(([label,url,date])=>`<p class="research-url"><strong>${label}:</strong> ${safeURL(url)?`<a href="${esc(safeURL(url))}" target="_blank" rel="noopener noreferrer">${esc(url)}</a>${date?' · accessed '+esc(date):''}`:'Source not added'}</p>`).join('')}<p class="meta">Classroom assumptions unless replaced with documented research: payroll deductions ${a.deductions}%; depreciation ${state.depreciation}% a year; savings APY ${state.apy}%; rent growth ${state.rentGrowth}% or $${state.rentDollars} annual increase in monthly rent. Starting cash ${money(a.cash)}, housing setup ${money(a.moving)}, emergency reserve ${money(a.reserve)}, purchase tax and fees ${money(a.fees)}.</p><details class="no-print"><summary>Review all cost assumptions</summary>${assumptionList()}</details><p class="meta">The waiting comparison holds price and loan terms fixed and excludes transportation costs while waiting. Savings APY is held constant; fees and taxes on savings are excluded. Loan payments occur monthly and use annual rate divided by 12. Financial reference: <a href="https://www.consumerfinance.gov/ask-cfpb/how-do-i-compare-auto-loan-offers-what-should-i-look-at-besides-the-monthly-payment-en-753/" target="_blank" rel="noopener noreferrer">CFPB loan comparison</a>.</p></section></div>`;}
 function assumptionList(){return `<table><tbody>${Object.entries(state.assumptions).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${num(v)}</td></tr>`).join('')}</tbody></table>`;}
 function galleryCredits(){return '<details class="gallery-credits"><summary>Photo credits</summary>'+garage.map(car=>'<p>'+esc(car.name)+' · '+creditLine(car)+'</p>').join('')+'</details>';}
@@ -423,12 +432,20 @@ const listingFacts=[
  ['$16,999','That’s the advertised vehicle price. Use it as the starting value for depreciation. Budget separately for fees and taxes.'],
  ['$19,125.60','This estimate includes taxes and fees. Using it for the car value would make those costs depreciate with the vehicle.']
 ];
-function listingReader(){
- const answer=state.listingRead;
- return `<fieldset class="forecast choice-set"><legend>Read a real listing</legend><p>A San Diego listing for a <strong>2015 Honda Civic EX</strong> shows three dollar amounts. Which would you enter as the car’s starting price?</p>
- <div class="choice-buttons">${listingFacts.map(([label],i)=>`<button data-ad="${i}" aria-pressed="${answer===i}">${label}</button>`).join('')}</div>
- ${listingFacts[answer]?`<p aria-live="polite">${listingFacts[answer][1]}</p>`:''}
- <small>Classroom snapshot, accessed November 23, 2026. <a href="https://autobypayment.com/Used-CA-SanDiego/Below-350" target="_blank" rel="noopener noreferrer">AutoByPayment listing and loan estimate</a></small></fieldset>`;
+const civicSnapshot={name:'2015 Honda Civic EX',price:16999,source:'https://autobypayment.com/Used-CA-SanDiego/Below-350'};
+function activeAd(slot){
+ const car=state.cars[slot];
+ if(!car.name||car.name===civicSnapshot.name&&(!car.price||car.price===16999)&&(!car.source||car.source===civicSnapshot.source))return {...civicSnapshot,example:true};
+ return car;
+}
+function listingReader(slot=0){
+ const ad=activeAd(slot),car=state.cars[slot],answer=car.adAnswer;
+ if(!(ad.price>0))return '<h3>'+esc(ad.name)+'</h3><p>Enter the asking price from this car’s listing to compare it with a payment.</p>';
+ const choices=ad.example?listingFacts.map(([label])=>label):[money(payment(ad.price*.9,7,60),2)+' per month',money(ad.price,2),money(ad.price*1.10,2)+' with fees'];
+ return `<fieldset class="forecast choice-set"><legend>Read the price tag</legend><p>Which amount is the starting value of the <strong>${esc(ad.name)}</strong>?</p>
+ <div class="choice-buttons">${choices.map((label,i)=>`<button data-ad="${i}" aria-pressed="${answer===i}">${label}</button>`).join('')}</div>
+ ${Number.isInteger(answer)?`<p role="status">${['This is one loan payment. The starting value is the asking price.', 'Asking price entered in your project.', 'This includes taxes and fees. Use the asking price to model the vehicle itself.'][answer]}</p>${answer!==1?'<button class="text-action" data-ad="1">Use the asking price</button>':''}`:''}
+ <small>${ad.example?'Classroom snapshot · <a href="'+ad.source+'" target="_blank" rel="noopener">View the Civic listing source</a>':'Payment and fees are classroom estimates for comparison.'}</small></fieldset>`;
 }
 const saleLabels={cash:'Walk away with cash',even:'Break even',owe:'Still owe money'};
 function saleMath(s,term=s.term){
@@ -467,7 +484,7 @@ function presentation(){
  return `<article class="exhibition"><button class="text-action" data-nav="report">Back to my report</button><div class="eyebrow">Algebra 2 exhibition · ${esc(state.name||'My project')}</div><h1>Would I still buy it?</h1>
  <div class="exhibit-pair"><section><small>My first pick</small>${picture(first)}<h2>${esc(first?.name||'First pick not recorded')}</h2>${first?`<p>“${esc(first.reason)}”</p>`:''}</section>
  <section><small>My researched choice</small>${picture(car)}<h2>${esc(car.name||'Choose a car')}</h2><p>${esc(({buy:'Buy now',wait:'Save first',revise:'Revise further'})[state.decision]||'Recommendation in progress')}</p></section></div>
- ${state.notes.decision?`<blockquote>${esc(state.notes.decision)}</blockquote>`:''}
+ ${pinnedEvidence()}${state.notes.decision?`<blockquote>${esc(state.notes.decision)}</blockquote>`:''}
  <section class="visitor-lab"><h2>${m.question}</h2><p>Presenter: predict what will change. Visitor: move the slider, then ask whether the recommendation still holds.</p>
  <label for="visitor-rate">${m.axis} <output data-visitor-rate>${num(visitorRate??state[m.field])}%</output></label>
  <input id="visitor-rate" data-visitor type="range" min="0" max="${Math.max(m.max,state[m.field])}" step=".25" value="${visitorRate??state[m.field]}">
@@ -475,8 +492,34 @@ function presentation(){
  ${state.notes[key]?`<p><strong>My interpretation</strong> · ${esc(state.notes[key])}</p>`:''}
  <button class="text-action" data-reset-visitor>Restore my scenario</button></section></article>`;
 }
-function presentationLaunch(){
- const key=exhibitKey();return `<section class="presentation-launch"><h2>Present to a visitor</h2><label class="field">Choose the graph you want to defend<select data-evidence>${Object.entries(exhibits).map(([k,m])=>`<option value="${k}" ${key===k?'selected':''}>${m.label}</option>`).join('')}</select></label><button data-nav="present" class="btn lead">Open presentation mode</button></section>`;
+const exhibitSteps=['My decision','Pin evidence','Rehearse'];
+let exhibitStep=0,previewReport=false,rehearsalAnswer=null,exhibitYear=3;
+const verdicts={buy:'Buy now',wait:'Save first',revise:'Revise my plan'};
+const visitorPrompts={
+ depreciation:{q:'Which number tells me what you would leave with after selling?',a:['The original asking price','Resale value minus remaining debt','The monthly payment'],correct:1,why:'You sell the car, then pay off the lender. A negative difference means you still owe money.'},
+ savings:{q:'Where did the growth on the interest-only curve come from?',a:['New monthly deposits','Paying less rent','Interest on the balance, including earlier interest'],correct:2,why:'Interest can earn more interest. Deposits are separate contributions from your paycheck.'},
+ rent:{q:'Why can the dollar increase change from one year to the next?',a:['The percentage applies to the new rent each year','The landlord adds the same dollars every year','The percentage rate doubles'],correct:0,why:'Each percentage increase uses the latest rent as its starting amount.'}
+};
+function evidencePoint(key,year){
+ const c=calculate(state),i=year*12;
+ if(key==='depreciation'&&c.carData[i]){const r=c.carData[i];return [['Resale value',r.value],['Debt left',r.debt]];}
+ if(key==='savings'&&c.savingsData[i]){const r=c.savingsData[i];return [['Interest alone',r.lump],['With deposits',r.deposits]];}
+ if(key==='rent'&&c.rentData[i]){const r=c.rentData[i];return [['Percentage increase',r.exponential],['Flat increase',r.linear]];}
+ return [];
+}
+function pinnedEvidence(){
+ const pin=state.exhibitPin;
+ if(!pin||!Object.hasOwn(exhibits,pin.model)||!Number.isInteger(pin.year)||pin.year<0||pin.year>5)return '';
+ const values=evidencePoint(pin.model,pin.year);if(!values.length)return '';
+ return `<p class="evidence-slip"><b>${exhibits[pin.model].label} · Year ${pin.year}</b><br>${values.map(([l,n])=>l+' '+money(n,2)).join(' · ')}</p>`;
+}
+function exhibitStudio(){
+ const key=exhibitKey(),car=state.cars[state.selected],c=calculate(state),point=evidencePoint(key,exhibitYear),prompt=visitorPrompts[key];
+ let body='';
+ if(exhibitStep===0)body=`<div class="cover"><div><small>YOUR EXHIBITION</small><h2>Would you still buy it?</h2><p>${esc(car.name||'Your researched car')}${state.city?' · '+esc(state.city):''}</p></div>${car.name?picture(car):''}</div><h3>What would you tell a visitor?</h3><div class="choice-buttons">${Object.entries(verdicts).map(([id,v])=>`<button data-verdict="${id}" aria-pressed="${state.decision===id}">${v}</button>`).join('')}</div>${state.notes.decision?'<blockquote>'+esc(state.notes.decision)+'</blockquote>':''}<p>After your monthly expenses, your plan leaves <b>${money(c.remainder,2)}</b>. Pick the graph that best explains your choice.</p><button class="btn lead" data-exhibit-step="1">Choose my evidence →</button>`;
+ if(exhibitStep===1)body=`<h2>Put a number behind your decision.</h2><p>Pick a graph, then tap the year you want your visitor to see.</p><div class="choice-buttons">${Object.entries(exhibits).map(([k,m])=>`<button data-exhibit-graph="${k}" aria-pressed="${key===k}">${m.label}</button>`).join('')}</div>${point.length?`<div class="exhibit-plot">${graphFor(key,c)}</div><div class="year-picks">${[0,1,2,3,4,5].map(y=>`<button data-exhibit-year="${y}" aria-pressed="${exhibitYear===y}">Year ${y}</button>`).join('')}</div><div class="trial-pair">${point.map(([label,n])=>`<div><b>${label}</b><strong>${money(n,2)}</strong></div>`).join('')}</div><button class="btn lead" data-pin>Pin year ${exhibitYear} and rehearse →</button>`:`<p>Add starting numbers to use this graph. <button class="text-action" data-nav="${key==='rent'?'housing':'cars'}">Go to the research step</button></p>`}`;
+ if(exhibitStep===2)body=`<h2>Take a visitor question.</h2>${pinnedEvidence()||'<button class="text-action" data-exhibit-step="1">Choose a graph point first</button>'}<fieldset class="choice-set"><legend>${prompt.q}</legend><div class="choice-buttons">${prompt.a.map((v,i)=>`<button data-rehearse="${i}" aria-pressed="${rehearsalAnswer===i}">${v}</button>`).join('')}</div></fieldset>${rehearsalAnswer!==null?'<p role="status">'+(rehearsalAnswer===prompt.correct?'✓ Yes. ':'Try again. ')+prompt.why+'</p>':''}${pinnedEvidence()&&rehearsalAnswer===prompt.correct?'<p><b>Say it out loud.</b> “I would ___ because in year ___ my graph shows ___. If ___ changed, I would reconsider.”</p>':''}<button data-nav="present" class="btn lead">Present to a visitor →</button>`;
+ return `<section class="studio no-print"><nav aria-label="Exhibition rehearsal">${exhibitSteps.map((v,i)=>`<button data-exhibit-step="${i}" aria-current="${exhibitStep===i?'step':'false'}">${i+1} · ${v}</button>`).join('')}</nav><div class="studio-body">${body}</div><div class="studio-links"><button class="text-action" data-preview-report aria-expanded="${previewReport}">${previewReport?'Close written report':'View written report'}</button><button class="text-action" data-action="print">Print / PDF</button><button class="text-action" data-action="export">Save backup</button></div></section>`;
 }
 
 const tasks = [
@@ -493,14 +536,14 @@ const tasks = [
   ['rent',3,'How fast could your rent rise?','Move to year 5. Compare the rent under a fixed percentage increase and a fixed dollar increase. Which takes more of your paycheck?'],
   ['revision',3,'Change one part of your plan','Save today’s budget as your starting point. Try a different car or loan term here and look at what changes. Your final report will flag any affected math checks to revisit.'],
   ['decision',3,'Make your recommendation','Would you still buy your day-one pick? Decide whether to buy now, save first or change cars. Use a budget result and a prediction to defend your choice.'],
-  ['report',3,'Prepare your exhibition','Review your evidence, add your name, and print or save a PDF for your exhibition.']
+  ['report',3,'Prepare your exhibition','Make your case in three moves. Choose your decision, pin a point on your graph, and try a visitor’s question.']
 ];
 const aliases={models:'depreciation'};
 const taskById=id=>tasks.find(t=>t[0]===id);
 const route=id=>id==='present'||id==='welcome'||taskById(id)?id:Object.hasOwn(aliases,id)?aliases[id]:'welcome';
 page=route(location.hash.slice(1)||state.currentTask||(state.firstDraft?'dream':state.savedAt?'life':'welcome'));
 let reminder=false;
-function hint(title,body){return `<details class="coach"><summary>${title}</summary><div>${body}</div></details>`;}
+function hint(title,body){return `<section class="inline-lesson"><h3>${title}</h3>${body}</section>`;}
 function numberField(label,key,options={}){return field(label,key,{type:'number',prefix:true,...options});}
 function sourceField(label,key){return field(label,key,{type:'url',wide:true,placeholder:'Paste the listing link'});}
 function caption(title,description){return `<div class="readout"><span>${title}</span><strong>${description}</strong></div>`;}
@@ -512,11 +555,12 @@ function missing(id){
  const s=state, notes=s.notes;
  if(id==='dream')return s.firstPick?'':!s.firstDraft?.name?.trim()?'Pick a car or enter your own.':!s.firstDraft.reason?.trim()?'Finish the sentence about why you want this car.':'';
  if(id==='life')return !String(s.career||'').trim()?'Choose a listing and use its pay, or add your own job.':!String(s.city||'').trim()?'Add the city where this job is based.':!(s.salary>0)?'Enter annual pay in dollars.':!safeURL(s.careerSource)?'Paste the full web address for the pay you found.':'';
- if(id==='housing')return s.rent===null?'Enter your share of one month’s rent.':!safeURL(s.rentSource)?'Paste the full rental listing link.':!notes.career.trim()?'Explain how the career and housing choices fit together.':'';
+ if(id==='housing')return !s.propertyVerified||!(s.rentTotal>0)||!s.propertyName?'Open an available rental and confirm its advertised price.':s.rent===null?'Enter your share of one month’s rent.':!safeURL(s.rentSource)?'Paste the full rental listing link.':!notes.career.trim()?'Explain how the career and housing choices fit together.':'';
  if(id==='cars'||id==='alternative'){const c=s.cars[id==='cars'?0:1];return !String(c.name||'').trim()?'Add the year, make and model.':!(c.price>0)?'Enter the asking price from the listing.':!(c.mpg>0)?'Find the combined MPG for this car.':!safeURL(c.source)?'Paste the full URL of a real car listing.':'';}
  if(id==='compare')return notes.car.trim()||s.comparedCar===true?'':'Choose the car you want to carry into your budget.';
  if(id==='depreciation'&&!s.saleCall&&!s.equations.depreciation&&!s.notes.depreciation)return 'Predict what will happen when you sell after three years.';
  if(id==='finance')return !Object.hasOwn(financingGoals,s.financePriority)&&!notes.finance.trim()?'Pick the loan tradeoff that matters most to you.':'';
+ if(id==='savings'&&experimentStage()<3)return 'Run both savings scenarios and identify the interest-only balance.';
  if(id==='payment')return s.checks.payment?'':'Check your two amounts using “Check my calculation.”';
  if(['depreciation','savings','rent'].includes(id))return !s.checks[id]&&!state.openModels?.[id]&&!Number.isInteger(state.predictions?.[id])&&!(id==='depreciation'&&state.saleCall)&&!state.equations[id]&&!state.notes[id]?'Choose a prediction or open your model to explore the graph.':!s.checks[id]?'Enter your equation and use “Check model.”':!notes[id].trim()?'Write what your model tells you about your decision.':'';
  if(id==='revision')return !s.baseline?'Save your starting plan before changing it.':!notes.revision.trim()?'Describe the change and compare the two results.':'';
@@ -547,7 +591,7 @@ function careerChooser(){
     ${custom?field('Job title from your listing','career',{wide:true}):''}`;
 }
 const jobSearch={view:'auto',detail:'',query:'',schedule:'',savedOnly:false};
-function resetJobSearch(){Object.assign(jobSearch,{view:'auto',detail:'',query:'',schedule:'',savedOnly:false});}
+function resetJobSearch(){clearLive();Object.assign(jobSearch,{view:'auto',detail:'',query:'',schedule:'',savedOnly:false});}
 const jobById=id=>localJobs.find(job=>job.id===id);
 const savedJobs=()=>Array.isArray(state.savedJobs)?state.savedJobs.filter(id=>jobById(id)):[];
 function jobRate(job){
@@ -567,6 +611,24 @@ function currentJob(){
  if(!state.career||!state.salary)return '';
  return '<div class="job-current"><span>In your budget</span><strong>'+esc(state.career)+'</strong><span>'+money(state.salary)+' gross / year</span></div>';
 }
+const liveEmployers=['AECOM','KIPP','Dominos','Equinox','ServiceNow'];
+let liveRequest=0,liveResults=[],liveMessage='';
+function livePanel(){
+ if(jobSearch.savedOnly)return '';
+ return `<section class="live-jobs"><button data-live-search class="btn quiet">Search live employer boards</button><p role="status">${esc(liveMessage)}</p>${liveResults.map((j,i)=>`<article><div><b>${esc(j.title)}</b><br>${esc(j.employer)} · ${esc(j.city)}</div><a href="${esc(j.url)}" target="_blank" rel="noopener">Read posting ↗</a><button class="text-action" data-live-job="${i}">Use this job</button></article>`).join('')}</section>`;
+}
+function clearLive(){liveRequest++;liveResults=[];liveMessage='';}
+async function liveJobs(){
+ const request=++liveRequest,query=jobSearch.query.trim();liveResults=[];liveMessage='Checking employer boards…';refreshJobList();
+ const replies=await Promise.allSettled(liveEmployers.map(async company=>{
+  const url=new URL('https://api.smartrecruiters.com/v1/companies/'+company+'/postings');url.searchParams.set('city','San Diego');url.searchParams.set('limit','50');if(query)url.searchParams.set('q',query);
+  const response=await fetch(url.href,{signal:AbortSignal.timeout(6500)});if(!response.ok)throw Error();const json=await response.json();
+  return (json.content||[]).filter(j=>j.name&&/^san diego$/i.test(j.location?.city||'')&&/^\d+$/.test(j.id)&&query.toLowerCase().split(/\s+/).every(w=>(j.name+' '+company).toLowerCase().includes(w))).map(j=>({title:j.name,city:j.location.city,employer:j.company?.name||company,url:'https://jobs.smartrecruiters.com/'+company+'/'+j.id}));
+ }));
+ if(request!==liveRequest)return;liveResults=replies.flatMap(r=>r.status==='fulfilled'?r.value:[]);const successful=replies.filter(r=>r.status==='fulfilled').length;
+ liveMessage=liveResults.length?liveResults.length+' current matches from participating employer boards. Check pay on the original posting.':successful?'These boards returned no local matches. Use the countywide search above for more employers.':'Live boards could not be reached. Use the countywide search above, or choose a classroom listing.';refreshJobList();
+}
+
 function jobResults(){
  const matches=findJobs(jobSearch.query,jobSearch.schedule,jobSearch.savedOnly,savedJobs());
  const count=matches.length;
@@ -575,11 +637,11 @@ function jobResults(){
    const preview=jobSearch.savedOnly?'<small>Est. '+money(budgetSalary(job)*(1-state.assumptions.deductions/100)/12)+' take-home / month</small>':'';
    return '<div class="job-row"><button class="job-open" data-job-action="open" data-job-id="'+job.id+'" aria-label="View '+job.title+' listing">'+jobLogo(job)+'<span class="job-row-name"><small>'+esc(job.employer)+'</small><strong>'+esc(job.title)+'</strong><span>'+job.area+' · '+job.schedule+'</span></span><span class="job-row-pay"><b>'+jobRate(job)+'</b>'+preview+'</span></button><button class="job-bookmark" data-job-action="save" data-job-id="'+job.id+'" aria-label="'+(saved?'Remove ':'Save ')+job.title+(saved?' from':' to')+' shortlist" aria-pressed="'+saved+'">'+(saved?'Saved':'Save')+'</button></div>';
  }).join('');
- return '<div class="job-list-heading"><strong>'+(jobSearch.savedOnly?'My shortlist':'Search results')+'</strong><span role="status">'+count+' '+(count===1?'listing':'listings')+'</span></div>'+(rows||'<div class="job-empty"><strong>'+(jobSearch.savedOnly?'No saved jobs match.':'No listings match that search.')+'</strong><p>Try another keyword or browse all six listings.</p><button class="text-action" data-job-action="clear">Show all jobs</button></div>');
+ return '<div class="job-list-heading"><strong>'+(jobSearch.savedOnly?'My shortlist':'Search results')+'</strong><span role="status">'+count+' '+(count===1?'listing':'listings')+'</span></div>'+(!jobSearch.savedOnly?'<p><a target="_blank" rel="noopener" href="https://www.indeed.com/jobs?q='+encodeURIComponent(jobSearch.query)+'&amp;l=San+Diego%2C+CA">Search current San Diego openings for '+esc(jobSearch.query||'any occupation')+' ↗</a></p>':'')+(rows||'<div class="job-empty"><strong>'+(jobSearch.savedOnly?'No saved jobs match.':'No listings match that search.')+'</strong><p>Try another keyword or browse the classroom listings.</p><button class="text-action" data-job-action="clear">Show all jobs</button></div>')+livePanel();
 }
 function refreshJobList(){const list=document.querySelector('[data-job-results]');if(list)list.innerHTML=jobResults();}
 function findJobBoard(){
- return currentJob()+'<div class="jobs-search"><div class="jobs-mast"><strong>Local job board</strong><span>San Diego County</span></div><div class="jobs-controls"><label for="job-query">Search jobs<input id="job-query" type="search" data-job-query placeholder="Job title, employer or keyword" value="'+esc(jobSearch.query)+'"></label><label for="job-schedule">Schedule<select data-job-schedule id="job-schedule">'+['','Full-time','Seasonal','Per diem'].map(s=>'<option value="'+s+'" '+(jobSearch.schedule===s?'selected':'')+'>'+(s||'All schedules')+'</option>').join('')+'</select></label></div></div>'+
+ return currentJob()+'<div class="jobs-search"><div class="jobs-mast"><strong>Local job board</strong><span>San Diego County</span></div><div class="jobs-controls"><label for="job-query">Search jobs<input id="job-query" type="search" data-job-query placeholder="Job title, employer or keyword" value="'+esc(jobSearch.query)+'"></label><label for="job-schedule">Schedule<select data-job-schedule id="job-schedule">'+['','Full-time','Part-time','Seasonal','Per diem'].map(s=>'<option value="'+s+'" '+(jobSearch.schedule===s?'selected':'')+'>'+(s||'All schedules')+'</option>').join('')+'</select></label></div></div>'+
  '<div class="job-tabs"><button data-job-action="all" aria-pressed="'+!jobSearch.savedOnly+'">All jobs</button><button data-job-action="shortlist" aria-pressed="'+jobSearch.savedOnly+'">Shortlist ('+savedJobs().length+')</button></div><div data-job-results>'+jobResults()+'</div><p class="job-footnote">Classroom copies of real postings, checked '+jobEdition+'. Availability may change.</p><button class="text-action" data-job-action="manual">Use a job I found somewhere else</button>';
 }
 function jobDetails(job){
@@ -613,25 +675,32 @@ function handleJobAction(action,id){
  if(target){if(target.matches('h2'))target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:'nearest'});}
 }
 
-const homes = [['1','On my own'],['2','One roommate'],['3','Two roommates'],['share','My own split']];
+const rentals=[
+ ['1018 E Lexington Ave #13','El Cajon','1 bed · 1 bath · 670 sq ft',1745,'f60f515a-7853-4b79-896f-e02c182582fd'],
+ ['4538 Norwood St B','Talmadge','2 beds · 1½ baths · 980 sq ft',2388,'10dd0150-f8a5-42f3-ae39-71ba663f9fe5'],
+ ['4539 54th St','College Area','2 beds · 2 baths · 850 sq ft',2495,'663d89ca-8496-453a-a539-456a24c2314f']
+];
+const homes=[['1','On my own'],['2','One roommate'],['3','Two roommates'],['family','With family, rent-free'],['share','My own contribution']];
+function personalRent(){const mode=state.rentMode||'1';return mode==='family'?0:mode==='share'?(state.manualRent??state.rent):state.rentTotal==null?null:Math.round(state.rentTotal*100/Number(mode))/100;}
 function housingChoice(){
-  const mode=state.rentMode || (state.rent!==null?'share':'1');
-  const buttons=homes.map(([key,label])=>`<button data-home="${key}" aria-pressed="${mode===key}">${label}</button>`).join('');
-  return `<fieldset class="choice-set"><legend>Who would you live with?</legend><div class="choice-buttons">${buttons}</div></fieldset>
-    <div class="fields">${mode==='share'?numberField('My share of monthly rent','rent',{help:'Enter the amount you would personally pay.'}):numberField('Total monthly rent on the listing','rentTotal',{help:mode==='1'?'You cover the full amount.':'The rent is split evenly between '+mode+' people.'})}
-    ${sourceField('Rental listing link','rentSource')}</div>
-    ${caption('My share of monthly rent','<span data-rent-share>'+money(state.rent,2)+'</span>')}`;
+ const mode=state.rentMode||(state.rent!==null?'share':'1');
+ return `<h2>Tour the rental market</h2><p>Pick a place near your job, even if you plan to live with family. You’ll compare its advertised rent with what leaves your own paycheck.</p>
+ <div class="market-list">${rentals.map(([name,area,desc,price],i)=>`<button data-property="${i}" aria-pressed="${state.propertyName===name}"><span><small>${area}</small><b>${name}</b>${desc}</span><strong>${money(price)}/mo</strong></button>`).join('')}</div>
+ <p class="help">Listings checked November 23, 2026. <a target="_blank" rel="noopener" href="https://citypm.appfolio.com/listings/listings">Browse today’s inventory</a></p>
+ <div class="fields">${field('Property or unit from the listing','propertyName',{wide:true,placeholder:'Use a public listing, including for the family scenario'})}${numberField('Advertised monthly rent','rentTotal')}${sourceField('Individual property listing','rentSource')}</div>
+ <div data-property-check>${propertyCheck()}</div>
+ <fieldset class="choice-set"><legend>Who would you live with?</legend><div class="choice-buttons">${homes.map(([k,l])=>`<button data-home="${k}" aria-pressed="${mode===k}">${l}</button>`).join('')}</div></fieldset>
+ ${mode==='share'?numberField('My share of monthly rent','rent',{help:'Enter what you personally pay, including a contribution to family.'}):''}
+ ${caption('My share of monthly rent','<span data-rent-share>'+money(state.rent,2)+'</span>')}`;
+}
+function propertyCheck(){
+ if(!safeURL(state.rentSource)||!(state.rentTotal>0)||!String(state.propertyName||'').trim())return '<p class="help">Choose a listing above or enter one you found.</p>';
+ return `<p><a href="${esc(safeURL(state.rentSource))}" target="_blank" rel="noopener">Open this property listing ↗</a> · Check that this unit is available at the price you entered. If it’s gone, pick another unit.</p><button class="btn quiet" data-confirm-property>${state.propertyVerified?'✓ Availability and price confirmed':'I checked this unit and its price'}</button>`;
 }
 function setRentMode(mode){
-  if(!homes.some(([key])=>key===mode))return;
-  const previous=state.rentMode || (state.rent!==null?'share':'1');
-  if(previous===mode)return;
-  if(previous==='share')state.manualRent=state.rent;
-  state.rentMode=mode;
-  const share=mode==='share'?(state.manualRent??state.rent):
-    Number.isFinite(state.rentTotal)?Math.round(state.rentTotal/Number(mode)*100)/100:null;
-  setField('rent',share);render();
-  document.querySelector(`[data-home="${mode}"]`)?.focus({preventScroll:true});
+ if(!homes.some(([k])=>k===mode))return;
+ if(state.rentMode==='share')state.manualRent=state.rent;
+ state.rentMode=mode;setField('rent',personalRent());render();
 }
 const financingGoals={monthly:'Room in my monthly budget',interest:'Less interest overall',time:'Owning the car sooner'};
 function loanEvidence(c){
@@ -693,29 +762,88 @@ function finance(c){return `${myCarLine()}${terms()}<div class="duo">${caption('
  ${hint('Show all offers side by side',`<div class="table-wrap" data-comparisons>${comparisonTable(c)}</div>`)}
  ${financeChoice(c)}
  ${hint('What does interest actually mean?','<p>Principal is the money you borrow. Interest is the cost of borrowing it. Extending the loan gives you more months to repay and can increase the total interest you pay.</p>')}`;}
-function firstPayment(c){return `<p class="pencil">Your loan starts at <strong>${money(c.principal,2)}</strong> with <strong>${num(state.rate)}%</strong> annual interest. Your monthly payment is <strong>${money(c.pay,2)}</strong>.</p><ol class="directions"><li>Multiply the amount borrowed by the annual rate as a decimal, then divide by 12. That’s this month’s interest.</li><li>Subtract that interest from the payment. The rest pays down the principal.</li></ol>
- <div class="fields">${['interest','principal'].map((k,i)=>`<div class="field"><label for="${k}-check">First month’s ${i?'principal repaid':'interest'}</label><input id="${k}-check" data-trial="${k}" type="number" step=".01" min="0" value="${esc(state.paymentWork?.[k]??'')}"></div>`).join('')}</div>
- <button class="btn quiet small" data-action="check-payment">Check my calculation</button><p class="feedback" data-feedback="payment" aria-live="polite">${state.checks.payment?'Calculation checked.':''}</p>
- ${hint('Walk me through a different loan','<p>Suppose you borrow $12,000 at 6% with a $250 payment. First-month interest is $12,000 × 0.06 ÷ 12 = $60. The remaining $190 reduces the principal.</p>')}`;}
+const miniChecks={
+ life:{intro:'A job offers $3,000 a month before deductions. Payroll takes out $600.',ask:'Which amount can you actually budget?',answers:['$2,400','$3,000','$600'],correct:0,reason:'Take-home pay is the money deposited in your account. $3,000 − $600 = $2,400.'},
+ housing:{intro:'Two friends split a $2,400 apartment evenly.',ask:'Which amount goes in one person’s monthly budget?',answers:['$2,400','$1,200','$600'],correct:1,reason:'The landlord receives $2,400. Each roommate pays half, or $1,200.'},
+ finance:{intro:'You can repay the same $10,000 at 7% over three years or seven.',ask:'Which loan usually costs more in total interest?',answers:['Three years','Seven years','Both cost the same'],correct:1,reason:'Seven years spreads the payments out. You carry a balance and pay interest for longer.'},
+ payment:{intro:'Your $250 payment has two jobs.',ask:'If $60 goes to interest, how much disappears from the debt?',answers:['$60','$190','$250'],correct:1,reason:'The lender collects $60 for lending you money. The other $190 reduces what you owe.'}
+};
+function microCheck(id){
+ const q=miniChecks[id],pick=state.lessonAnswers?.[id];
+ return `<section class="micro no-print"><h3>${q.intro}</h3>${id==='payment'?'<div class="split-bar"><span>$60 interest</span><b>$190 toward debt</b></div><p>You borrowed $12,000 at 6% per year. One month’s interest is $12,000 × 0.06 ÷ 12 = $60.</p>':''}<fieldset class="choice-set"><legend>${q.ask}</legend><div class="choice-buttons">${q.answers.map((a,i)=>`<button data-mini="${id}" data-answer="${i}" aria-pressed="${pick===i}">${a}</button>`).join('')}</div></fieldset>${Number.isInteger(pick)?'<p role="status">'+(pick===q.correct?'✓ Exactly. ':'Try again. ')+q.reason+'</p>':''}</section>`;
+}
+let calculatorText='',calculatorValue=null;
+function calculator(){
+ return `<section class="calc"><h3>Scratch calculator</h3><label for="calc-expression">Type a calculation or tap the keys</label><input id="calc-expression" data-calculator value="${esc(calculatorText)}" placeholder="e.g. 12000 × .06 ÷ 12" autocomplete="off"><div class="calc-keys">${['7','8','9','÷','4','5','6','×','1','2','3','−','0','.','+','=','Clear','⌫'].map(k=>`<button data-calc-key="${k}" aria-label="${k==='⌫'?'Backspace':k}">${k}</button>`).join('')}</div><output data-calc-output aria-live="polite">${calculatorValue===null?'':esc(calculatorValue)}</output><button class="text-action" data-apply-calc>Use result for ${state.paymentWork?.interestOK?'principal':'interest'}</button></section>`;
+}
+function calcKey(key){
+ if(key==='='){try{if(!calculatorText.trim()||/[a-z=]/i.test(calculatorText))throw Error();calculatorValue=Number(expression(calculatorText,0).toFixed(8));}catch{calculatorValue='Check the expression';}}
+ else{calculatorText=key==='Clear'?'':key==='⌫'?calculatorText.slice(0,-1):(calculatorText+key).slice(0,180);calculatorValue=null;}
+ const box=document.querySelector('[data-calculator]'),out=document.querySelector('[data-calc-output]');if(box)box.value=calculatorText;if(out)out.textContent=calculatorValue??'';
+}
+function firstPayment(c){
+ const work=state.paymentWork||{},part=work.interestOK?'principal':'interest',isInterest=part==='interest';
+ return microCheck('payment')+(state.lessonAnswers?.payment!==1?'<p class="help">Choose the amount that reduces the example debt to start your own loan.</p>':`<h2>Split your first payment</h2><div class="payment-ticket"><span>Total monthly payment</span><strong>${money(c.pay,2)}</strong><small>Borrowed ${money(c.principal,2)} · annual rate ${num(state.rate)}%</small></div>
+ ${!isInterest?`<p>✓ First month’s interest · <b>${money(Number(work.interest??c.loan[1].interest),2)}</b></p>`:''}
+ <h3>${isInterest?'1. Find the interest':'2. Find the amount that pays down debt'}</h3><p>${isInterest?`Start with ${money(c.principal,2)}. Multiply by ${Number((state.rate/100).toFixed(5))}, then divide by 12 for one month.`:`Start with the whole ${money(c.pay,2)} payment. Subtract the interest you just found.`}</p>
+ <label for="${part}-check">${isInterest?'First month’s interest':'First month’s principal repaid'} (dollars)</label><input id="${part}-check" data-trial="${part}" inputmode="decimal" type="number" step=".01" value="${esc(work[part]??'')}"><button class="btn" data-action="check-payment">Check my ${part}</button>
+ <p data-feedback="payment" class="feedback" role="status">${esc(feedback.payment||(state.checks.payment?'✓ Your payment adds up.':''))}</p>${calculator()}`);
+}
+function gradePayment(){
+ const c=calculate(state);if(!c.loan||state.lessonAnswers?.payment!==1)return;
+ const work=state.paymentWork??={},key=work.interestOK?'principal':'interest',el=document.querySelector('#'+key+'-check'),raw=el?.value??work[key]??'';
+ const interest=Number(moneyNumber(c.loan[1].interest)),total=Number(moneyNumber(c.pay)),principal=Number((total-interest).toFixed(2)),n=Number(raw);
+ const near=x=>raw!==''&&Number.isFinite(n)&&Math.abs(n-x)<.0051;
+ const ok=key==='interest'?near(interest):near(principal)||near(Number(moneyNumber(c.loan[1].principal)));
+ work[key]=raw;
+ if(ok&&key==='interest'){work.interestOK=true;feedback.payment='Interest checked. Now subtract it from the total payment.';}
+ else if(ok){state.checks.payment=true;feedback.payment='✓ '+money(total,2)+' covers '+money(interest,2)+' in interest and approximately '+money(principal,2)+' toward the balance.';}
+ else{state.checks.payment=false;feedback.payment=near(total)?'That is the whole monthly payment. '+(key==='interest'?'Only the borrowing charge goes here.':'Subtract the interest portion first.'):key==='principal'&&near(interest)?'That number is your interest. Subtract it from '+money(total,2)+' to find the part that repays debt.':key==='interest'?'Use borrowed dollars × annual rate as a decimal ÷ 12. Round to cents.':'Subtract your first month’s interest from '+money(total,2)+'.';}
+ save();render();document.querySelector(work.interestOK?'#principal-check':'#interest-check')?.focus?.();
+}
+function moneyNumber(n){return (Math.round((n+1e-10)*100)/100).toFixed(2);}
+function modelParts(key){
+ const legacy=state.equations[key]||'',match=legacy.replace(/[ ,]/g,'').match(/^(?:[VAR]\(t\)=)?([\d.]+)\*?\(([\d.]+)\)\^([tx])$/i);
+ const fields=state.modelFields?.[key];
+ return fields||{start:match?.[1]||'',factor:match?.[2]||'',power:match?.[3]||'t'};
+}
+function equationBlock(key,formula){
+ const parts=modelParts(key),symbol={depreciation:'V',savings:'A',rent:'R'}[key];
+ const box=(k,label)=>`<input data-model-part="${k}" data-model-key="${key}" aria-label="${label}" value="${esc(parts[k])}" placeholder="${k==='start'?'amount':k==='factor'?'factor':'t'}" ${k!=='power'?'inputmode="decimal"':''} maxlength="18">`;
+ return `<div class="formula">${formula}</div><p>Put your starting dollars in the first box and your yearly multiplier inside the parentheses. The raised <i>t</i> counts years.</p><div class="math-composer" role="group" aria-label="Equation editor"><i>${symbol}(t)</i> = ${box('start','Starting amount')} (${box('factor','Yearly multiplier')})<sup>${box('power','Exponent in years')}</sup></div>
+ <details><summary>Use a different equation form</summary><input id="equation-${key}" data-field="equations.${key}" value="${esc(state.equations[key])}" aria-label="Equivalent equation"></details><button class="btn quiet" data-check="${key}">Check model</button><p class="feedback" data-feedback="${key}" role="status">${esc(feedback[key]||(state.checks[key]?'Your model was checked.':''))}</p>`;
+}
+function displayEquation(key){const raw=state.equations[key];if(!raw)return 'Not entered';const m=raw.match(/^([\d.,]+)\(([\d.]+)\)\^([tx])$/i);return m?esc(m[1])+'('+esc(m[2])+')<sup>'+esc(m[3])+'</sup>':esc(raw);}
+function experimentKey(){return JSON.stringify([state.apy,state.assumptions.cash,state.assumptions.moving,state.assumptions.reserve,state.assumptions.deposit]);}
+function experimentStage(){return state.savingsTrial?.key===experimentKey()?state.savingsTrial.stage:0;}
+function savingsExperiment(c){
+ const stage=experimentStage(),row=c.savingsData[60];if(!row)return '';
+ return `<section class="experiment" data-stage="${stage}"><small>FIVE-YEAR SAVINGS EXPERIMENT</small><h2>Where did the extra money come from?</h2><p>Start with ${money(c.initial,2)} at ${num(state.apy)}% APY. Run the same five years twice.</p>
+ <div class="trial-pair"><div><b>Interest alone</b>${stage>=1?`<strong>${money(row.lump,2)}</strong>`:'<button class="btn" data-run-savings="1">Run five years →</button>'}</div><div><b>With monthly deposits</b>${stage>=2?`<strong>${money(row.deposits,2)}</strong>`:`<button class="btn" data-run-savings="2" ${stage<1?'disabled':''}>Add ${money(state.assumptions.deposit)} each month →</button>`}</div></div>
+ ${stage>=2?`<p>You deposited ${money(60*state.assumptions.deposit,2)} over 60 months. Those deposits earned an additional ${money(row.deposits-row.lump-60*state.assumptions.deposit,2)} in interest.</p><fieldset class="choice-set"><legend>Which ending balance does your interest-only equation predict?</legend><div class="choice-buttons"><button data-run-savings="3">Interest alone</button><button data-run-savings="wrong">With monthly deposits</button></div></fieldset>`:''}
+ <p role="status">${stage===3?'✓ Your equation tracks the original deposit growing over time.':state.savingsTrial?.wrong?'Monthly deposits add new money from your paycheck. Try the other balance.':''}</p></section>`;
+}
+
 const modelHelp={
- depreciation:['Annual depreciation','depreciation',40,1,'V(t) = P(1 − d)<sup>t</sup>','P is the listing price. Convert the annual loss to a decimal and subtract it from 1. The result is the fraction of value the car keeps each year.','A $10,000 car that loses 20% keeps 80%. Its rule is 10000(0.80)^t. Year 1 costs it $2,000 in value. In year 2 it loses $1,600.','Could you afford to sell after three years? Compare resale value with debt and explain how the annual percentage changes the car’s value.'],
- savings:['Annual savings APY','apy',12,.25,'A(t) = S(1 + a)<sup>t</sup>','S is the cash left after moving costs and the emergency reserve, before buying the car. Write the equation for that cash growing with interest alone.','With $1,000 and 2% APY, type 1000(1.02)^t. A monthly deposit adds new money. That deposit belongs in the comparison curve.','Would you wait 12 months? Use the payment difference and distinguish your deposits from interest.'],
- rent:['Annual rent increase','rentGrowth',12,.5,'R(t) = R₀(1 + g)<sup>t</sup>','Start with your monthly rent share today. Each year multiply the previous rent by 1 plus the rate as a decimal.','If rent begins at $800 and rises 5%, type 800(1.05)^t. A flat $40 annual increase matches in year 1. In year 2 the percentage increase is $42.','Compare both year-5 rents. Explain why the percentage increase changes in dollars and what happens if your income stays flat.']
+ depreciation:['Annual depreciation','depreciation',40,1,'V(t) = P(1 − d)<sup>t</sup>','P is the listing price. Convert the annual loss to a decimal and subtract it from 1. The result is the fraction of value the car keeps each year.','A $10,000 car that loses 20% keeps 80%. Its rule is 10,000(0.80)<sup>t</sup>. Year 1 costs it $2,000 in value. In year 2 it loses $1,600.','Could you afford to sell after three years? Compare resale value with debt and explain how the annual percentage changes the car’s value.'],
+ savings:['Annual savings APY','apy',12,.25,'A(t) = S(1 + a)<sup>t</sup>','S is the cash left after moving costs and the emergency reserve, before buying the car. Write the equation for that cash growing with interest alone.','With $1,000 and 2% APY, the model is 1,000(1.02)<sup>t</sup>. A monthly deposit adds new money. That deposit belongs in the comparison curve.','Would you wait 12 months? Use the payment difference and distinguish your deposits from interest.'],
+ rent:['Annual rent increase','rentGrowth',12,.5,'R(t) = R₀(1 + g)<sup>t</sup>','Start with your monthly share. If you pay zero, use the listing’s market rent to model what moving out could cost. Each year multiply the previous rent by 1 plus the rate as a decimal.','If rent begins at $800 and rises 5%, the model is 800(1.05)<sup>t</sup>. A flat $40 annual increase matches in year 1. In year 2 the percentage increase is $42.','Compare both year-5 rents. Explain why the percentage increase changes in dollars and what happens if your income stays flat.']
 };
 function modelLesson(id,c){
  modelTab=id;
  const isSale=id==='depreciation';const tried=isSale?!!state.saleCall:Number.isInteger(state.predictions?.[id]);
  const hasWork=state.equations[id]||state.notes[id]||state.checks[id];
  if(isSale&&!tried&&!hasWork&&!state.openModels?.[id])return salePrompt();
+ if(id==='savings')withDeposits=experimentStage()>=2;
  if(!tried&&!state.openModels?.[id]&&!hasWork)return prediction(id)+`<button class="text-action" data-open-model="${id}">Go straight to my model</button>`;
  const [label,k,max,step,formula,why,example,question]=modelHelp[id];
- const extra=id==='depreciation'?hint('See the value and debt at each year',`<div class="table-wrap" data-modeltable="depreciation">${yearTable(id,c)}</div>`):id==='savings'?`<label class="checks"><input type="checkbox" data-action="deposits" ${withDeposits?'checked':''}>Show the monthly-deposit curve</label><p>Buying now costs ${value('pay',c.pay,2)} per month. After 12 months of saving, the estimated payment is ${value('waitPay',c.waitPay,2)}. This holds the car price and loan terms fixed and excludes travel costs while waiting.</p>`:'';
+ const extra=id==='depreciation'?hint('See the value and debt at each year',`<div class="table-wrap" data-modeltable="depreciation">${yearTable(id,c)}</div>`):id==='savings'?`<p>Buying now costs ${value('pay',c.pay,2)} per month. After 12 months of saving, the estimated payment is ${value('waitPay',c.waitPay,2)}. This holds the car price and loan terms fixed and excludes travel costs while waiting.</p>`:'';
  if(isSale&&trialTerm)c=calculate({...state,term:trialTerm});
- return `${isSale?(state.saleCall?'<div data-sale-result>'+saleResult()+'</div>':salePrompt()):prediction(id)}<div data-graph="${id}">${graphFor(id,c)}</div>${timeline(id,c)}${extra}
+ return `${isSale?(state.saleCall?'<div data-sale-result>'+saleResult()+'</div>':salePrompt()):prediction(id)}<div data-graph="${id}">${graphFor(id,c)}</div>${timeline(id,c)}${id==='savings'?savingsExperiment(c):''}${extra}
  ${hint('Adjust the assumptions',range(label,k,0,max,step,'%')+(id==='rent'?numberField('Flat annual increase in monthly rent','rentDollars'):id==='savings'?numberField('Deposit each month','assumptions.deposit'):''))}
- <h2>Build your model</h2><p>${why} In your equation, <i>t</i> counts years.</p>
+ ${id==='savings'&&experimentStage()<3?'<p class="pencil">Run both savings scenarios and check which balance your equation represents.</p>':`<h2>Build your model</h2><p>${why} In your equation, <i>t</i> counts years.</p>
  ${hint('Show me a worked example with different numbers',`<p>${example}</p>`)}${equationBlock(id,formula)}
- ${note(id,question,'Use two values from your graph to explain your thinking.')}`;
+ ${note(id,question,'Use two values from your graph to explain your thinking.')}`}`;
 }
 function revision(c){return `${state.baseline?'':`<p class="pencil">Your current plan leaves <strong>${money(c.remainder,2)}</strong> per month and <strong>${money(c.cashLeft,2)}</strong> in cash after setup.</p><button class="btn" data-action="baseline" ${c.ready?'':'disabled'}>Save my starting plan</button>`}
  ${state.baseline?`<h2>Try a change</h2>${carOptions()}${terms()}<div class="table-wrap">${revisionTable(c)}</div>${note('revision','What changed, and was it worth it?','I changed ___. My monthly balance went from ___ to ___, but ___.')}`:''}
@@ -725,9 +853,10 @@ function decision(c){return `${state.firstPick?`<p class="pencil">On day one you
  ${hint('What counts as evidence?','<p>Use dollars from your own plan. Point to a year on one graph. Explain what the number means for your life and name one assumption that could change the result.</p>')}`;}
 function taskContent(id,c){
  if(id==='dream')return firstPickPage();
- if(id==='cars'||id==='alternative')return (id==='cars'?(state.listingRead===1?hint('Revisit the real listing',listingReader()):listingReader()):'')+listing(id==='cars'?0:1);
+ if(id==='cars'||id==='alternative'){const slot=id==='cars'?0:1;return '<div data-ad-reader>'+listingReader(slot)+'</div>'+listing(slot);}
  if(modelHelp[id])return modelLesson(id,c);
- return {life:paycheck,housing,compare,finance,payment:firstPayment,revision,decision}[id](c);
+ if(id==='life')return paycheck(c)+microCheck('life');
+ return (['housing','finance'].includes(id)?microCheck(id):'')+{housing,compare,finance,payment:firstPayment,revision,decision}[id](c);
 }
 function nextTask(){return tasks[tasks.findIndex(t=>t[0]===page)+1];}
 function prerequisite(id,c){
@@ -741,7 +870,7 @@ function prerequisite(id,c){
 }
 function reviewList(){
  const unfinished=tasks.slice(0,-1).filter(t=>missing(t[0]));
- return unfinished.length?`<details class="coach"><summary>Review ${unfinished.length} unfinished ${unfinished.length===1?'step':'steps'}</summary>${unfinished.map(t=>`<p><button class="text-action" data-nav="${t[0]}">${t[2]}</button> · ${esc(missing(t[0]))}</p>`).join('')}</details>`:'<p class="pencil">Your research, models and recommendation are ready for their final read.</p>';
+ return unfinished.length?`<details class="coach" open><summary>Review ${unfinished.length} unfinished ${unfinished.length===1?'step':'steps'}</summary>${unfinished.map(t=>`<p><button class="text-action" data-nav="${t[0]}">${t[2]}</button> · ${esc(missing(t[0]))}</p>`).join('')}</details>`:'<p class="pencil">Your research, models and recommendation are ready for their final read.</p>';
 }
 function render(){
  queuePhotos();const t=taskById(page),idx=tasks.indexOf(t),c=calculate(state);
@@ -751,7 +880,7 @@ function render(){
  if(!t)content=welcome();
  else {
    const next=nextTask(),pre=prerequisite(page,c);
-   const body=page==='report'?presentationLaunch()+reviewList()+reportPage():pre?'':taskContent(page,c);
+   const body=page==='report'?exhibitStudio()+reviewList()+'<div class="'+(previewReport?'':'print-copy')+'">'+reportPage()+'</div>' :pre?'':taskContent(page,c);
    content=`<article class="lesson ${page==='life'?'job-lesson':''} ${page==='report'?'final-report':''}"><div class="lesson-intro"><div class="period-line"><span>Period ${t[1]} of 3</span><span>Step ${idx+1} of ${tasks.length}</span></div><progress max="${tasks.length}" value="${idx+1}" aria-label="Position in project"></progress><h1>${t[2]}</h1><p>${t[3]}</p></div>${pre?`<p class="pencil">${pre[1]} <button data-nav="${pre[0]}" class="text-action">Go to that step</button></p>`:''}
    <div class="task-body">${body}</div>${next&&next[1]!==t[1]?`<p class="class-stop">Stopping here for today? <button class="text-action" data-action="export">Download my backup</button> so you can pick up in period ${next[1]}.</p>`:''}
    <footer class="walk-foot"><button class="text-action" data-nav="${idx?tasks[idx-1][0]:'welcome'}">Back</button>${next?`<button class="btn lead" data-action="next">${next[1]!==t[1]?'Continue to period '+next[1]:'Continue'}</button>`:''}</footer>
@@ -760,9 +889,9 @@ function render(){
  app.innerHTML=bar+'<main class="walk-main" id="main" tabindex="-1">'+(state.isExample?'<p class="example-label">Worked example · Replace the sample figures with your research.</p>':'')+content+'</main>';
 }
 
-function save(){state.savedAt=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(state));saveError=false;}catch{saveError=true;}document.querySelector('[data-save]')?.replaceChildren(document.createTextNode(saveError?'Not saved · download work':'Saved in this browser'));}
+function save(){state.savedAt=new Date().toISOString();try{projectStore?.setItem(KEY,JSON.stringify(state));saveError=false;}catch{saveError=true;}document.querySelector('[data-save]')?.replaceChildren(document.createTextNode(saveError?'Not saved · download work':'Saved in this browser'));}
 function notify(text){const toast=document.querySelector('#toast');toast.textContent=text;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),4200);}
-function go(to){if(page==='life'&&to!=='life')resetJobSearch();closeModal();page=route(to);reminder=false;if(page==='present')visitorRate=null;if(page==='depreciation'){trialTerm=null;if(state.saleCall)exploreYear=3;}if(page!=='welcome'&&page!=='present'){state.currentTask=page;save();}history.replaceState(null,'','#'+page);render();window.scrollTo({top:0,behavior:'instant'});document.querySelector('#main')?.focus({preventScroll:true});}
+function go(to){if(page==='life'&&to!=='life')resetJobSearch();closeModal();page=route(to);reminder=false;if(page==='present')visitorRate=null;if(page==='report'&&state.exhibitPin){exhibitYear=state.exhibitPin.year;}if(page==='depreciation'){trialTerm=null;if(state.saleCall)exploreYear=3;}if(page!=='welcome'&&page!=='present'){state.currentTask=page;save();}history.replaceState(null,'','#'+page);render();window.scrollTo({top:0,behavior:'instant'});document.querySelector('#main')?.focus({preventScroll:true});}
 function invalidate(path){if(/^cars\.[01]\.price$/.test(path)&&Number(path.split('.')[1])!==state.selected)return;const keys=[];if(path.startsWith('equations.'))keys.push(path.split('.')[1]);if(path==='rent'||path==='rentGrowth')keys.push('rent');if(path==='depreciation'||path==='selected'||/^cars\.\d\.price$/.test(path))keys.push('depreciation');if(['apy','assumptions.cash','assumptions.moving','assumptions.reserve'].includes(path))keys.push('savings');if(['rate','down','term','selected'].includes(path)||/^cars\.\d\.price$/.test(path))keys.push('payment');for(const key of keys){if(key==='payment')state.paymentWork={};state.checks[key]=false;delete feedback[key];const out=document.querySelector(`[data-feedback="${key}"]`);if(out){out.textContent='';out.className='feedback';}}}
 function setField(path,val){if(['career','city','salary','careerSource'].includes(path))delete state.budgetJob;const keys=path.split('.');let o=state;for(let i=0;i<keys.length-1;i++)o=o[keys[i]];o[keys.at(-1)]=val;invalidate(path);if(path.endsWith('Source')||path.endsWith('.source')){const datePath=path.endsWith('.source')?path.replace('.source','.date'):path.replace('Source','Date');const kk=datePath.split('.');let ob=state;for(let i=0;i<kk.length-1;i++)ob=ob[kk[i]];ob[kk.at(-1)]=new Intl.DateTimeFormat('en-CA').format(new Date());}save();}
 function refresh(){const c=calculate(page==='depreciation'&&trialTerm?{...state,term:trialTerm}:state);
@@ -776,20 +905,27 @@ const commute=document.querySelector('[data-commute]');if(commute){
   commute.querySelector('p').innerHTML=template.content.querySelector('p').innerHTML;
 }
 const comparison=document.querySelector('[data-garage-comparison]');if(comparison)comparison.innerHTML=compareGarage();
+if(page==='savings'){const lab=document.querySelector('.experiment');if(lab){const wrap=document.createElement('template');wrap.innerHTML=savingsExperiment(c);const next=wrap.content.firstElementChild;if(Number(lab.dataset.stage)!==experimentStage()){render();return;}if(next)lab.innerHTML=next.innerHTML;}}
 const calendar=document.querySelector('[data-calendar]');if(calendar)calendar.innerHTML=calendarReading(modelTab,c);
 document.querySelectorAll('[data-value]').forEach(el=>{const key=el.dataset.value;el.textContent=money(key==='deposit'?state.assumptions.deposit:c[key],Number(el.dataset.dec||0));});document.querySelectorAll('[data-range-output]').forEach(el=>el.textContent=state[el.dataset.rangeOutput]+'%');const h=document.querySelector('[data-budgethint]');if(h)h.textContent=budgetHint(c);const rem=document.querySelector('[data-remainder]');if(rem)rem.className=c.remainder!==null&&c.remainder<0?'negative':'positive';const comp=document.querySelector('[data-comparisons]');if(comp)comp.innerHTML=comparisonTable(c);document.querySelectorAll('[data-graph]').forEach(el=>el.innerHTML=graphFor(el.dataset.graph,c));const vals={car5:c.carData.at(-1)?.value??null,debt5:c.carData.at(-1)?.debt??null,equity:c.down,saved12:c.saved?.[12].balance??null,earned12:c.saved?.[12].interest??null,rent5:c.rentData.at(-1)?.exponential??null,linear5:c.rentData.at(-1)?.linear??null};document.querySelectorAll('[data-modelvalue]').forEach(el=>{const k=el.dataset.modelvalue;el.textContent=k==='rentShare'?(c.income>0&&c.rentData.length?num(c.rentData.at(-1).exponential/c.income*100)+'%':'—'):money(vals[k]);});const t=document.querySelector('[data-modeltable]');if(t)t.innerHTML=yearTable(t.dataset.modeltable,c);for(const key of ['payment','depreciation','savings','rent']){if(!state.checks[key]&&!feedback[key]){const e=document.querySelector(`[data-feedback="${key}"]`);if(e)e.textContent='';}}}
 function modal(content){const wrap=document.createElement('div');wrap.className='modal-backdrop';wrap.innerHTML=`<section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button class="close" data-action="close" aria-label="Close dialog">×</button>${content}</section>`;document.body.append(wrap);wrap.querySelector('button').focus();}
 function closeModal(){document.querySelector('.modal-backdrop')?.remove();}
 function exportWork(){save();const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='life-and-car-project.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('Project backup downloaded. It includes your research and explanations.');}
 document.addEventListener('input',e=>{const el=e.target,path=el.dataset.field;
-if(el.dataset.jobQuery!==undefined){jobSearch.query=el.value;refreshJobList();return;}
+if(el.dataset.calculator!==undefined){calculatorText=el.value;calculatorValue=null;const out=document.querySelector('[data-calc-output]');if(out)out.textContent='';return;}
+if(el.dataset.modelPart){const key=el.dataset.modelKey,part=el.dataset.modelPart;if(!Object.hasOwn(modelHelp,key)||!['start','factor','power'].includes(part))return;const parts={...modelParts(key),[part]:el.value};state.modelFields={...state.modelFields,[key]:parts};setField('equations.'+key,parts.start+'('+parts.factor+')^'+parts.power);const alt=document.querySelector('#equation-'+key);if(alt)alt.value=state.equations[key];return;}
+if(path?.startsWith('equations.')){const key=path.split('.')[1];if(state.modelFields)delete state.modelFields[key];}
+if(el.dataset.jobQuery!==undefined){clearLive();jobSearch.query=el.value;refreshJobList();return;}
 if(el.dataset.visitor!==undefined){const k=exhibitKey(),m=exhibits[k];visitorRate=Math.max(0,Math.min(Math.max(m.max,state[m.field]),Number(el.value)));const graph=document.querySelector('[data-visitor-chart]'),out=document.querySelector('[data-visitor-rate]');if(graph)graph.innerHTML=visitorGraph();if(out)out.textContent=num(visitorRate)+'%';return;}
 if(el.dataset.timeline!==undefined){exploreYear=Math.max(0,Math.min(5,Number(el.value)));refresh();return;}
-if(el.dataset.trial){state.paymentWork={...state.paymentWork,[el.dataset.trial]:el.value};state.checks.payment=false;const msg=document.querySelector('[data-feedback="payment"]');if(msg)msg.textContent='';save();return;}
+if(el.dataset.trial){delete feedback.payment;if(el.dataset.trial==='interest'&&state.paymentWork)state.paymentWork.interestOK=false;state.paymentWork={...state.paymentWork,[el.dataset.trial]:el.value};state.checks.payment=false;const msg=document.querySelector('[data-feedback="payment"]');if(msg)msg.textContent='';save();return;}
 if(!path)return;let val=el.value;if(el.type==='number'||el.type==='range'){if(val===''){val=null;}else{val=Number(val);if(!Number.isFinite(val))return;if(el.max&&val>Number(el.max)){val=Number(el.max);el.value=val;}if(val<0){val=0;el.value=0;}}if((path.startsWith('assumptions.')||path==='rentDollars')&&val===null)val=0;}if(path==='rentTotal'){
-  state.rentTotal=val;state.rentMode=state.rentMode||'1';
-  setField('rent',val===null?null:Math.round(val/Number(state.rentMode)*100)/100);
-}else{setField(path,val);}
+  state.rentTotal=val;state.propertyVerified=false;state.rentMode=state.rentMode||'1';invalidate('rent');
+  setField('rent',personalRent());
+}else{if(path==='rentSource'||path==='propertyName')state.propertyVerified=false;if(path==='rent'&&state.rentMode==='share')state.manualRent=val;setField(path,val);}
+if(path.startsWith('equations.')){const parts=modelParts(path.split('.')[1]);document.querySelectorAll('[data-model-part]').forEach(input=>input.value=parts[input.dataset.modelPart]);}
+if(['rentSource','rentTotal','propertyName'].includes(path)){const box=document.querySelector('[data-property-check]');if(box)box.innerHTML=propertyCheck();}
+if(/^cars\.[01]\.(name|source|price)$/.test(path)){const slot=Number(path.split('.')[1]);delete state.cars[slot].adAnswer;const reader=document.querySelector('[data-ad-reader]');if(reader)reader.innerHTML=listingReader(slot);save();}
 if(path==='assumptions.miles'){document.querySelectorAll('[data-field="assumptions.miles"]').forEach(other=>{if(other!==el)other.value=val;});}
 if(path==='firstDraft.name'){const box=document.querySelector('[data-dream-preview]');if(box)box.innerHTML=picture(state.firstDraft)+lookupStatus(state.firstDraft);queuePhotos();}
 if(/^cars\.[01]\.name$/.test(path)){const status=document.querySelector('[data-listing-status]');if(status)status.innerHTML=lookupStatus(state.cars[Number(path.split('.')[1])]);queuePhotos();const i=Number(path.split('.')[1]),car=state.cars[i];const title=document.querySelector(`[data-car-title="${i}"]`),box=document.querySelector(`[data-photo-box="${i}"]`);if(title)title.textContent=car.name||'Choose a car';const question=document.querySelector(`[data-car-insight="${i}"]`);if(question)question.textContent=referenceFor(car.name)?.insight||'';if(box)box.innerHTML=portrait(car)+'<small>'+creditLine(car)+'</small>';refresh();}
@@ -808,6 +944,19 @@ if(e.target.dataset.careerList!==undefined){
 }
 if(e.target.dataset.photoSlot!==undefined){attachPhoto(e.target.files[0],Number(e.target.dataset.photoSlot)).catch(err=>notify(err.message));e.target.value='';return;}if(e.target.dataset.car!==undefined){state.selected=Number(e.target.dataset.car);invalidate('selected');save();render();}if(e.target.dataset.action==='deposits'){withDeposits=e.target.checked;refresh();}});
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.liveSearch!==undefined){liveJobs();return;}
+if(b.dataset.liveJob!==undefined){const j=liveResults[Number(b.dataset.liveJob)];if(!j)return;Object.assign(state,{career:j.title,ownJob:j.title,customCareer:true,city:j.city,salary:null,careerSource:j.url,careerDate:new Date().toISOString().slice(0,10)});delete state.budgetJob;jobSearch.view='manual';save();render();return;}
+if(b.dataset.exhibitStep!==undefined){exhibitStep=Number(b.dataset.exhibitStep);render();return;}
+if(b.dataset.verdict&&Object.hasOwn(verdicts,b.dataset.verdict)){state.decision=b.dataset.verdict;save();render();return;}
+if(b.dataset.exhibitGraph&&Object.hasOwn(exhibits,b.dataset.exhibitGraph)){state.exhibitModel=b.dataset.exhibitGraph;delete state.exhibitPin;rehearsalAnswer=null;save();render();return;}
+if(b.dataset.exhibitYear!==undefined){exhibitYear=Number(b.dataset.exhibitYear);render();return;}
+if(b.dataset.pin!==undefined){state.exhibitPin={model:exhibitKey(),year:exhibitYear};rehearsalAnswer=null;exhibitStep=2;save();render();return;}
+if(b.dataset.rehearse!==undefined){rehearsalAnswer=Number(b.dataset.rehearse);render();return;}
+if(b.dataset.previewReport!==undefined){previewReport=!previewReport;render();if(previewReport)document.querySelector('.report')?.scrollIntoView({block:'start'});return;}
+if(b.dataset.mini){const id=b.dataset.mini;if(!Object.hasOwn(miniChecks,id))return;state.lessonAnswers={...state.lessonAnswers,[id]:Number(b.dataset.answer)};save();render();return;}
+if(b.dataset.calcKey!==undefined){calcKey(b.dataset.calcKey);return;}
+if(b.dataset.applyCalc!==undefined){calcKey('=');if(typeof calculatorValue==='number'){const k=state.paymentWork?.interestOK?'principal':'interest';state.paymentWork={...state.paymentWork,[k]:moneyNumber(calculatorValue)};state.checks.payment=false;save();render();}return;}
+if(b.dataset.runSavings){const val=b.dataset.runSavings,stage=experimentStage();if(val==='1'||(val==='2'&&stage>=1)||(val==='3'&&stage>=2)||(val==='wrong'&&stage>=2)){state.savingsTrial={key:experimentKey(),stage:val==='wrong'?2:Number(val),wrong:val==='wrong'};exploreYear=5;withDeposits=state.savingsTrial.stage>=2;save();render();}return;}
 if(b.dataset.jobAction){handleJobAction(b.dataset.jobAction,b.dataset.jobId);return;}
 if(b.dataset.retryPhoto){loadPhoto(projectCars().find(car=>photoKey(car)===b.dataset.retryPhoto),true);return;}
 if(b.dataset.confirmCar!==undefined){state.comparedCar=true;save();render();return;}
@@ -817,13 +966,20 @@ if(b.dataset.dream&&!state.firstPick){
  if(state.firstDraft?.id!==id)state.firstDraft={id,name:car?.name||'',photo:'',reason:''};
  save();render();document.querySelector(id==='custom'?'[data-field="firstDraft.name"]':'[data-field="firstDraft.reason"]')?.focus();return;
 }
-if(b.dataset.ad!==undefined){const i=Number(b.dataset.ad);if(!listingFacts[i])return;state.listingRead=i;save();render();const button=document.querySelector(`[data-ad="${i}"]`);const panel=button?.closest('details');if(panel)panel.open=true;button?.focus({preventScroll:true});return;}
+if(b.dataset.ad!==undefined){
+ const slot=page==='alternative'?1:0,car=state.cars[slot],ad=activeAd(slot),i=Number(b.dataset.ad);
+ if(![0,1,2].includes(i)||!(ad.price>0))return;
+ if(i===1){if(ad.example){setField('cars.'+slot+'.name',ad.name);setField('cars.'+slot+'.source',ad.source);}setField('cars.'+slot+'.price',ad.price);}
+ car.adAnswer=i;if(slot===0)state.listingRead=i;save();render();return;
+}
 if(b.dataset.sale&&Object.hasOwn(saleLabels,b.dataset.sale)){
  const result=saleMath(state);if(!result||state.saleCall)return;
  state.saleCall={guess:b.dataset.sale,term:state.term,actual:result.outcome,net:result.net};exploreYear=3;trialTerm=null;save();render();return;
 }
 if(b.dataset.trialTerm){const n=Number(b.dataset.trialTerm);if(![36,60,84].includes(n))return;trialTerm=n;exploreYear=3;render();document.querySelector(`[data-trial-term="${n}"]`)?.focus({preventScroll:true});return;}
 if(b.dataset.resetVisitor!==undefined){visitorRate=null;render();document.querySelector('#visitor-rate')?.focus();return;}
+if(b.dataset.property!==undefined){const r=rentals[Number(b.dataset.property)];if(!r)return;state.propertyName=r[0];state.rentTotal=r[3];state.rentSource='https://citypm.appfolio.com/listings/detail/'+r[4];state.rentDate='';state.propertyVerified=false;state.rentMode=state.rentMode||'1';setField('rent',personalRent());render();return;}
+if(b.dataset.confirmProperty!==undefined){if(safeURL(state.rentSource)&&state.rentTotal>0&&state.propertyName){state.propertyVerified=true;state.rentDate=new Date().toISOString().slice(0,10);save();render();}return;}
 if(b.dataset.home){setRentMode(b.dataset.home);return;}
 if(b.dataset.priority&&Object.hasOwn(financingGoals,b.dataset.priority)){
  state.financePriority=b.dataset.priority;save();render();
@@ -849,7 +1005,7 @@ if(b.dataset.action==='next'){if(missing(page)){reminder=true;render();document.
 if(b.dataset.action==='outline'){modal(`<h2 id="modal-title">Your project</h2>${itinerary()}<div class="menu-tools">${[['export','Download backup'],['import','Open backup'],['example','Try a worked example'],['reset','Start fresh']].map(([key,label])=>`<button class="text-action" data-tool="${key}">${label}</button>`).join('')}</div><p class="help">Download a backup at the end of class. Open it if you switch devices.</p>`);return;}
 if(b.dataset.tool)closeModal();
 if(b.dataset.removePhoto!==undefined){state.cars[Number(b.dataset.removePhoto)].photo='';save();render();return;}
-if(b.dataset.nav){go(b.dataset.nav);return;}if(b.dataset.term){state.term=Number(b.dataset.term);invalidate('term');save();render();return;}if(b.dataset.decision){state.decision=b.dataset.decision;save();render();return;}if(b.dataset.check){const key=b.dataset.check,c=calculate(state),initial=key==='depreciation'?state.cars[state.selected].price:key==='savings'?c.initial:state.rent,factor=key==='depreciation'?1-state.depreciation/100:1+(key==='savings'?state.apy:state.rentGrowth)/100;const result=checkEquation(state.equations[key],initial,factor);state.checks[key]=result.ok;feedback[key]=result.message;save();const out=document.querySelector(`[data-feedback="${key}"]`);out.textContent=result.message;out.className='feedback '+(result.ok?'success':'error');return;}
+if(b.dataset.nav){go(b.dataset.nav);return;}if(b.dataset.term){state.term=Number(b.dataset.term);invalidate('term');save();render();return;}if(b.dataset.decision){state.decision=b.dataset.decision;save();render();return;}if(b.dataset.check){const key=b.dataset.check,c=calculate(state),initial=key==='depreciation'?state.cars[state.selected].price:key==='savings'?c.initial:c.rentData[0]?.exponential,factor=key==='depreciation'?1-state.depreciation/100:1+(key==='savings'?state.apy:state.rentGrowth)/100;const result=checkEquation(state.equations[key],initial,factor);state.checks[key]=result.ok;feedback[key]=result.message;save();const out=document.querySelector(`[data-feedback="${key}"]`);out.textContent=result.message;out.className='feedback '+(result.ok?'success':'error');return;}
  const action=b.dataset.tool||b.dataset.action;if(action==='example')modal(`<h2 id="modal-title">Explore a worked example</h2><p>This loads fictional research numbers so you can explore the budget and graphs. Any work currently saved in this browser will be replaced.</p><p>Download a backup first if you want to keep your current work.</p><div class="inline row-spaced"><button class="btn secondary" data-action="export">Download current work</button><button class="btn" data-action="load-example">Load example</button></div>`);
  if(action==='load-example'){state=example();photoJobs.clear();resetJobSearch();feedback={};save();closeModal();go('life');notify('Worked example loaded. Replace the research with your own.');}
  if(action==='reset')modal(`<h2 id="modal-title">Start a new project?</h2><p>This clears the project saved in this browser. Download your current work first if you want to keep it.</p><div class="inline row-spaced"><button class="btn secondary" data-action="export">Download current work</button><button class="btn" data-action="confirm-reset">Start fresh</button></div>`);
@@ -858,10 +1014,10 @@ if(b.dataset.nav){go(b.dataset.nav);return;}if(b.dataset.term){state.term=Number
  if(action==='choose-import'){closeModal();document.querySelector('#import-file').click();}
  if(action==='print'){if(page!=='report')go('report');else render();requestAnimationFrame(()=>window.print());}
  if(action==='baseline'){const c=calculate(state);if(!c.ready)return;state.baseline={car:state.cars[state.selected].name,remainder:c.remainder,cashLeft:c.cashLeft,term:state.term,capturedAt:new Date().toISOString()};save();render();notify('Comparison saved. Change a choice, then return here.');}
- if(action==='check-payment'){const c=calculate(state),out=document.querySelector('[data-feedback="payment"]'),i=document.querySelector('#interest-check').value,p=document.querySelector('#principal-check').value;if(!c.loan){out.textContent='Add a selected car price first.';return;}const ok=i!==''&&p!==''&&Math.abs(Number(i)-c.loan[1].interest)<.03&&Math.abs(Number(p)-c.loan[1].principal)<.03;state.checks.payment=ok;save();out.textContent=ok?'Correct. Your first payment calculation is checked.':Math.abs(Number(i)-c.loan[1].interest)>=.03||i===''?'Start with interest. Multiply '+money(c.principal,2)+' by '+Number((state.rate/100).toFixed(5))+' and divide by 12. Keep the unrounded result until the last step.':'Your interest is right. Subtract it from your monthly payment of '+money(c.pay,2)+' to find the principal repaid.';out.className='feedback '+(ok?'success':'error');}
+ if(action==='check-payment')gradePayment();
 
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();const modal=document.querySelector('.modal');if(e.key==='Tab'&&modal){const items=[...modal.querySelectorAll('button,a,input,textarea')],first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target?.dataset?.calculator!==undefined){e.preventDefault();calcKey('=');return;}if(e.key==='Escape')closeModal();const modal=document.querySelector('.modal');if(e.key==='Tab'&&modal){const items=[...modal.querySelectorAll('button,a,input,textarea')],first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 document.querySelector('#import-file').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>2e6)throw Error('Choose a project backup smaller than 2 MB.');const next=restore(JSON.parse(await file.text()));state=next;photoJobs.clear();resetJobSearch();feedback={};save();go(state.currentTask||'life');notify('Project restored from your backup.');}catch(err){notify('Could not open backup: '+err.message);}finally{e.target.value='';}});
 document.addEventListener('error',e=>{
  if(e.target?.dataset?.networkImage===undefined)return;
