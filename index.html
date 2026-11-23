@@ -30,6 +30,38 @@ body:has(.walk-main){background:#faf9f5;color:#19352c}
 .dream-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:5px 0 12px}.dream-grid button{padding:0 0 11px;background:#fffefa;color:#214433;border:1px solid #c3cfbf;border-radius:8px;overflow:hidden;text-align:left}.dream-grid img{display:block;width:100%;aspect-ratio:2.1;object-fit:cover}.dream-grid strong,.dream-grid span{display:block;padding:0 12px}.dream-grid strong{margin:9px 0 2px}.dream-grid span,.ex-car figcaption{font-size:.8rem;color:#56705f}.dream-grid [aria-pressed=true]{border-color:#346347;box-shadow:inset 0 0 0 2px #346347;background:#edf3e6}.draft-pick .field,.presentation-launch .field{margin:14px 0}.ex-car{margin:8px 0}.ex-car img{max-height:225px;width:100%;object-fit:cover;border-radius:6px}.sale-slip,.visitor-lab{background:#edf2e6;padding:18px;border-radius:7px}.sale-slip dl div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #cad6c7;padding:5px 0}.sale-slip dd{font-weight:650;margin:0}.sale-slip small{color:#485d50}.presentation-launch{border-bottom:1px solid #c9d7c9;padding-bottom:18px}.exhibition{max-width:820px;margin:24px auto}.exhibition h1{font-family:Georgia,serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:400}.exhibition .eyebrow{margin:20px 0 10px}.exhibit-pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:24px 0}.exhibit-pair small{font-weight:700}.exhibit-pair .ex-car img{height:clamp(90px,17vw,190px)}.visitor-lab label{display:flex;justify-content:space-between;font-weight:bold}.exhibition blockquote{border-left:3px solid #85a475;margin:18px 0;padding:4px 15px;font-size:1.12rem}.visitor-lab input{width:100%}.visitor-lab h2{margin-top:0}.visitor-lab .graph{max-height:260px}@media(max-width:520px){.dream-grid,.exhibit-pair{gap:8px}.dream-grid strong{font-size:.89rem}.sale-slip,.visitor-lab{padding:13px}.sale-slip dd{white-space:nowrap}}@media print{.presentation-launch{display:none}}
 .image-frame{display:block;min-width:0}.image-frame>.vehicle-photo{display:block;width:100%}.ex-car figcaption a,.report-photo figcaption a{color:inherit;text-decoration:underline}.one-car small a{color:white}.one-car>.image-frame img{max-height:250px}.my-car-line .image-frame{width:84px;flex-shrink:0}.draft-pick [data-dream-preview] .ex-car img{object-fit:contain;background:#e9eee6}
 .dream-grid button>.image-frame,.starter-strip button>.image-frame,.picker-grid button>.image-frame,.car-ballot label>.image-frame{display:block;padding:0;margin:0}
+
+.job-lesson .lesson-intro h1{font-size:clamp(2.45rem,5vw,4.25rem);margin-bottom:.35rem}
+.job-lesson .lesson-intro p{max-width:57ch;font-size:1.05rem}
+.job-lesson .task-body{padding-top:1.2rem}
+.jobs-search{background:#174635;color:#fffdf5;padding:clamp(1.1rem,3vw,1.65rem);border-radius:12px}
+.jobs-mast,.job-list-heading,.job-current,.job-actions,.job-tabs{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.jobs-mast strong{font:500 clamp(1.65rem,3vw,2.2rem)/1.1 Georgia,serif}
+.jobs-mast>span{font-size:.86rem;color:#dbe7ce}
+.jobs-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(9rem,30%);gap:.8rem;margin-top:1.1rem}
+.jobs-controls label{font-size:.75rem;color:#edf2e8;font-weight:650;display:grid;gap:.28rem}
+.jobs-controls input,.jobs-controls select{width:100%;min-width:0;font-size:1rem;height:2.85rem;background:#fffef8;color:#193d31;border:0;border-radius:5px;padding:0 .8rem}
+.job-tabs{justify-content:flex-start;margin:.9rem 0 .2rem;gap:.25rem}
+.job-tabs button,.job-bookmark{background:transparent;color:#365546;border:1px solid transparent;padding:.45rem .75rem;font-size:.85rem;font-weight:650;border-radius:2rem}
+.job-tabs button[aria-pressed=true],.job-bookmark[aria-pressed=true]{background:#deeadc;color:#204a34}
+.job-list-heading{border-bottom:1px solid #bbcbbc;padding:.8rem 0 .55rem}
+.job-list-heading span,.job-footnote,.job-row-name small,.job-row-name>span,.job-row-pay small{font-size:.8rem;color:#55675d}
+.job-row{display:flex;align-items:center;gap:.25rem;border-bottom:1px solid #d4ded3}
+.job-row:hover{background:#f2f4ec}
+.job-open{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.95rem;flex:1;min-width:0;text-align:left;padding:1rem .25rem;background:transparent;color:#17382b}
+.job-logo{display:grid;place-items:center;width:2.9rem;height:2.9rem;font:700 .94rem/1 Georgia,serif;letter-spacing:.035em;border-radius:.55rem;background:#e2d6c2;color:#58412c}
+.job-logo.arts{background:#e2d8ed;color:#593c65}.job-logo.transit{background:#e7d7d1;color:#773f30}.job-logo.clinic{background:#d2e5df;color:#1d574d}.job-logo.data{background:#d6ddf0;color:#304a75}.job-logo.events{background:#f0dfb8;color:#6c501a}
+.job-row-name,.job-row-pay{display:grid;gap:.12rem}.job-row-name strong{font:650 1.12rem/1.2 system-ui,sans-serif;letter-spacing:-.025em}
+.job-row-pay{text-align:right}.job-row-pay b{font-size:.9rem;white-space:nowrap}.job-bookmark{border-color:#c9d5c7}
+.job-empty{padding:1.6rem 0}.job-footnote{margin:.85rem 0 .25rem}.job-detail header{display:flex;gap:1rem;align-items:center;margin:1.15rem 0 .55rem}
+.job-detail header .job-logo{height:3.8rem;width:3.8rem;flex:none}.job-detail header p{font-size:.88rem;margin:0}.job-detail h2,.job-receipt h2{font:500 clamp(1.8rem,4vw,2.65rem)/1.15 Georgia,serif;color:#183d30}
+.job-rate{font-weight:700;color:#254b37}.job-detail dl{margin:1.4rem 0}.job-detail dt{font-weight:700;margin:.85rem 0 .15rem}.job-detail dd{margin:0;color:#405648;max-width:68ch}
+.job-paystub{margin:1.3rem 0;background:#eaf0e2;border-left:4px solid #507a48;padding:1rem 1.2rem;border-radius:0 .5rem .5rem 0}
+.job-paystub>div{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.job-paystub strong{font:600 1.65rem Georgia,serif;color:#234b33}.job-paystub strong small{font:500 .85rem system-ui}.job-paystub p{margin:.25rem 0;font-size:.88rem;color:#3e5543}
+.job-paystub>small,.job-receipt>small{font-size:.7rem;letter-spacing:.1em;font-weight:700;color:#486249}.job-consider{font:italic 1.15rem/1.45 Georgia,serif}
+.job-actions{justify-content:flex-start}.job-current{padding:.6rem 0 1rem;justify-content:flex-start;font-size:.9rem}
+@media(max-width:650px){.job-open{grid-template-columns:2.6rem 1fr;column-gap:.6rem;row-gap:.22rem}.job-row-pay{grid-column:2;text-align:left}.job-logo{width:2.4rem;height:2.4rem}.job-row-name strong{font-size:1rem}.job-bookmark{font-size:.78rem;padding:.4rem .55rem}.jobs-controls{grid-template-columns:1fr}.jobs-mast{gap:.35rem}.job-tabs{margin-top:.7rem}}
 </style></head>
 <body><a class="skip" href="#main">Skip to project</a><div id="app"></div><div id="toast" class="toast" role="status" aria-live="polite"></div><input id="import-file" type="file" accept=".json,application/json" hidden><script>const garage = [
   {id:'civic', name:'2019 Honda Civic', short:'Civic', shape:'Compact sedan', price:18500, mpg:32, insight:'How much room does a compact sedan leave in your monthly budget?'},
@@ -119,6 +151,55 @@ function knownCarImage(name){
  return {url:'https://'+host+'/wikipedia/commons/thumb/'+folder+'/'+slug+'/960px-'+slug,source:'https://commons.wikimedia.org/wiki/File:'+slug,title:file.replaceAll('_',' '),author,license:'CC BY-SA 4.0',yearMatch:true};
 }
 
+// Classroom snapshots checked November 23, 2026. Rates and schedules come from the linked postings.
+const jobEdition='November 23, 2026';
+const localJobs=[
+  {id:'grant',title:'Guest Experience Expert',employer:'The US Grant · Marriott',area:'Downtown',field:'Hospitality',mark:'USG',tone:'hotel',schedule:'Full-time',rate:29.65,hours:40,weeks:52,
+   shift:'Full-time with open availability. The hotel prefers weekend availability.',
+   work:'Check guests in, sort out requests during their stay and recommend places around San Diego.',
+   entry:'A high school diploma or GED is preferred. The posting lists no previous hotel experience or license.',
+   question:'Could you work weekend shifts if that is when your friends are free?',keywords:'hotel front desk customer service tourism',
+   url:'https://careers.marriott.com/guest-experience-expert/job/P1-7060509-0'},
+  {id:'stage',title:'Production Carpenter',employer:'UC San Diego · Theatre & Dance',area:'La Jolla',field:'Arts & trades',mark:'T/D',tone:'arts',schedule:'Seasonal',rate:28.14,high:30.65,hours:40,weeks:39,
+   shift:'Full-time during the nine-month production season. Summer brings a three-month furlough. Some evenings and weekends are required.',
+   work:'Turn scenic designs into sets. Build and install pieces that actors and crews can use safely.',
+   entry:'Experience building scenery from materials such as wood and metal is required.',
+   question:'If rent is due all summer, how much of each working month’s pay would you put aside?',keywords:'music stage crew theater theatre stagehand art construction woodworking',
+   url:'https://employment.ucsd.edu/production-carpenter-141028/job/28D30034BF9E3BBD025D00947643616A'},
+  {id:'bus',title:'Student Bus Operator',employer:'San Diego Metropolitan Transit System',area:'San Diego routes',field:'Transportation',mark:'MTS',tone:'transit',schedule:'Full-time',rate:28.21,hours:40,weeks:52,
+   shift:'The posting guarantees 40 hours a week. Routes can involve early mornings, split shifts or holidays.',
+   work:'Train for a commercial license, drive a scheduled route and help riders get where they need to go.',
+   entry:'Age 21+, a diploma or GED, a California license and at least three years of driving with a good record. Commercial license training is paid.',
+   question:'Would paid training outweigh having less control over your shift?',keywords:'driver bus transit paid training transportation',
+   url:'https://www.craigslist.org/view/d/san-diego-mts-bus-driver-hr-paid-cdl/1JJUyijAcYiwVNFP6xiW1n'},
+  {id:'clinic',title:'Medical Assistant',employer:'UC San Diego Health · Float Team',area:'Kearny Mesa',field:'Health care',mark:'MA',tone:'clinic',schedule:'Per diem',rate:30.75,hours:8,weeks:52,
+   shift:'The posting lists a 20% appointment with eight-hour shifts. Actual shifts can vary. A steady one-shift week is a budgeting scenario.',
+   work:'Help staff with patient visits, appointments and getting clinical spaces ready between patients.',
+   entry:'Medical assistant certification or training, medical vocabulary and the listed life-support qualifications are required.',
+   question:'How would you plan for a month when fewer shifts are available?',keywords:'medical assistant nursing health hospital patients part time healthcare',
+   url:'https://employment.ucsd.edu/medical-assistant-per-diem-float-team-141893/job/9338F7AE1E52B60F2147E626AC40BF7F'},
+  {id:'data',title:'Business Intelligence and Planning Analyst',employer:'UC San Diego · Student Affairs',area:'San Diego · hybrid',field:'Technology',mark:'BI',tone:'data',schedule:'Full-time',rate:80000,high:90000,salaried:true,
+   shift:'Hybrid position with eight-hour weekday shifts.',
+   work:'Analyze campus data and build reports that help university staff decide how to use their resources.',
+   entry:'A relevant bachelor’s degree or equivalent training or experience, plus analytical, database and reporting skills.',
+   question:'What training would you need before you could count this salary in your plan?',keywords:'technology coding computer data statistics business analyst IT',
+   url:'https://employment.ucsd.edu/business-intelligence-and-planning-analyst-141484/job/98EAD6CC9BB112F147D70B66440DEFC7'},
+  {id:'events',title:'Events Specialist I',employer:'UC San Diego Health · Moores Cancer Center',area:'La Jolla',field:'Event production',mark:'EV',tone:'events',schedule:'Full-time',rate:26.53,high:35.73,hours:40,weeks:52,
+   shift:'Weekday shifts with flexibility for evening and weekend events.',
+   work:'Coordinate venues, caterers and audiovisual equipment for conferences and workshops. Track attendance and costs after the event.',
+   entry:'A related bachelor’s degree or four years of relevant experience, education or training. Some event planning experience is required.',
+   question:'Would the event schedule fit the commute and routine you want?',keywords:'media music events audio production planning hospitality',
+   url:'https://employment.ucsd.edu/events-specialist-i-cancer-center-142102/job/BC9633E3EDEFF3B043FD0A8229ACBDDA'}
+];
+function budgetSalary(job){return job.salaried?job.rate:Math.round(job.rate*job.hours*job.weeks*100)/100;}
+function findJobs(words,schedule,savedOnly,savedIds){
+ const tokens=words.toLowerCase().trim().split(/\s+/).filter(Boolean);
+ return localJobs.filter(job=>{
+   const haystack=[job.title,job.employer,'San Diego',job.area,job.field,job.keywords].join(' ').toLowerCase();
+   return (!schedule||schedule===job.schedule)&&(!savedOnly||savedIds.includes(job.id))&&tokens.every(token=>haystack.includes(token));
+ });
+}
+
 
 const VERSION=1;
 function fresh(){return {version:VERSION,name:'',career:'',city:'',salary:null,rent:null,careerSource:'',rentSource:'',careerDate:'',rentDate:'',cars:[{name:'',price:null,mpg:null,source:'',date:''},{name:'',price:null,mpg:null,source:'',date:''}],selected:0,rate:7,down:10,term:60,assumptions:{deductions:25,utilities:120,food:350,phone:80,health:100,debt:0,fun:150,other:100,registration:20,insurance:180,maintenance:100,miles:1000,fuel:4.5,fees:2000,cash:10000,moving:2500,reserve:2000,deposit:200},depreciation:15,apy:4,rentGrowth:3,rentDollars:75,notes:{career:'',car:'',finance:'',depreciation:'',savings:'',rent:'',decision:'',revision:''},equations:{depreciation:'',savings:'',rent:''},checks:{},baseline:null,decision:'',savedAt:null};}
@@ -162,6 +243,7 @@ for(const k of ['rentTotal','manualRent'])if(s[k]!=null&&(!Number.isFinite(s[k])
 for(const pick of [s.firstDraft,s.firstPick])if(pick&&(typeof pick.name!=='string'||typeof pick.reason!=='string'||pick.name.length>20000||pick.reason.length>20000||(pick.photo&&!validPhoto(pick.photo))))throw Error('Invalid first car record.');
 if(s.saleCall&&(!['cash','even','owe'].includes(s.saleCall.guess)||![36,60,84].includes(s.saleCall.term)||!Number.isFinite(s.saleCall.net)))throw Error('Invalid year-three prediction.');
 return s;}
+
 
 
 
@@ -307,7 +389,7 @@ function equationBlock(key,formula){return `<div class="formula">${formula}</div
 function yearTable(key,c){if(!c.carData.length&&key==='depreciation')return '<p>Add a car price first.</p>';return `<table><thead><tr><th>Year</th><th>Car value</th><th>Debt</th><th>Equity</th></tr></thead><tbody>${c.carData.filter((_,i)=>i%12===0).map(d=>`<tr><td>${d.x}</td><td>${money(d.value,2)}</td><td>${money(d.debt,2)}</td><td>${money(d.value-d.debt,2)}</td></tr>`).join('')}</tbody></table>`;}
 function revisionTable(c){const b=state.baseline;return `<table><thead><tr><th>Measure</th><th>Before</th><th>Current</th></tr></thead><tbody><tr><td>Selected car</td><td>${esc(b?.car||'Not saved yet')}</td><td>${esc(state.cars[state.selected].name||'Choose a car')}</td></tr><tr><td>Left each month</td><td>${money(b?.remainder??null)}</td><td>${money(c.remainder)}</td></tr><tr><td>Cash after setup</td><td>${money(b?.cashLeft??null)}</td><td>${money(c.cashLeft)}</td></tr><tr><td>Loan term</td><td>${b?b.term/12+' years':'—'}</td><td>${state.term/12} years</td></tr></tbody></table>`;}
 function reportPage(){const c=calculate(state),p=progress(state),complete=p.every(Boolean),a=state.assumptions;return `<div class="report"><div class="toolbar"><button class="btn" data-action="print">Print or save PDF</button><button class="btn secondary" data-action="export">Download project backup</button><button class="btn secondary" data-action="import">Open project backup</button></div>${!complete?`<div class="report-warning">Draft report · ${p.filter(Boolean).length} of 5 project sections complete. You can print a draft; unfinished work is labeled below.</div>`:''}<div class="report-top"><div class="eyebrow">Algebra 2 · Exhibition project</div><h1>My life. My car. My decision.</h1><p>${esc(state.name||'Your name')} ${state.city?'· '+esc(state.city):''}</p><div class="no-print">${field('Name for your report','name',{placeholder:'First name or project name'})}</div></div>
-${state.cars[state.selected].name?`<figure class="report-photo">${portrait(state.cars[state.selected])}<figcaption><strong>${esc(state.cars[state.selected].name)}</strong> ${creditLine(state.cars[state.selected])}</figcaption></figure>`:''}<section class="report-section"><h2>The life I researched</h2><table><tbody><tr><td>Career</td><td>${esc(state.career||'Not entered')}</td></tr><tr><td>Annual gross pay</td><td>${money(state.salary)}</td></tr><tr><td>Monthly take-home estimate</td><td>${money(c.income)}</td></tr>${state.rentMode&&homes.some(([k])=>k===state.rentMode)?'<tr><td>Living arrangement</td><td>'+esc(homes.find(([k])=>k===state.rentMode)[1])+'</td></tr>':''}<tr><td>Monthly rent share</td><td>${money(state.rent)}</td></tr><tr><td>Selected car</td><td>${esc(state.cars[state.selected].name||'Not selected')}</td></tr><tr><td>Car price</td><td>${money(state.cars[state.selected].price)}</td></tr></tbody></table><p class="quote">${esc(state.notes.career||'Career and housing explanation not entered.')}</p><p class="quote">${esc(state.notes.car||(state.comparedCar?'I selected '+state.cars[state.selected].name+' after comparing the two listings.':'Car comparison in progress.'))}</p></section>
+${state.cars[state.selected].name?`<figure class="report-photo">${portrait(state.cars[state.selected])}<figcaption><strong>${esc(state.cars[state.selected].name)}</strong> ${creditLine(state.cars[state.selected])}</figcaption></figure>`:''}<section class="report-section"><h2>The life I researched</h2>${jobReport()}<table><tbody><tr><td>Career</td><td>${esc(state.career||'Not entered')}</td></tr><tr><td>Annual gross pay</td><td>${money(state.salary)}</td></tr><tr><td>Monthly take-home estimate</td><td>${money(c.income)}</td></tr>${state.rentMode&&homes.some(([k])=>k===state.rentMode)?'<tr><td>Living arrangement</td><td>'+esc(homes.find(([k])=>k===state.rentMode)[1])+'</td></tr>':''}<tr><td>Monthly rent share</td><td>${money(state.rent)}</td></tr><tr><td>Selected car</td><td>${esc(state.cars[state.selected].name||'Not selected')}</td></tr><tr><td>Car price</td><td>${money(state.cars[state.selected].price)}</td></tr></tbody></table><p class="quote">${esc(state.notes.career||'Career and housing explanation not entered.')}</p><p class="quote">${esc(state.notes.car||(state.comparedCar?'I selected '+state.cars[state.selected].name+' after comparing the two listings.':'Car comparison in progress.'))}</p></section>
 <section class="report-section"><h2>My affordability analysis</h2><table><tbody>${[['Take-home pay',c.income],['Living expenses',c.living],['Transportation including loan',c.transport],['Planned savings',a.deposit],['Money left per month',c.remainder],['Cash after setup and emergency reserve',c.cashLeft]].map(([k,v])=>`<tr><td>${k}</td><td>${money(v,2)}</td></tr>`).join('')}</tbody></table><p class="meta">Loan: ${state.term/12} years, ${state.rate}% annual interest, ${state.down}% down. Monthly payment ${money(c.pay,2)}; total interest ${money(c.interest,2)}.</p><p class="quote">${Object.hasOwn(financingGoals,state.financePriority)?'<strong>My priority: '+esc(financingGoals[state.financePriority])+'</strong><br>'+esc(loanEvidence(c))+' ':''}${esc(state.notes.finance||(Object.hasOwn(financingGoals,state.financePriority)?'':'Financing explanation not entered.'))}</p><p class="meta">First payment calculation: ${state.checks.payment?'checked':'not checked'}.</p></section>
 <section class="report-section"><h2>My exponential models</h2><div class="graphs">${[['depreciation','Car depreciation'],['savings','Compound savings'],['rent','Future monthly rent']].map(([key,label])=>`<article class="graph-card"><h3>${label}</h3>${graphFor(key,c)}<p class="student-equation">My equation: ${esc(state.equations[key]||'Not entered')}</p><p class="meta">${state.checks[key]?'Model checked':'Model not checked'}</p><p class="quote">${esc(state.notes[key]||'Interpretation not entered.')}</p></article>`).join('')}</div></section>
 <section class="report-section"><h2>My final decision</h2>${state.firstPick?`<p>My first pick was <strong>${esc(state.firstPick.name)}</strong>. “${esc(state.firstPick.reason)}”</p>`:''}${state.saleCall?`<p>My original year-three prediction: ${esc(saleLabels[state.saleCall.guess])}. My estimated cash after payoff was ${money(state.saleCall.net,2)}.</p>`:''}<p><strong>${{buy:'Buy now',wait:'Save first',revise:'Revise further'}[state.decision]||'Recommendation not selected'}</strong></p>${revisionTable(c)}<p class="quote">${esc(state.notes.revision||'Revision explanation not entered.')}</p><p class="quote">${esc(state.notes.decision||'Final recommendation not entered.')}</p></section>
@@ -399,7 +481,7 @@ function presentationLaunch(){
 
 const tasks = [
   ['dream',1,'Which car would you pick today?','Choose the car you want before checking the budget. Save one reason. You’ll come back to this choice at the exhibition.'],
-  ['life',1,'Find your first paycheck','Pick a job you could see yourself doing. Find one entry-level listing in a city where you might live. Use its pay and save its link.'],
+  ['life',1,'Find your next job','Browse San Diego listings. Open a job to see what the work takes and what the paycheck could cover.'],
   ['housing',1,'Find a place to live','Look up one rental near that job. Choose who would share it and use the listing to work out your monthly cost.'],
   ['cars',1,'Find a car you would drive','Open one listing for a gasoline or hybrid car. Record the asking price, combined miles per gallon, and the listing link.'],
   ['alternative',1,'Find your comparison car','Find a second real listing with a different price or fuel economy. You’ll compare both cars on the same commute.'],
@@ -429,7 +511,7 @@ function assumptions(keys){
 function missing(id){
  const s=state, notes=s.notes;
  if(id==='dream')return s.firstPick?'':!s.firstDraft?.name?.trim()?'Pick a car or enter your own.':!s.firstDraft.reason?.trim()?'Finish the sentence about why you want this car.':'';
- if(id==='life')return !String(s.career||'').trim()?'Enter the job title from your listing.':!String(s.city||'').trim()?'Add the city where this job is based.':!(s.salary>0)?'Enter annual pay in dollars.':!safeURL(s.careerSource)?'Paste the full web address for the pay you found.':'';
+ if(id==='life')return !String(s.career||'').trim()?'Choose a listing and use its pay, or add your own job.':!String(s.city||'').trim()?'Add the city where this job is based.':!(s.salary>0)?'Enter annual pay in dollars.':!safeURL(s.careerSource)?'Paste the full web address for the pay you found.':'';
  if(id==='housing')return s.rent===null?'Enter your share of one month’s rent.':!safeURL(s.rentSource)?'Paste the full rental listing link.':!notes.career.trim()?'Explain how the career and housing choices fit together.':'';
  if(id==='cars'||id==='alternative'){const c=s.cars[id==='cars'?0:1];return !String(c.name||'').trim()?'Add the year, make and model.':!(c.price>0)?'Enter the asking price from the listing.':!(c.mpg>0)?'Find the combined MPG for this car.':!safeURL(c.source)?'Paste the full URL of a real car listing.':'';}
  if(id==='compare')return notes.car.trim()||s.comparedCar===true?'':'Choose the car you want to carry into your budget.';
@@ -464,6 +546,73 @@ function careerChooser(){
     <option value="custom" ${custom?'selected':''}>Use a different job title…</option></select></div>
     ${custom?field('Job title from your listing','career',{wide:true}):''}`;
 }
+const jobSearch={view:'auto',detail:'',query:'',schedule:'',savedOnly:false};
+function resetJobSearch(){Object.assign(jobSearch,{view:'auto',detail:'',query:'',schedule:'',savedOnly:false});}
+const jobById=id=>localJobs.find(job=>job.id===id);
+const savedJobs=()=>Array.isArray(state.savedJobs)?state.savedJobs.filter(id=>jobById(id)):[];
+function jobRate(job){
+ const unit=job.salaried?' / yr':' / hr',digits=job.salaried?0:2;
+ return money(job.rate,digits)+(job.high?'–'+money(job.high,digits):'')+unit;
+}
+function payBasis(job){
+ return job.salaried?money(job.rate)+' per year':money(job.rate,2)+' × '+job.hours+' hours/week × '+job.weeks+' paid weeks';
+}
+function jobLogo(job){return '<span class="job-logo '+job.tone+'" aria-hidden="true">'+job.mark+'</span>';}
+function jobReport(){
+ const j=state.budgetJob;
+ if(!j||!jobById(j.id)||typeof j.basis!=='string')return '';
+ return '<p><strong>'+esc(j.employer)+'</strong> · '+esc(j.schedule)+'<br>Pay used in my budget: '+esc(j.basis)+'. Source snapshot: '+esc(j.edition)+'.</p>';
+}
+function currentJob(){
+ if(!state.career||!state.salary)return '';
+ return '<div class="job-current"><span>In your budget</span><strong>'+esc(state.career)+'</strong><span>'+money(state.salary)+' gross / year</span></div>';
+}
+function jobResults(){
+ const matches=findJobs(jobSearch.query,jobSearch.schedule,jobSearch.savedOnly,savedJobs());
+ const count=matches.length;
+ const rows=matches.map(job=>{
+   const saved=savedJobs().includes(job.id);
+   const preview=jobSearch.savedOnly?'<small>Est. '+money(budgetSalary(job)*(1-state.assumptions.deductions/100)/12)+' take-home / month</small>':'';
+   return '<div class="job-row"><button class="job-open" data-job-action="open" data-job-id="'+job.id+'" aria-label="View '+job.title+' listing">'+jobLogo(job)+'<span class="job-row-name"><small>'+esc(job.employer)+'</small><strong>'+esc(job.title)+'</strong><span>'+job.area+' · '+job.schedule+'</span></span><span class="job-row-pay"><b>'+jobRate(job)+'</b>'+preview+'</span></button><button class="job-bookmark" data-job-action="save" data-job-id="'+job.id+'" aria-label="'+(saved?'Remove ':'Save ')+job.title+(saved?' from':' to')+' shortlist" aria-pressed="'+saved+'">'+(saved?'Saved':'Save')+'</button></div>';
+ }).join('');
+ return '<div class="job-list-heading"><strong>'+(jobSearch.savedOnly?'My shortlist':'Search results')+'</strong><span role="status">'+count+' '+(count===1?'listing':'listings')+'</span></div>'+(rows||'<div class="job-empty"><strong>'+(jobSearch.savedOnly?'No saved jobs match.':'No listings match that search.')+'</strong><p>Try another keyword or browse all six listings.</p><button class="text-action" data-job-action="clear">Show all jobs</button></div>');
+}
+function refreshJobList(){const list=document.querySelector('[data-job-results]');if(list)list.innerHTML=jobResults();}
+function findJobBoard(){
+ return currentJob()+'<div class="jobs-search"><div class="jobs-mast"><strong>Local job board</strong><span>San Diego County</span></div><div class="jobs-controls"><label for="job-query">Search jobs<input id="job-query" type="search" data-job-query placeholder="Job title, employer or keyword" value="'+esc(jobSearch.query)+'"></label><label for="job-schedule">Schedule<select data-job-schedule id="job-schedule">'+['','Full-time','Seasonal','Per diem'].map(s=>'<option value="'+s+'" '+(jobSearch.schedule===s?'selected':'')+'>'+(s||'All schedules')+'</option>').join('')+'</select></label></div></div>'+
+ '<div class="job-tabs"><button data-job-action="all" aria-pressed="'+!jobSearch.savedOnly+'">All jobs</button><button data-job-action="shortlist" aria-pressed="'+jobSearch.savedOnly+'">Shortlist ('+savedJobs().length+')</button></div><div data-job-results>'+jobResults()+'</div><p class="job-footnote">Classroom copies of real postings, checked '+jobEdition+'. Availability may change.</p><button class="text-action" data-job-action="manual">Use a job I found somewhere else</button>';
+}
+function jobDetails(job){
+ const gross=budgetSalary(job),saved=savedJobs().includes(job.id);
+ const rangeNote=job.high?' The estimate uses the low end of the posted range.':'';
+ return '<div class="job-detail"><button class="text-action" data-job-action="browse">← Back to results</button><header>'+jobLogo(job)+'<div><p>'+esc(job.employer)+'</p><h2>'+esc(job.title)+'</h2><span>'+job.area+' · '+job.schedule+'</span></div></header><p class="job-rate">'+jobRate(job)+'</p><dl><dt>On the job</dt><dd>'+job.work+'</dd><dt>Before you apply</dt><dd>'+job.entry+'</dd><dt>Your schedule</dt><dd>'+job.shift+'</dd></dl><a href="'+esc(job.url)+'" target="_blank" rel="noopener noreferrer">Read the original posting ↗</a><div class="job-paystub"><small>PAYCHECK PREVIEW</small><div><span>Estimated take-home</span><strong>'+money(gross*(1-state.assumptions.deductions/100)/12)+'<small> / month</small></strong></div><p>'+payBasis(job)+' = '+money(gross)+' gross per year.'+rangeNote+'</p><p>Budget estimate using '+num(state.assumptions.deductions)+'% deductions and a 12-month average.'+(job.salaried?'':' Paid weeks and hours are planning assumptions.')+'</p></div><p class="job-consider">'+job.question+'</p><div class="job-actions"><button class="btn lead" data-job-action="choose" data-job-id="'+job.id+'">Use this job in my budget</button><button class="text-action" data-job-action="save" data-job-id="'+job.id+'" aria-pressed="'+saved+'">'+(saved?'Remove from shortlist':'Save to shortlist')+'</button></div></div>';
+}
+function paycheck(c){
+ if(jobSearch.view==='detail'&&jobById(jobSearch.detail))return jobDetails(jobById(jobSearch.detail));
+ if(jobSearch.view==='manual')return '<button class="text-action" data-job-action="browse">← Back to job search</button>'+manualPaycheck(c);
+ if(jobSearch.view==='auto'&&state.career&&state.salary&&safeURL(state.careerSource)){
+  const known=jobById(state.budgetJob?.id);
+  return '<div class="job-receipt"><small>YOUR BUDGET JOB</small><h2>'+esc(state.career)+'</h2><p>'+esc(state.budgetJob?.employer||state.city)+'</p><div class="job-paystub"><div><span>Estimated monthly take-home</span><strong>'+value('income',c.income)+'</strong></div><p>'+money(state.salary)+' gross per year · '+esc(state.city)+'</p>'+(known?'<p>'+esc(state.budgetJob.basis)+'</p>':'')+'</div><p>Your pay and source are saved. Continue to housing to see what this income can cover.</p><div class="job-actions"><button class="text-action" data-job-action="browse">Compare other jobs</button><a href="'+esc(safeURL(state.careerSource))+'" target="_blank" rel="noopener noreferrer">View pay source ↗</a>'+(!known?'<button class="text-action" data-job-action="manual">Edit my listing</button>':'')+'</div></div>'+assumptions(['deductions']);
+ }
+ return findJobBoard();
+}
+function handleJobAction(action,id){
+ const job=jobById(id);
+ if(action==='open'&&job){jobSearch.view='detail';jobSearch.detail=id;}
+ else if(action==='save'&&job){const ids=savedJobs();state.savedJobs=ids.includes(id)?ids.filter(x=>x!==id):[...ids,id];save();}
+ else if(action==='choose'&&job){
+  Object.assign(state,{career:job.title,city:'San Diego',salary:budgetSalary(job),careerSource:job.url,careerDate:new Intl.DateTimeFormat('en-CA').format(new Date()),customCareer:false,budgetJob:{id,employer:job.employer,schedule:job.schedule,basis:payBasis(job),edition:jobEdition}});
+  jobSearch.view='auto';reminder=false;save();
+ }else if(action==='manual'){jobSearch.view='manual';}
+ else if(['browse','all','shortlist','clear'].includes(action)){jobSearch.view='browse';if(action==='clear'){resetJobSearch();jobSearch.view='browse';}if(action==='shortlist'||action==='all')jobSearch.savedOnly=action==='shortlist';}
+ else return;
+ render();
+ if(action==='save'){document.querySelector('[data-job-action="save"][data-job-id="'+id+'"]')?.focus({preventScroll:true});return;}
+ if(action==='all'||action==='shortlist'){document.querySelector('[data-job-action="'+action+'"]')?.focus({preventScroll:true});return;}
+ const target=document.querySelector('.job-detail header h2,.job-receipt h2,#job-query,#career-list');
+ if(target){if(target.matches('h2'))target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:'nearest'});}
+}
+
 const homes = [['1','On my own'],['2','One roommate'],['3','Two roommates'],['share','My own split']];
 function housingChoice(){
   const mode=state.rentMode || (state.rent!==null?'share':'1');
@@ -507,7 +656,7 @@ function prediction(id){
  <div class="forecast-feedback" aria-live="polite">${answered?`<p><strong>${pick===q.correct?'That’s right.':'Try this reasoning.'}</strong> ${q.explanations[pick].replace(/^Yes\. /,'')} ${q.experiment}</p>`:''}</div></fieldset>`;
 }
 
-function paycheck(c){return `<div class="fields">${careerChooser()}${field('City or region','city',{placeholder:'e.g. San Diego'})}${numberField('Annual starting pay','salary',{placeholder:'e.g. 48000',wide:true})}${sourceField('Where did you find the pay?','careerSource')}</div>
+function manualPaycheck(c){return `<div class="fields">${careerChooser()}${field('City or region','city',{placeholder:'e.g. San Diego'})}${numberField('Annual starting pay','salary',{placeholder:'e.g. 48000',wide:true})}${sourceField('Where did you find the pay?','careerSource')}</div>
  ${caption('Estimated monthly take-home pay',value('income',c.income))}
  ${hint('Where do I look? What if the pay is hourly?','<p>Search for your job title, your city, and “entry level.” Look for the starting wage on the employer’s posting. If it lists a range, use the low end and explain that choice.</p><p>Multiply hourly pay × hours per week × weeks worked per year. For example, $22 × 40 × 50 gives $44,000 before deductions. Use the schedule for your job.</p>')}
  ${assumptions(['deductions'])}`;}
@@ -603,7 +752,7 @@ function render(){
  else {
    const next=nextTask(),pre=prerequisite(page,c);
    const body=page==='report'?presentationLaunch()+reviewList()+reportPage():pre?'':taskContent(page,c);
-   content=`<article class="lesson ${page==='report'?'final-report':''}"><div class="lesson-intro"><div class="period-line"><span>Period ${t[1]} of 3</span><span>Step ${idx+1} of ${tasks.length}</span></div><progress max="${tasks.length}" value="${idx+1}" aria-label="Position in project"></progress><h1>${t[2]}</h1><p>${t[3]}</p></div>${pre?`<p class="pencil">${pre[1]} <button data-nav="${pre[0]}" class="text-action">Go to that step</button></p>`:''}
+   content=`<article class="lesson ${page==='life'?'job-lesson':''} ${page==='report'?'final-report':''}"><div class="lesson-intro"><div class="period-line"><span>Period ${t[1]} of 3</span><span>Step ${idx+1} of ${tasks.length}</span></div><progress max="${tasks.length}" value="${idx+1}" aria-label="Position in project"></progress><h1>${t[2]}</h1><p>${t[3]}</p></div>${pre?`<p class="pencil">${pre[1]} <button data-nav="${pre[0]}" class="text-action">Go to that step</button></p>`:''}
    <div class="task-body">${body}</div>${next&&next[1]!==t[1]?`<p class="class-stop">Stopping here for today? <button class="text-action" data-action="export">Download my backup</button> so you can pick up in period ${next[1]}.</p>`:''}
    <footer class="walk-foot"><button class="text-action" data-nav="${idx?tasks[idx-1][0]:'welcome'}">Back</button>${next?`<button class="btn lead" data-action="next">${next[1]!==t[1]?'Continue to period '+next[1]:'Continue'}</button>`:''}</footer>
    <div data-reminder aria-live="polite">${reminder&&missing(page)?`<p class="pencil">Still to do: <span data-missing>${esc(missing(page))}</span> <button class="text-action" data-nav="${next?.[0]||'report'}">Come back to this later</button></p>`:''}</div></article>`;
@@ -613,9 +762,9 @@ function render(){
 
 function save(){state.savedAt=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(state));saveError=false;}catch{saveError=true;}document.querySelector('[data-save]')?.replaceChildren(document.createTextNode(saveError?'Not saved · download work':'Saved in this browser'));}
 function notify(text){const toast=document.querySelector('#toast');toast.textContent=text;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),4200);}
-function go(to){closeModal();page=route(to);reminder=false;if(page==='present')visitorRate=null;if(page==='depreciation'){trialTerm=null;if(state.saleCall)exploreYear=3;}if(page!=='welcome'&&page!=='present'){state.currentTask=page;save();}history.replaceState(null,'','#'+page);render();window.scrollTo({top:0,behavior:'instant'});document.querySelector('#main')?.focus({preventScroll:true});}
+function go(to){if(page==='life'&&to!=='life')resetJobSearch();closeModal();page=route(to);reminder=false;if(page==='present')visitorRate=null;if(page==='depreciation'){trialTerm=null;if(state.saleCall)exploreYear=3;}if(page!=='welcome'&&page!=='present'){state.currentTask=page;save();}history.replaceState(null,'','#'+page);render();window.scrollTo({top:0,behavior:'instant'});document.querySelector('#main')?.focus({preventScroll:true});}
 function invalidate(path){if(/^cars\.[01]\.price$/.test(path)&&Number(path.split('.')[1])!==state.selected)return;const keys=[];if(path.startsWith('equations.'))keys.push(path.split('.')[1]);if(path==='rent'||path==='rentGrowth')keys.push('rent');if(path==='depreciation'||path==='selected'||/^cars\.\d\.price$/.test(path))keys.push('depreciation');if(['apy','assumptions.cash','assumptions.moving','assumptions.reserve'].includes(path))keys.push('savings');if(['rate','down','term','selected'].includes(path)||/^cars\.\d\.price$/.test(path))keys.push('payment');for(const key of keys){if(key==='payment')state.paymentWork={};state.checks[key]=false;delete feedback[key];const out=document.querySelector(`[data-feedback="${key}"]`);if(out){out.textContent='';out.className='feedback';}}}
-function setField(path,val){const keys=path.split('.');let o=state;for(let i=0;i<keys.length-1;i++)o=o[keys[i]];o[keys.at(-1)]=val;invalidate(path);if(path.endsWith('Source')||path.endsWith('.source')){const datePath=path.endsWith('.source')?path.replace('.source','.date'):path.replace('Source','Date');const kk=datePath.split('.');let ob=state;for(let i=0;i<kk.length-1;i++)ob=ob[kk[i]];ob[kk.at(-1)]=new Intl.DateTimeFormat('en-CA').format(new Date());}save();}
+function setField(path,val){if(['career','city','salary','careerSource'].includes(path))delete state.budgetJob;const keys=path.split('.');let o=state;for(let i=0;i<keys.length-1;i++)o=o[keys[i]];o[keys.at(-1)]=val;invalidate(path);if(path.endsWith('Source')||path.endsWith('.source')){const datePath=path.endsWith('.source')?path.replace('.source','.date'):path.replace('Source','Date');const kk=datePath.split('.');let ob=state;for(let i=0;i<kk.length-1;i++)ob=ob[kk[i]];ob[kk.at(-1)]=new Intl.DateTimeFormat('en-CA').format(new Date());}save();}
 function refresh(){const c=calculate(page==='depreciation'&&trialTerm?{...state,term:trialTerm}:state);
 const slip=document.querySelector('[data-sale-result]');if(slip)slip.innerHTML=saleResult();
 const share=document.querySelector('[data-rent-share]');if(share)share.textContent=money(state.rent,2);
@@ -633,6 +782,7 @@ function modal(content){const wrap=document.createElement('div');wrap.className=
 function closeModal(){document.querySelector('.modal-backdrop')?.remove();}
 function exportWork(){save();const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='life-and-car-project.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('Project backup downloaded. It includes your research and explanations.');}
 document.addEventListener('input',e=>{const el=e.target,path=el.dataset.field;
+if(el.dataset.jobQuery!==undefined){jobSearch.query=el.value;refreshJobList();return;}
 if(el.dataset.visitor!==undefined){const k=exhibitKey(),m=exhibits[k];visitorRate=Math.max(0,Math.min(Math.max(m.max,state[m.field]),Number(el.value)));const graph=document.querySelector('[data-visitor-chart]'),out=document.querySelector('[data-visitor-rate]');if(graph)graph.innerHTML=visitorGraph();if(out)out.textContent=num(visitorRate)+'%';return;}
 if(el.dataset.timeline!==undefined){exploreYear=Math.max(0,Math.min(5,Number(el.value)));refresh();return;}
 if(el.dataset.trial){state.paymentWork={...state.paymentWork,[el.dataset.trial]:el.value};state.checks.payment=false;const msg=document.querySelector('[data-feedback="payment"]');if(msg)msg.textContent='';save();return;}
@@ -645,6 +795,7 @@ if(path==='firstDraft.name'){const box=document.querySelector('[data-dream-previ
 if(/^cars\.[01]\.name$/.test(path)){const status=document.querySelector('[data-listing-status]');if(status)status.innerHTML=lookupStatus(state.cars[Number(path.split('.')[1])]);queuePhotos();const i=Number(path.split('.')[1]),car=state.cars[i];const title=document.querySelector(`[data-car-title="${i}"]`),box=document.querySelector(`[data-photo-box="${i}"]`);if(title)title.textContent=car.name||'Choose a car';const question=document.querySelector(`[data-car-insight="${i}"]`);if(question)question.textContent=referenceFor(car.name)?.insight||'';if(box)box.innerHTML=portrait(car)+'<small>'+creditLine(car)+'</small>';refresh();}
 if(el.type==='number'||el.type==='range')refresh();const rem=document.querySelector('[data-reminder]');if(rem&&reminder){const pending=missing(page);if(!pending){rem.innerHTML='';reminder=false;}else {const span=rem.querySelector('[data-missing]');if(span)span.textContent=pending;}}});
 document.addEventListener('change',e=>{
+if(e.target.dataset.jobSchedule!==undefined){jobSearch.schedule=e.target.value;refreshJobList();return;}
 if(e.target.dataset.dreamPhoto!==undefined){attachPhoto(e.target.files[0],'dream').catch(err=>notify(err.message));e.target.value='';return;}
 if(e.target.dataset.evidence!==undefined){if(Object.hasOwn(exhibits,e.target.value)){state.exhibitModel=e.target.value;visitorRate=null;save();}return;}
 if(e.target.dataset.careerList!==undefined){
@@ -657,6 +808,7 @@ if(e.target.dataset.careerList!==undefined){
 }
 if(e.target.dataset.photoSlot!==undefined){attachPhoto(e.target.files[0],Number(e.target.dataset.photoSlot)).catch(err=>notify(err.message));e.target.value='';return;}if(e.target.dataset.car!==undefined){state.selected=Number(e.target.dataset.car);invalidate('selected');save();render();}if(e.target.dataset.action==='deposits'){withDeposits=e.target.checked;refresh();}});
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.jobAction){handleJobAction(b.dataset.jobAction,b.dataset.jobId);return;}
 if(b.dataset.retryPhoto){loadPhoto(projectCars().find(car=>photoKey(car)===b.dataset.retryPhoto),true);return;}
 if(b.dataset.confirmCar!==undefined){state.comparedCar=true;save();render();return;}
 if(b.dataset.dream&&!state.firstPick){
@@ -699,9 +851,9 @@ if(b.dataset.tool)closeModal();
 if(b.dataset.removePhoto!==undefined){state.cars[Number(b.dataset.removePhoto)].photo='';save();render();return;}
 if(b.dataset.nav){go(b.dataset.nav);return;}if(b.dataset.term){state.term=Number(b.dataset.term);invalidate('term');save();render();return;}if(b.dataset.decision){state.decision=b.dataset.decision;save();render();return;}if(b.dataset.check){const key=b.dataset.check,c=calculate(state),initial=key==='depreciation'?state.cars[state.selected].price:key==='savings'?c.initial:state.rent,factor=key==='depreciation'?1-state.depreciation/100:1+(key==='savings'?state.apy:state.rentGrowth)/100;const result=checkEquation(state.equations[key],initial,factor);state.checks[key]=result.ok;feedback[key]=result.message;save();const out=document.querySelector(`[data-feedback="${key}"]`);out.textContent=result.message;out.className='feedback '+(result.ok?'success':'error');return;}
  const action=b.dataset.tool||b.dataset.action;if(action==='example')modal(`<h2 id="modal-title">Explore a worked example</h2><p>This loads fictional research numbers so you can explore the budget and graphs. Any work currently saved in this browser will be replaced.</p><p>Download a backup first if you want to keep your current work.</p><div class="inline row-spaced"><button class="btn secondary" data-action="export">Download current work</button><button class="btn" data-action="load-example">Load example</button></div>`);
- if(action==='load-example'){state=example();photoJobs.clear();feedback={};save();closeModal();go('life');notify('Worked example loaded. Replace the research with your own.');}
+ if(action==='load-example'){state=example();photoJobs.clear();resetJobSearch();feedback={};save();closeModal();go('life');notify('Worked example loaded. Replace the research with your own.');}
  if(action==='reset')modal(`<h2 id="modal-title">Start a new project?</h2><p>This clears the project saved in this browser. Download your current work first if you want to keep it.</p><div class="inline row-spaced"><button class="btn secondary" data-action="export">Download current work</button><button class="btn" data-action="confirm-reset">Start fresh</button></div>`);
- if(action==='confirm-reset'){state=fresh();photoJobs.clear();feedback={};save();closeModal();go('welcome');}
+ if(action==='confirm-reset'){state=fresh();photoJobs.clear();resetJobSearch();feedback={};save();closeModal();go('welcome');}
  if(action==='close')closeModal();if(action==='export')exportWork();if(action==='import'){if(state.savedAt)modal(`<h2 id="modal-title">Open a saved project</h2><p>The selected backup will replace the work saved in this browser. Download your current work first to keep it.</p><div class="inline row-spaced"><button class="btn secondary" data-action="export">Download current work</button><button class="btn" data-action="choose-import">Choose backup file</button></div>`);else document.querySelector('#import-file').click();}
  if(action==='choose-import'){closeModal();document.querySelector('#import-file').click();}
  if(action==='print'){if(page!=='report')go('report');else render();requestAnimationFrame(()=>window.print());}
@@ -710,7 +862,7 @@ if(b.dataset.nav){go(b.dataset.nav);return;}if(b.dataset.term){state.term=Number
 
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();const modal=document.querySelector('.modal');if(e.key==='Tab'&&modal){const items=[...modal.querySelectorAll('button,a,input,textarea')],first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
-document.querySelector('#import-file').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>2e6)throw Error('Choose a project backup smaller than 2 MB.');const next=restore(JSON.parse(await file.text()));state=next;photoJobs.clear();feedback={};save();go(state.currentTask||'life');notify('Project restored from your backup.');}catch(err){notify('Could not open backup: '+err.message);}finally{e.target.value='';}});
+document.querySelector('#import-file').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>2e6)throw Error('Choose a project backup smaller than 2 MB.');const next=restore(JSON.parse(await file.text()));state=next;photoJobs.clear();resetJobSearch();feedback={};save();go(state.currentTask||'life');notify('Project restored from your backup.');}catch(err){notify('Could not open backup: '+err.message);}finally{e.target.value='';}});
 document.addEventListener('error',e=>{
  if(e.target?.dataset?.networkImage===undefined)return;
  const box=e.target.closest('[data-model-frame]'),key=box?.dataset.modelFrame;
