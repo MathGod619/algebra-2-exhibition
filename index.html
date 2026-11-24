@@ -273,6 +273,7 @@ function fresh(){return{v:3,step:'welcome',name:'',lastStep:'',
  job:{id:'',title:'',salary:null,url:''},
  home:{id:'',total:null,split:'2',custom:null,url:''},
  b:{ded:25,utilities:120,food:350,phone:80,health:100,fun:150,other:100,save:200},
+ quiz:{i:0,a:{},done:false,b:null,why:''},
  credit:{pay:'ontime',util:20,apps:'1',mix:'card',payAmt:100,card:{name:'',url:'',apr:'',fee:''}},
  car:{id:'',name:'',year:null,price:null,mpg:null,tank:null,url:''},
  cc:{miles:1000,gas:4.50,premium:1200,maintenance:100},
@@ -423,6 +424,9 @@ function carLabel(){return [S.car.year,S.car.name].filter(Boolean).join(' ')||'Y
 
 /* ---- questions from the original project ---- */
 const QUESTIONS={
+ paycheck:[
+  ['habits','Your quiz answers set your budget. Which number surprised you? Does it match how you really live?']
+ ],
  credit:[
   ['creditWhat','What is a credit score? Describe a few of the important factors in the calculation.'],
   ['creditImprove','What can you do to improve your credit score?'],
@@ -496,7 +500,7 @@ const app=$('#app');
 function stepIndex(){return STEPS.findIndex(s=>s[0]===S.step);}
 function answered(group){return QUESTIONS[group].every(([k])=>(S.ans[k]||'').trim().length>8);}
 function done(id){const c=calc();return{
- paycheck:c.takehome!=null&&c.rent!=null,
+ paycheck:S.quiz.done&&c.takehome!=null&&c.rent!=null&&answered('paycheck'),
  credit:!!S.chk.monthlyOk&&!!S.chk.interestOk&&answered('credit'),
  car:c.price>0&&c.mpg>0&&c.year>=MIN_YEAR&&!!S.chk.tanksOk,
  loan:c.pay!=null&&!!S.chk.firstIntOk&&answered('loan'),
@@ -510,7 +514,7 @@ function topBar(){
 }
 function logo(){return `<svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0e1a2b"/><path d="M6 21c3 0 3-2 6.5-2s3.5 2 6.5 2 3-2 6.5-2" stroke="#5b8ff9" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M7 15l4-5h10l4 5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>`;}
 function dock(){
- const i=stepIndex();if(i<0)return '';const c=calc();const next=STEPS[i+1];
+ const i=stepIndex();if(i<0||(S.step==='paycheck'&&!S.quiz.done))return '';const c=calc();const next=STEPS[i+1];
  const stats=[['Take-home / mo',money(c.takehome)],['Car costs / mo',c.carMo!=null?money(c.carMo):'—'],['Left over',c.left!=null&&c.carMo!=null?money(c.left):'—']];
  if(S.step==='credit')stats[1]=['Credit score',String(c.score)];
  if(i>=5&&c.solved)stats[2]=['Underwater',c.wetMonths?c.wetMonths+' months':'Never'];
@@ -559,11 +563,46 @@ function demoChart(){
 }
 
 /* ---- 1. paycheck ---- */
+// Habits quiz. No prices, no category names, and options are not in cheap-to-expensive order, so students answer honestly.
+// Amounts are classroom estimates in dollars a month, added to QUIZ_BASE. Taxes and health costs are not asked about.
+const QUIZ_BASE={utilities:75,food:200,phone:60,fun:20,other:30,save:0};
+const QUIZ_CATS={food:'Groceries',fun:'Fun & eating out',phone:'Phone & internet',utilities:'Utilities',other:'Other needs',save:'Savings each month'};
+const QUIZ=[
+ ['night','late-night food','It’s 9 pm on a school night and you’re hungry. What usually happens?',[['I make something in the kitchen',{food:30}],['I order something or go out and get it',{fun:70}],['I wait until morning',{}],['I snack on whatever is there',{food:15}]]],
+ ['sat','free Saturdays','You have a free Saturday. What are you most likely doing?',[['Going to a concert, a game or an event',{fun:100}],['Hanging out at the beach, a park or the skatepark',{fun:15}],['Gaming or watching shows at home',{fun:20}],['Going to the mall, the movies or an arcade',{fun:70}]]],
+ ['hot','hot days','It’s 90° out and you’re home all day. What do you do?',[['Turn on a fan',{utilities:10}],['Run the AC until it feels good, and leave it on',{utilities:60}],['Open windows and find shade',{}],['Run the AC just to sleep',{utilities:30}]]],
+ ['drink','drinks you buy','How often do you have a drink you didn’t make, like coffee, boba, soda or an energy drink?',[['A few times a week',{fun:45}],['Almost never',{}],['Most days',{fun:90}],['About once a week',{fun:20}]]],
+ ['phone','your phone','Your phone screen cracks, but it still works. What would you do?',[['Get the newest model I can',{phone:45}],['Keep using it cracked',{}],['Get a used or older phone',{phone:15}],['Get the screen fixed',{phone:10}]]],
+ ['store','how you shop for food','You’re getting a week of food at the store. Which sounds most like you?',[['I get the list, plus a few things that look good',{food:80}],['I get organic or specialty stuff',{food:170}],['I get the brands I like',{food:120}],['I get whatever version is on sale',{food:30}]]],
+ ['clothes','clothes and shoes','When do you usually get new clothes or shoes?',[['When something wears out',{other:20}],['When something I like drops',{other:130}],['Around the start of a school year or season',{other:40}],['Something new most months',{other:80}]]],
+ ['bus','using data','You have a long ride with no Wi-Fi. What do you do?',[['Talk, sleep or look out the window',{}],['Stream or scroll the whole time',{phone:25}],['Message people now and then',{phone:10}],['Listen to stuff I already downloaded',{phone:5}]]],
+ ['lunch','weekend lunch','Where does lunch usually come from on a weekend?',[['Fast food or a taco shop',{fun:60}],['Cooked at home',{food:60}],['A café or a sit-down place',{fun:100}],['Leftovers',{food:30}]]],
+ ['shower','showers','How long is your usual shower?',[['10 to 20 minutes',{utilities:25}],['Under 5 minutes',{}],['More than 20 minutes',{utilities:40}],['5 to 10 minutes',{utilities:10}]]],
+ ['apps','apps and subscriptions','How many paid apps, games and streaming services do you use, no matter who pays?',[['2 or 3',{other:30}],['6 or more',{other:85}],['0 or 1',{other:10}],['4 or 5',{other:55}]]],
+ ['gift','gift money','You get some money for your birthday. A month later, where is it?',[['It went to one thing I’d been wanting',{save:100}],['I still have most of it',{save:250}],['It went to lots of small things',{save:50}],['I spent some and still have some',{save:150}]]]
+];
+function quizBudget(a=S.quiz.a){const b={...QUIZ_BASE},why={};for(const [id,label,,opts] of QUIZ){const o=opts[a[id]];if(!o)continue;for(const [k,v] of Object.entries(o[1])){b[k]+=v;(why[k]??=[]).push([v,label]);}}return{b,why};}
+function quizView(){
+ const i=Math.min(Math.max(0,S.quiz.i),QUIZ.length-1),[id,,q,opts]=QUIZ[i];
+ return `<p class="eyebrow">Step 1 of 7 · About you</p><h1>A normal week</h1>
+ <p class="lede">Answer for a normal week, not your best one. There are no right answers, and your choices aren’t graded or printed. At the end you’ll see how they’re used, and you can’t retake it.</p>
+ <section class="card" style="max-width:640px"><div class="card-head"><h2 style="margin:0">${esc(q)}</h2></div><p class="small muted" style="margin:0 0 12px" aria-live="polite">Question ${i+1} of ${QUIZ.length}</p>
+ <div style="display:grid;gap:10px">${opts.map(([l],k)=>`<button class="pick" style="width:100%;box-sizing:border-box;text-align:left" data-quiz="${k}" aria-pressed="${S.quiz.a[id]===k}"><b>${esc(l)}</b></button>`).join('')}</div>
+ ${i>0?'<p style="margin:14px 0 0"><button class="link" data-act="quizback">← Previous question</button></p>':''}</section>`;
+}
+function quizResult(){
+ if(!S.quiz.b)return '';const {why}=quizBudget();
+ return `<section class="card"><h2>Your answers became your budget</h2><p class="small muted" style="margin:4px 0 10px">These are classroom estimates of what your habits would cost each month on your own.</p>
+ <table class="ledger">${Object.entries(QUIZ_CATS).map(([k,l])=>{const top=(why[k]||[]).sort((x,y)=>y[0]-x[0]).slice(0,2).map(x=>x[1]).join(', ');return `<tr><td>${l}${top?` <span class="muted small">(raised by ${esc(top)})</span>`:''}</td><td>${money(S.quiz.b[k])}</td></tr>`;}).join('')}</table>${qa('habits',QUESTIONS.paycheck[0][1])}</section>`;
+}
+function budgetChanges(){const q=S.quiz.b;if(!q)return [];const base={...q,health:fresh().b.health};const out=Object.entries({...QUIZ_CATS,health:'Health costs'}).filter(([k])=>num(S.b[k])!==base[k]).map(([k,l])=>`${l}: ${money(base[k])} → ${money(num(S.b[k])??0)}`);if(num(S.b.ded)!==fresh().b.ded)out.push(`Taxes & deductions: ${fresh().b.ded}% → ${num(S.b.ded)??0}%`);return out;}
 function paycheck(){
+ if(!S.quiz.done)return quizView();
  const j=S.job;
  return `<p class="eyebrow">Step 1 of 7 · Life skills</p><h1>Your paycheck</h1>
  <p class="lede">Before you shop for a car, find out how much money you actually have each month. Pick a real job, then a real place to live.</p>
  <div class="grid2"><div class="stack">
+ ${quizResult()}
  <section class="card"><div class="card-head"><h2>Choose a job</h2><span class="small muted">San Diego · Nov 2026</span></div>
   <div class="picks">${JOBS.map(x=>`<button class="pick" data-job="${x.id}" aria-pressed="${j.id===x.id}"><small>${esc(x.employer)}</small><b>${esc(x.title)}</b><small>${esc(x.schedule)}</small><span class="amt">${x.salary?money(x.salary)+'/yr':'$'+x.rate.toFixed(2)+'/hr'}</span><small>≈ ${money(jobSalary(x))} a year</small></button>`).join('')}
    <button class="pick" data-job="own" aria-pressed="${j.id==='own'}"><small>Your own research</small><b>Use a different job</b><small>Your dream job: title, yearly pay, link</small></button></div>
@@ -576,9 +615,10 @@ function paycheck(){
   ${S.home.split==='custom'?`<label class="f" style="margin-top:12px;max-width:220px"><span>My share of rent</span><div class="money-in"><input class="inp" inputmode="decimal" data-k="home.custom" data-num value="${S.home.custom??''}"></div></label>`:''}
   ${S.home.url?`<p class="small" style="margin:12px 0 0"><a href="${esc(S.home.url)}" target="_blank" rel="noopener">Open the rental listing ↗</a> Listings change. If it’s gone, find a similar one.</p>`:''}
  </section>
- <details class="card"><summary>Adjust the classroom estimates (taxes, groceries, phone…)</summary>
-  <p class="small muted">Starting estimates. Change any number your research supports.</p>
-  <div class="fields">${[['ded','Taxes & deductions','pct'],['utilities','Utilities'],['food','Groceries'],['phone','Phone & internet'],['health','Health costs'],['fun','Fun & eating out'],['other','Other needs'],['save','Savings each month']].map(([k,l,t])=>`<label class="f"><span>${l}</span><div class="${t?'pct-in':'money-in'}"><input class="inp" inputmode="decimal" data-k="b.${k}" data-num value="${S.b[k]}"></div></label>`).join('')}</div>
+ <details class="card"><summary>Change a number (taxes, groceries, phone…)</summary>
+  <p class="small muted">Your quiz answers set these. Taxes and health costs are classroom estimates. Change a number only if you found a real cost. Your report shows every change.</p>
+  <div class="fields">${[['ded','Taxes & deductions','pct'],['utilities','Utilities'],['food','Groceries'],['phone','Phone & internet'],['health','Health costs'],['fun','Fun & eating out'],['other','Other needs'],['save','Savings each month']].map(([k,l,t])=>`<label class="f"><span>${l}</span><div class="${t?'pct-in':'money-in'}"><input class="inp" inputmode="decimal" data-k="b.${k}" data-num value="${S.b[k]??''}"></div></label>`).join('')}</div>
+  <label class="f" style="margin-top:12px"><span>If you changed a number, what real cost did you find?</span><textarea class="inp" data-k="quiz.why">${esc(S.quiz.why)}</textarea></label>
  </details>
  </div>
  <aside class="sticky"><section class="card"><h2>Your month</h2><p class="small muted" style="margin:0 0 10px">Before any car costs</p><div data-live="budget"></div></section></aside></div>`;
@@ -892,6 +932,7 @@ function report(){
  <article class="card report"><p class="eyebrow">Exponential Functions Project · Report</p><h1 style="font-size:32px">${esc(S.name||'Student name')}</h1>
  <p class="muted">${esc(S.job.title||'—')} · ${esc(carLabel())} · ${money(c.price)}${S.car.url?` · <a href="${esc(S.car.url)}">listing</a>`:''}</p>
  <h2>1. Paycheck</h2><p>Gross ${money(c.gross)}/mo · take-home ${money(c.takehome)}/mo · rent share ${money(c.rent)} · car payment is ${pct(c.payShare)} of take-home.</p>
+ ${S.quiz.b?`<p>Budget from my habits: ${Object.entries(QUIZ_CATS).map(([k,l])=>`${l} ${money(S.quiz.b[k])}`).join(' · ')}.</p>${budgetChanges().length?`<div class="qa-item"><b>Numbers I changed</b><p>${budgetChanges().map(esc).join('<br>')}</p>${S.quiz.why?`<p>${esc(S.quiz.why)}</p>`:'<p class="blank">No reason given</p>'}</div>`:''}`:'<p class="blank">Habits quiz not taken</p>'}${QUESTIONS.paycheck.map(([k,p])=>ansRow(k,p)).join('')}
  <h2>2. Credit</h2><p>Simulated score <b>${c.score}</b> (${c.myTier.label}) → ${c.myTier.apr}% used-car APR.</p>
  ${ck('monthly','Monthly interest rate at 24% APR')}${ck('interest','Interest on $2,500 for one month')}${ck('double','Months for the balance to double')}
  <div class="qa-item"><b>Card chosen</b><p>${esc(S.credit.card.name||'—')} · APR ${esc(S.credit.card.apr||'—')}% · fee ${esc(S.credit.card.fee||'—')}</p></div>
@@ -987,6 +1028,7 @@ app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.chk){e.p
 app.addEventListener('click',async e=>{
  const b=e.target.closest('button');if(!b)return;const d=b.dataset;
  if(d.go){go(d.go);return;}
+ if(d.quiz!=null){const z=S.quiz;z.a[QUIZ[z.i][0]]=+d.quiz;if(z.i<QUIZ.length-1)z.i++;else{z.done=true;z.b=quizBudget().b;Object.assign(S.b,z.b);}save();render();scrollTo({top:0,behavior:'instant'});$('#main')?.focus({preventScroll:true});return;}
  if(d.job){if(d.job==='own'){if(S.job.id!=='own')S.job={id:'own',title:'',salary:null,url:''};}else{const j=JOBS.find(x=>x.id===d.job);S.job={id:j.id,title:j.title,salary:jobSalary(j),url:j.url};}save();render();return;}
  if(d.home){const r=RENTALS.find(x=>x.id===d.home);S.home={...S.home,id:r.id,total:r.total,url:r.url};save();render();return;}
  if(d.split){S.home.split=d.split;save();render();return;}
@@ -1000,6 +1042,7 @@ app.addEventListener('click',async e=>{
  const a=d.act;
  if(a==='check'){const id=d.id,c=calc(),v=num(S.chk[id]),w=CHECKS[id].want(c);S.chk[id+'Tried']=true;S.chk[id+'Ok']=v!=null&&w!=null&&Math.abs(v-w)<=CHECKS[id].tol;if(id==='cross'&&S.chk.crossOk&&c.fitPass&&c.quadPass){S.solved={key:c.key,month:v,p:c.qa,q:c.qb,c:c.financed,r2:c.quadR2,term:c.n,apr:c.apr};rebase();}
   save();live();const rail=app.querySelector('.rail');if(rail){const tmp=document.createElement('div');tmp.innerHTML=topBar();rail.replaceWith(tmp.querySelector('.rail'));}return;}
+ if(a==='quizback'){S.quiz.i=Math.max(0,S.quiz.i-1);save();render();$('#main')?.focus({preventScroll:true});return;}
  if(a==='addrow'){S.data.push({year:'',price:'',miles:''});save();render();document.querySelector('#datatable tbody tr:last-child input')?.focus();return;}
  if(a==='clearrows'){if(await ask('Remove all your listings?','Remove all')){S.data=[];S.dataSource='';save();render();}return;}
  if(a==='practice'){S.data=practiceData();S.dataSource='practice';save();render();toast('Practice data loaded');return;}
@@ -1020,6 +1063,7 @@ function practiceData(car=S.car){
 }
 function example(){const s=fresh(),j=JOBS[0],g=GARAGE[0],r=RENTALS[1];
  s.name='Worked example';s.job={id:j.id,title:j.title,salary:jobSalary(j),url:j.url};s.home={id:r.id,total:r.total,split:'2',custom:null,url:r.url};
+ s.quiz.a={night:0,sat:1,hot:3,drink:0,phone:3,store:0,clothes:2,bus:1,lunch:0,shower:3,apps:0,gift:3};s.quiz.done=true;s.quiz.b=quizBudget(s.quiz.a).b;Object.assign(s.b,s.quiz.b);
  s.car={id:g.id,name:g.name,year:g.year,price:g.price,mpg:g.mpg,tank:g.tank,url:''};s.data=practiceData(s.car);s.dataSource='practice';s.step='paycheck';
  const fit=calc(s).best;s.fit={a:Math.round(fit.a),b:Math.round(fit.b*1e4)/1e4,tried:true,shown:false};
  const q=calc(s).qbest;s.quad={a:Math.round(q.a*10)/10,b:Math.round(q.b*10)/10,tried:true,shown:false};
