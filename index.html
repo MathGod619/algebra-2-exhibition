@@ -206,6 +206,12 @@ details summary{cursor:pointer;font-weight:650}
 .report .qa-item b{display:block;font-size:14px}
 .report .qa-item p{margin:4px 0 0;white-space:pre-wrap}
 .report .blank{color:var(--debt);font-style:italic}
+.hand input.ok{border-color:var(--value);background:var(--value-soft)}.hand input.no{border-color:var(--debt);background:var(--debt-soft)}
+.hand td{vertical-align:middle}.hand td:first-child span{display:block}
+.cp{border:2px solid var(--ink)}
+.rubric{min-width:640px}.rubric td,.rubric th{text-align:left;vertical-align:top}.rubric th:last-child{white-space:nowrap}
+@media print{.rubric{min-width:0;font-size:11px}}
+.grid2>*{min-width:0}
 .credit-line{font-size:12px;color:var(--faint);margin-top:10px}
 </style>
 </head>
@@ -287,6 +293,9 @@ function fresh(){return{v:3,step:'welcome',name:'',lastStep:'',
  fit:{a:null,b:.85,tried:false,shown:false},
  quad:{a:null,b:null,tried:false,shown:false},
  chk:{},ans:{},
+ hand:{done:false,tries:0,rows:null},
+ stress:{price:null,down:0,term:72,ovr:'',roll:true,old:0,quad:{a:null,b:null},solved:null},
+ cp:{},
  solved:null,base:null,decision:{choice:'',why:'',visitor:''}};}
 function merge(d){const f=fresh();for(const k of Object.keys(f))if(d&&k in d)f[k]=(f[k]&&typeof f[k]==='object'&&!Array.isArray(f[k])&&d[k]&&typeof d[k]==='object')?{...f[k],...d[k]}:d[k];if(d?.quiz&&d.quiz.v!==2){f.quiz.v=2;f.quiz.a={};f.quiz.i=0;}if(d?.credit?.card)f.credit.card={...fresh().credit.card,...d.credit.card};return f;}
 let S;try{S=merge(JSON.parse(localStorage.getItem(KEY)||'null')||{});}catch{S=fresh();}
@@ -364,7 +373,7 @@ function calc(s=S){
  o.tax=o.price>0?o.price*SALES_TAX/100:null;o.fees=s.loan.fees;
  o.down=Math.max(0,num(s.loan.down)||0);
  o.apr=o.tier.apr;o.n=s.loan.term;
- const fin=(down,roll=s.loan.roll)=>o.price>0?Math.max(0,o.price+(roll?o.tax+o.fees:0)-down):null;
+ const fin=(down,roll=s.loan.roll)=>o.price>0?Math.max(0,o.price+(roll?o.tax+o.fees:0)+(s.loan.old||0)-down):null;
  o.financed=fin(o.down);
  o.upfront=o.price>0?o.down+(s.loan.roll?0:o.tax+o.fees):null;
  o.pay=o.financed!=null?payment(o.financed,o.apr,o.n):null;
@@ -421,6 +430,62 @@ function calc(s=S){
 function modelCross(c){let last=0;for(let m=0;m<=c.n;m+=.05)if(c.D(m/12)-c.V(m/12)>.005)last=m;return last;}
 // accept the models' crossing or the bank's exact month, and anything between
 function crossRange(c){if(!c.D||c.wetMonths==null)return null;const x=modelCross(c),y=c.dryAt;return[Math.min(x,y),Math.max(x,y)];}
+// Plans that are never (or barely) underwater have no crossing worth analyzing, so those students build a loan that does.
+const STRESS_MIN=12;
+function barely(c){return c.solved&&(S.solved.wet??S.base?.wet??c.wetMonths)<3;}
+function initStress(){const P=S.base?.price??num(S.car.price),x=S.stress;if(x.price===P)return;const L=S.base||S.loan;S.stress={...fresh().stress,price:P,down:num(L.down)||0,term:L.term,ovr:L.override||'',roll:L.roll};save();}
+function stressCalc(){const x=S.stress;return calc({...S,car:{...S.car,price:x.price},loan:{...S.loan,down:x.down,term:x.term,override:x.ovr||null,roll:x.roll,old:x.old},quad:{...x.quad,tried:true}});}
+function stressKey(sc){return [sc.key,sc.financed?.toFixed(2),sc.n,sc.apr].join('|');}
+function stressOk(sc=stressCalc()){return !!S.stress.solved&&S.stress.solved.key===stressKey(sc);}
+// The first two months of the payoff schedule, worked by hand before the site shows the rest
+const HAND=[['firstInt','Interest',1],['p1','Principal',1],['b1','End balance',1],['i2','Interest',2],['p2','Principal',2],['b2','End balance',2]];
+const cents=x=>Math.round(x*100)/100;
+function handWant(c){const r=c.apr/1200,pay=cents(c.pay),i1=cents(c.financed*r),p1=cents(pay-i1),b1=cents(c.financed-p1),i2=cents(b1*r),p2=cents(pay-i2);return{start:cents(c.financed),pay,apr:c.apr,n:c.n,firstInt:i1,p1,b1,i2,p2,b2:cents(b1-p2)};}
+function handOk(id,w){const v=num(S.chk[id]);return v!=null&&Math.abs(v-w[id])<=(id==='firstInt'?.011:.031);}
+function handHint(id,w,tries){const g=num(S.chk[id]),yr=w.apr/100,near=(x,d=1)=>Math.abs(g-x)<=d;
+ const start=/2$/.test(id)?w.b1:w.start,int=/2$/.test(id)?w.i2:w.firstInt,prin=/2$/.test(id)?w.p2:w.p1;
+ if(g==null)return 'Fill in this box.';
+ if(id==='firstInt'||id==='i2'){
+  if(id==='i2'&&near(w.firstInt,.02))return 'That’s month 1’s interest again. In month 2 you owe less, so use your month 1 end balance.';
+  if(near(start*yr))return 'That’s a whole year of interest. The APR is yearly, so divide by 12.';
+  if(near(start*w.apr/12,start*.001))return 'Close. Write the APR as a decimal before you multiply.';
+  return `Multiply the start balance by the APR as a decimal, then divide by 12.${tries>2?` Type ${start} × ${yr.toFixed(4)} ÷ 12 into your calculator.`:''}`;}
+ if(id==='p1'||id==='p2'){if(near(w.pay,.02))return 'That’s the whole payment. Part of it goes to interest.';return `Principal is what’s left of the payment after interest.${tries>2?` Type ${w.pay.toFixed(2)} − ${int.toFixed(2)}.`:''}`;}
+ if(near(start-w.pay,.05))return 'You subtracted the whole payment. Only the principal lowers what you owe.';
+ if(near(start+int,.05))return 'You added the interest. Subtract the principal from the start balance.';
+ return `Subtract the principal from the start balance.${tries>2?` Type ${start.toFixed(2)} − ${prin.toFixed(2)}.`:''}`;}
+// Teacher checkpoints: a live list of what's finished, questions to ask out loud, and initials. Nothing is locked behind them.
+const CHECKPOINTS={
+ credit:{n:1,before:'Car',items:c=>[['Quiz, job and rental finished',S.quiz.done&&c.takehome!=null&&c.rent!=null],['Three credit card checks correct',!!(S.chk.monthlyOk&&S.chk.interestOk&&S.chk.doubleOk)],['A real card picked',!!S.credit.card.name.trim()],['Step 2 questions answered',answered('credit')]],
+  talk:()=>['A $1,000 balance at 24% APR with no payments: what do you owe after 1 month? After 2? Why doesn’t it go up by the same dollar amount both times?','Which one habit would raise your score the most? Show me.'],
+  snap:c=>`take-home ${money(c.takehome)}, score ${c.score}, ${c.myTier.apr}% APR`},
+ loan:{n:2,before:'Value data',items:c=>[[`A car from ${MIN_YEAR} or newer`,c.price>0&&c.year>=MIN_YEAR],['Tanks of gas check correct',!!S.chk.tanksOk],['First two months worked by hand',S.hand.done],['Step 3 and 4 questions answered',answered('car')&&answered('loan')]],
+  talk:()=>['Why is the interest in month 2 smaller than in month 1, even though the payment is the same?','Which would save you more: a 20% down payment or a shorter loan? Which can you really do?'],
+  snap:c=>`${carLabel()} ${money(c.price)}, ${money(c.financed)} at ${c.apr}% for ${c.n} months`},
+ model:{n:3,before:'Fix it',items:c=>[['6 or more real listings',c.pts.length>=6&&S.dataSource!=='practice'],['Both regressions matched',c.fitPass&&c.quadPass||c.solved],['V(3) worked by hand',chkOk('vpt',c)],['Crossing solved',c.solved],...(barely(c)?[['Loan that puts you underwater solved',stressOk()]]:[]),['Step 6 questions answered',answered('model')]],
+  talk:c=>['What do a and b mean for your car, in dollars and percent?',barely(c)?'Your plan stays above water. What did it take to sink it, and which change mattered most?':'Show me the crossing on your graph. How do you know it’s the last one?'],
+  snap:c=>`V(t) = ${money(c.a)}(${(+c.b).toFixed(3)})^t, ${c.solved?(S.solved.wet??c.wetMonths)+' months underwater':'crossing not solved'}`}
+};
+function chkOk(id,c=calc()){const v=num(S.chk[id]),ch=CHECKS[id],w=ch.want(c);return !!S.chk[id+'Tried']&&v!=null&&w!=null&&Math.abs(v-w)<=tolOf(ch,c);}
+function tolOf(ch,c){return typeof ch.tol==='function'?ch.tol(c):ch.tol;}
+function cpItems(id,c){return CHECKPOINTS[id].items(c).map(([l,ok])=>`<p style="margin:5px 0">${ok?'✓':'○'} ${l}</p>`).join('');}
+function cpCard(id){const k=CHECKPOINTS[id],g=S.cp[id],c=calc();
+ return `<section class="card cp"><p class="eyebrow">Checkpoint ${k.n} of 3</p><h2>Stop and show your teacher</h2>
+ <div data-live="cp-${id}" style="margin:8px 0 12px"></div>
+ <h3>Be ready to explain out loud</h3><ul class="small" style="margin:4px 0 14px;padding-left:20px">${k.talk(c).map(t=>`<li>${t}</li>`).join('')}</ul>
+ ${g?`<div class="verdict good">Signed by ${esc(g.by)} on ${esc(g.at)}${g.left?` with ${g.left} item${g.left>1?'s':''} unfinished`:''}. <button class="link" data-act="unsign" data-id="${id}">Remove</button></div>`
+ :`<div class="check"><label class="f" style="max-width:200px"><span>Teacher initials</span><input class="inp" id="init-${id}" maxlength="6" autocomplete="off"></label><button class="btn sm" data-act="sign" data-id="${id}">Sign</button></div>`}
+ <p class="small" style="margin:14px 0 0"><button class="link" data-act="backup">Download a backup</button> <span class="muted">Save it in your Drive. Your work lives only in this browser.</span></p></section>`;}
+function cpBanner(id){return S.cp[id]?'':`<div class="verdict info no-print" style="margin-bottom:14px">Checkpoint ${CHECKPOINTS[id].n} isn’t signed yet. <button class="link" data-go="${id}">Go back to it</button></div>`;}
+// 20-point rubric. Edit the wording or points here.
+const RUBRIC=[
+ ['Budget & credit','Budget is honest and explained. Compares credit choices with numbers.','Budget and credit work is complete and correct.','Mostly complete. Some numbers are wrong or unexplained.','Large parts are missing.'],
+ ['Calculations','All checks correct and can redo any of them out loud.','All checks correct, with small slips explaining them.','Some checks are wrong or can’t be explained.','Few checks attempted.'],
+ ['Models','Both models match the data. Explains a, b and the crossing in context, and where the model could be wrong.','Both models match. Explains a, b and the crossing in context.','One model matches, or the meaning is unclear.','Models are missing or don’t match the data.'],
+ ['Decision','Clear choice with budget and model evidence. Weighs another option and its cost.','Clear choice with a number from the budget and one from the model.','A choice with little evidence.','No choice, or no reasons.'],
+ ['Exhibition','Explains without reading and answers new questions with numbers.','Explains clearly and answers most questions.','Reads from the board or needs help with questions.','Can’t explain the work yet.']];
+function rubricTable(score=false){return `<div class="scroll"><table class="tbl rubric"><thead><tr><th></th><th>4</th><th>3</th><th>2</th><th>1</th>${score?'<th>Score</th>':''}</tr></thead><tbody>${RUBRIC.map(([h,...r])=>`<tr><td><b>${h}</b></td>${r.map(x=>`<td>${x}</td>`).join('')}${score?'<td>&nbsp;&nbsp;&nbsp;/ 4</td>':''}</tr>`).join('')}${score?'<tr><td colspan="5"><b>Total</b></td><td>/ 20</td></tr>':''}</tbody></table></div>`;}
+function rubric(){return `<p class="eyebrow">20 points</p><h1>How you’re graded</h1><p class="lede">Five parts, 4 points each. You’ll also show your teacher three checkpoints along the way: after steps 2, 4 and 6.</p><section class="card">${rubricTable()}</section><div style="margin-top:16px"><button class="btn" data-go="${S.lastStep||'paycheck'}">Back to my project</button></div>`;}
 // a re-solved model must not leave an old answer in step 7's "Original" column
 function rebase(){const b=S.base;if(!b)return;const now={price:S.car.price,L:{...S.loan}};
  S.car.price=b.price;Object.assign(S.loan,{down:b.down,term:b.term,override:b.override||null,roll:b.roll});S.base=snapshot();S.car.price=now.price;S.loan=now.L;}
@@ -508,9 +573,9 @@ function done(id){const c=calc();return{
  paycheck:S.quiz.done&&c.takehome!=null&&c.rent!=null&&answered('paycheck'),
  credit:!!S.chk.monthlyOk&&!!S.chk.interestOk&&answered('credit'),
  car:c.price>0&&c.mpg>0&&c.year>=MIN_YEAR&&!!S.chk.tanksOk,
- loan:c.pay!=null&&!!S.chk.firstIntOk&&answered('loan'),
+ loan:c.pay!=null&&S.hand.done&&answered('loan'),
  value:c.pts.length>=5,
- model:c.solved,
+ model:c.solved&&(!barely(c)||stressOk()),
  decide:!!S.decision.choice&&S.decision.why.trim().length>20}[id];}
 // Before the quiz, nothing on the page may hint at what the project is about (title, logo, step names, example).
 function intro(){return !S.quiz.done&&!S.job.title&&!S.car.name;}
@@ -531,7 +596,7 @@ function dock(){
 function render(){
  if(intro()&&!['welcome','paycheck'].includes(S.step))S.step='welcome';
  document.title=intro()?'Algebra 2 Exhibition':'Life & Car · Will you be underwater?';
- const view={welcome,paycheck,credit,car,loan,value,model,decide,report,board}[S.step]||welcome;
+ const view={welcome,paycheck,credit,car,loan,value,model,decide,report,board,rubric}[S.step]||welcome;
  app.innerHTML=topBar()+`<main id="main" tabindex="-1">${view()}</main>`+dock();
  live();
 }
@@ -563,7 +628,7 @@ function welcome(){
   <li><span><b>Fix it &amp; defend it.</b> Change the plan, make your call, present it.</span></li>
  </ol>
  <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn blue" data-go="${started?(S.lastStep||'paycheck'):'paycheck'}">${started?'Continue my project':'Start my project'} →</button><button class="btn alt" data-act="example">See a worked example</button></div>
- <p class="small muted" style="margin-top:14px">Your work saves in this browser. Use <b>Project ▾ → Download backup</b> before you switch devices.</p>
+ <p class="small muted" style="margin-top:14px">Your work saves in this browser. Use <b>Project ▾ → Download backup</b> before you switch devices. You’ll show your teacher three checkpoints. <button class="link" data-go="rubric">How you’re graded</button></p>
  </div>
  <div class="card dark" aria-hidden="true">${demoChart()}<div class="legend" style="color:#c8d0dc"><span><i style="background:#2bc48a"></i>What the car is worth</span><span><i style="background:#ff6b57"></i>What you still owe</span><span><i style="background:rgba(91,143,249,.45)"></i>Underwater</span></div></div>
  </section>`;
@@ -679,6 +744,7 @@ function credit(){
   ${qa('cardReq','What are the requirements to be approved?')}${qa('cardPerks','What benefits or promotions does it offer?')}
  </section>
  ${qblock('credit')}
+ ${cpCard('credit')}
  </div>
  <aside class="sticky"><section class="card"><h2>Your score, explained</h2><div data-live="score"></div></section></aside></div>`;
 }
@@ -706,7 +772,7 @@ function payoffBox(){
 function carPic(g){if(IMG[g.id])return `<img src="${IMG[g.id]}" alt="${g.year} ${g.name}">`;return `<svg viewBox="0 0 320 180" role="img" aria-label="${g.year} ${g.name}" style="display:block;width:100%;aspect-ratio:16/10;background:#e9e5db"><path d="M40 122c0-18 8-26 30-29l28-6 30-27c6-5 12-7 20-7h52c10 0 16 3 22 9l24 25 22 5c12 3 18 11 18 24v10H40z" fill="#8a93a3"/><path d="M118 86l22-19c4-3 7-4 12-4h14v23zM176 63h24c6 0 10 2 13 5l16 18h-53z" fill="#e9e5db"/><circle cx="94" cy="128" r="21" fill="#2a3547"/><circle cx="94" cy="128" r="9" fill="#e9e5db"/><circle cx="232" cy="128" r="21" fill="#2a3547"/><circle cx="232" cy="128" r="9" fill="#e9e5db"/></svg>`;}
 function car(){
  const k=S.car;
- return `<p class="eyebrow">Step 3 of 7 · Life skills</p><h1>Your car</h1>
+ return `${cpBanner('credit')}<p class="eyebrow">Step 3 of 7 · Life skills</p><h1>Your car</h1>
  <p class="lede">Pick the car you actually want, from <b>${MIN_YEAR} or newer</b>. Then add up what it costs every month besides the loan.</p>
  <div class="grid2"><div class="stack">
  <section class="card"><h2>Pick a car</h2><p class="small muted" style="margin:0 0 12px">Start with a classroom car, or bring your own listing. Edmunds and Kelley Blue Book show how an asking price compares with the market.</p>
@@ -755,7 +821,7 @@ function loan(){
  const c=calc(),L=S.loan;
  if(!(c.price>0))return needs('Pick your car first','The loan is built from your car’s price.','car');
  return `<p class="eyebrow">Step 4 of 7 · Data set #1</p><h1>Your loan</h1>
- <p class="lede">Choose how much to put down and how long to pay. The bank’s payoff schedule shows exactly what you owe each month. That schedule is your first data set.</p>
+ <p class="lede">Choose how much to put down and how long to pay. The bank’s payoff schedule shows exactly what you owe each month. Work the first two months yourself, and the site builds the rest. That schedule is your first data set.</p>
  <div class="grid2"><div class="stack">
  <section class="card"><h2>Loan terms</h2>
   <div class="verdict ${TIERS.indexOf(c.tier)<=1?'good':'info'}" style="margin-top:8px">Your credit: <b>${c.tier.label}</b> (score ${c.score}) → <b>${c.apr}% APR</b>${L.override?' · what-if from step 7':''}. <button class="link" data-go="credit">Change your credit habits</button></div>
@@ -765,12 +831,8 @@ function loan(){
   <h3 style="margin:16px 0 8px">Tax &amp; fees (${money(c.tax+c.fees)})</h3>
   <div class="seg"><button data-roll="1" aria-pressed="${L.roll}">Add to the loan</button><button data-roll="0" aria-pressed="${!L.roll}">Pay in cash</button></div>
  </section>
+ ${handCard(c)}
  <section class="card"><div class="card-head"><h2>Payoff schedule</h2><span class="small muted">Balance at the start of each year</span></div><div class="scroll" data-live="sched"></div></section>
- <section class="card"><h2>Check the bank’s math</h2>
-  <p>In month 1, interest is charged on the whole amount you borrowed. How much of your first payment is interest?</p>
-  <p class="eq" style="font-size:17px">interest = balance × <span class="n">APR</span> ÷ 12</p>
-  ${checkRow('firstInt','Month 1 interest (to the cent)')}
- </section>
  <section class="card"><h2>Compare loan lengths</h2><p class="small muted" style="margin:0 0 8px">Same car, same rate, same down payment.</p><div class="scroll" data-live="terms"></div></section>
  <section class="card"><h2>Know the deal</h2>
   <div class="explain"><h3>Down payment</h3><p class="small" style="margin:0">Cash you pay up front. A bigger down payment means you borrow less, pay less interest and start with equity. It also ties up cash you might need for an emergency.</p></div>
@@ -778,9 +840,29 @@ function loan(){
   <div class="explain"><h3>Balloon loan</h3><p class="small" style="margin:0">Lower monthly payments, then one large “balloon” payment of the remaining balance at the end of the loan.</p></div>
  </section>
  ${qblock('loan')}
+ ${cpCard('loan')}
  </div>
  <aside class="sticky"><section class="card"><h2>Your loan</h2><div data-live="loanbox"></div></section></aside></div>`;
 }
+function handCard(c){
+ const w=handWant(c),H=S.hand,r=H.rows;
+ const row=(l,x,y)=>`<tr><td>${l}</td><td>${x}</td><td>${y}</td></tr>`;
+ const head='<thead><tr><th></th><th>Month 1</th><th>Month 2</th></tr></thead>';
+ if(H.done)return `<section class="card"><h2>Your first two months</h2><p class="small muted" style="margin:0 0 8px">Worked by hand for ${money(r.start,2)} at ${r.apr}% with a payment of ${money(r.pay,2)}.</p>${handTable(r)}<div class="verdict good" style="margin-top:12px">Both months are correct. Interest fell by ${money(r.firstInt-r.i2,2)} because you owed less. Only ${money(r.p1,2)} of your first ${money(r.pay,2)} paid down the loan.</div></section>`;
+ const inp=(id,l)=>`<input inputmode="decimal" data-chk="${id}" data-hand aria-label="${l}" value="${esc(S.chk[id]??'')}">`;
+ return `<section class="card"><h2>Work the first two months</h2><p class="small muted" style="margin:0 0 8px">Choose your loan above first. Use a calculator and round to the cent. The payment is <b data-live="handPay">${money(w.pay,2)}</b> both months and your APR is ${c.apr}%.</p>
+ <div class="scroll"><table class="tbl hand">${head}<tbody>
+ ${row('Start balance',`<b data-live="handStart">${money(w.start,2)}</b>`,'<span class="muted small">month 1 end balance</span>')}
+ ${row('Interest <span class="muted small">start × APR ÷ 12</span>',inp('firstInt','Month 1 interest'),inp('i2','Month 2 interest'))}
+ ${row('Principal <span class="muted small">payment − interest</span>',inp('p1','Month 1 principal'),inp('p2','Month 2 principal'))}
+ ${row('End balance <span class="muted small">start − principal</span>',inp('b1','Month 1 end balance'),inp('b2','Month 2 end balance'))}
+ </tbody></table></div>
+ <button class="btn sm" data-act="checkhand" style="margin-top:12px">Check my months</button><div data-live="fb-hand" style="margin-top:10px"></div></section>`;
+}
+function handTable(r){const row=(l,x,y)=>`<tr><td>${l}</td><td>${money(x,2)}</td><td>${money(y,2)}</td></tr>`;return `<table class="tbl"><thead><tr><th></th><th>Month 1</th><th>Month 2</th></tr></thead><tbody>${row('Start balance',r.start,r.b1)}${row('Interest',r.firstInt,r.i2)}${row('Principal',r.p1,r.p2)}${row('End balance',r.b1,r.b2)}</tbody></table>`;}
+function handFb(c){const H=S.hand;if(H.done||!H.tries||!S.chk.handTried)return '';const w=handWant(c),bad=HAND.find(([id])=>!handOk(id,w));
+ return bad?`<div class="verdict bad"><b>Month ${bad[2]} ${bad[1].toLowerCase()}:</b> ${handHint(bad[0],w,H.tries)}</div>`:'';}
+const handLocked='<div class="verdict info">Work the first two months above to see this.</div>';
 function loanBox(c){
  return `<div class="kpis"><div class="kpi"><span>Monthly payment</span><strong>${money(c.pay,2)}</strong></div><div class="kpi"><span>Amount borrowed</span><strong>${money(c.financed)}</strong></div><div class="kpi bad"><span>Total interest</span><strong>${money(c.interest)}</strong></div><div class="kpi"><span>Cash at signing</span><strong>${money(c.upfront)}</strong></div></div>
  <table class="ledger" style="margin-top:12px"><tr><td>Car payment</td><td>${money(c.pay)}</td></tr><tr><td>Gas, insurance, upkeep</td><td>${money(c.runMo)}</td></tr><tr class="total"><td>All car costs</td><td>${money(c.carMo)}</td></tr></table>
@@ -800,7 +882,7 @@ function termsTable(c){
 function value(){
  const c=calc();
  if(!(c.price>0&&c.year))return needs('Pick your car first','You’ll look up older versions of the same model, so we need its model year.','car');
- return `<p class="eyebrow">Step 5 of 7 · Data set #2</p><h1>What it’s worth</h1>
+ return `${cpBanner('loan')}<p class="eyebrow">Step 5 of 7 · Data set #2</p><h1>What it’s worth</h1>
  <p class="lede">How fast will your ${esc(carLabel())} lose value? Older versions of the same model tell you. A ${c.year-3} is about what your car will be in 3 years.</p>
  <div class="grid2"><div class="stack">
  <section class="card"><h2>How to collect your data</h2>
@@ -829,6 +911,8 @@ function model(){
  const c=calc();
  if(!(c.price>0&&c.year))return needs('Pick your car first','Your models are built from your car and your loan.','car');
  if(c.pts.length<3)return needs('You need value data first','Add at least 3 listings (6 is better) so there’s something to model.','value');
+ if(!S.hand.done&&!S.solved)return needs('Work two months of your loan first','The loan model is built from your payoff schedule. Finish the first two months in step 4.','loan');
+ initStress();
  if(S.fit.a==null){S.fit.a=Math.round(c.price/100)*100;save();}
  if(S.quad.b==null){S.quad.b=0;S.quad.a=0;save();}
  const amax=Math.round(niceMax(Math.max(...c.pts.map(p=>p.v),c.price)*1.6)/100)*100;
@@ -852,6 +936,7 @@ function model(){
   <div class="form2" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">${box('fit.a','fit','a from Desmos')}${box('fit.b','fit','b from Desmos')}</div>
   <div data-live="fitscore" style="margin-top:12px"></div>
   <div style="margin-top:14px">${checkRow('lose','If your car keeps a fraction b each year, what percent does it lose each year?','pct')}</div>
+  <div style="margin-top:14px" id="vptrow" hidden><p class="small" style="margin:0 0 8px">Now use your model without Desmos. Put t = 3 into V(t) = a · bᵗ with the <i class="eq">a</i> and <i class="eq">b</i> you entered.</p>${checkRow('vpt','What will your car be worth 3 years after you buy it?')}</div>
  </section>
  <section class="card"><h2>2. Loan balance · quadratic</h2>
   <p class="eq" style="text-align:center;font-size:22px;margin:4px 0 14px" data-live="qeq"></p>
@@ -872,10 +957,49 @@ function model(){
   <div id="crossbody" hidden><p style="margin:6px 0 10px">Where does V(t) = D(t)? In Desmos, graph ${code('y = a*b^x')} and ${code(`y = p*x^2 + q*x + ${c.financed.toFixed(2)}`)}, then click the point where they cross. Desmos gives x in <b>years</b>. Your answer is in <b>months</b>.</p>
   ${checkRow('cross','In which month do you get above water for good? Use the last crossing. Enter 0 if you’re never underwater.','none')}</div>
  </section>
+ ${stressCard()}
  ${qblock('model')}
+ ${cpCard('model')}
  </div>
  <aside class="sticky"><section class="card"><h2>Value vs. what you owe</h2><p class="small muted" style="margin:0 0 6px">${esc(carLabel())} · ${S.loan.term}-month loan at ${c.apr}%</p><div data-live="cross"></div><div data-live="crosslegend"></div><div data-live="wet" style="margin-top:12px"></div><div data-live="wetkpis" style="margin-top:12px"></div></section></aside></div>`;
 }
+function stressCard(){
+ const x=S.stress,sc=stressCalc(),P=x.price;
+ const box=(k,l)=>`<label class="f"><span>${l}</span><input class="inp" inputmode="text" autocomplete="off" data-k="stress.quad.${k}" data-num value="${x.quad[k]??''}"></label>`;
+ const code=t=>`<code style="background:#f0ede6;border-radius:6px;padding:2px 7px">${t}</code>`;
+ return `<section class="card" id="stress" hidden><h2>4. Break it</h2>
+ <p style="margin:6px 0 10px"><span data-live="stressWhy"></span> Plenty of drivers aren’t that lucky. Keep the same car and the same V(t). Build a loan that would put you underwater for <b>at least a year</b>, then find out exactly how long.</p>
+ <div class="slider"><div class="slider-top"><span>Down payment</span><output data-live="sDown"></output></div><input type="range" aria-label="Down payment" min="0" max="${Math.round(P*.5/100)*100}" step="100" data-k="stress.down" data-num value="${x.down}"></div>
+ <h3 style="margin:14px 0 8px">Length of the loan</h3><div class="seg">${[36,48,60,72,84].map(n=>`<button data-sterm="${n}" aria-pressed="${x.term===n}">${n} mo</button>`).join('')}</div>
+ <h3 style="margin:14px 0 8px">Credit</h3><div class="seg">${TIERS.map(t=>`<button data-sovr="${t.id}" aria-pressed="${sc.tier===t}">${t.label} · ${t.apr}%</button>`).join('')}</div>
+ <h3 style="margin:14px 0 8px">Tax &amp; fees</h3><div class="seg"><button data-sroll="1" aria-pressed="${x.roll}">Add to loan</button><button data-sroll="0" aria-pressed="${!x.roll}">Pay in cash</button></div>
+ <div class="slider" style="margin-top:14px"><div class="slider-top"><span>Debt left from an old car, added to this loan</span><output data-live="sOld"></output></div><input type="range" aria-label="Debt from an old car" min="0" max="${Math.round(P*.6/100)*100}" step="100" data-k="stress.old" data-num value="${x.old}"></div>
+ <div data-live="stressState" style="margin-top:12px"></div>
+ <div id="stressbody" hidden>
+  <h3 style="margin:18px 0 8px">Model this loan</h3>
+  <ol class="small" style="margin:0 0 12px;padding-left:20px"><li>Copy the new balances and paste them into a <b>new</b> Desmos graph. <a href="https://www.desmos.com/calculator" target="_blank" rel="noopener">Open Desmos ↗</a></li><li>On a new line, type <span data-live="sCmd"></span></li><li>Type the <i class="eq">p</i> and <i class="eq">q</i> Desmos gives you below.</li></ol>
+  <button class="btn sm alt" data-act="copybals">Copy new balances</button>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">${box('a','p from Desmos')}${box('b','q from Desmos')}</div>
+  <div data-live="squad" style="margin-top:12px"></div>
+  <div id="scrossrow" hidden style="margin-top:14px">${checkRow('scross','In which month would you get above water for good with this loan?','none')}</div>
+ </div>
+ <div data-live="schart" style="margin-top:14px"></div>
+ ${qa('broke','What broke? Which change put you underwater the most, and why does that make sense with your two graphs?')}</section>`;
+}
+function stressLive(c){
+ const el=$('#stress');if(!el)return;el.hidden=!barely(c);if(el.hidden)return;
+ const x=S.stress,sc=stressCalc(),w=S.solved.wet??c.wetMonths,ok=stressOk(sc),far=sc.wetMonths>=STRESS_MIN;
+ put('stressWhy',w?`Your plan is only underwater for ${w} month${w>1?'s':''}.`:'Your plan is never underwater.');
+ put('sDown',money(x.down));put('sOld',money(x.old));
+ put('stressState',`<div class="kpis" style="margin-bottom:10px"><div class="kpi"><span>Amount borrowed</span><strong>${money(sc.financed)}</strong></div><div class="kpi"><span>Payment</span><strong>${money(sc.pay)}</strong></div><div class="kpi bad"><span>Total interest</span><strong>${money(sc.interest)}</strong></div></div><div class="verdict ${far?'wet':'info'}">${far?'This loan puts you underwater for at least a year. Now find out exactly how long.':sc.wetMonths?'Underwater, but for less than a year. Push further.':'Still above water the whole time. What makes the balance start higher, or fall more slowly?'}</div>`);
+ $('#stressbody').hidden=!far;
+ put('sCmd',`<code style="background:#f0ede6;border-radius:6px;padding:2px 7px">y1 ~ p*x1^2 + q*x1 + ${sc.financed.toFixed(2)}</code>`);
+ const typed=num(x.quad.a)!=null&&num(x.quad.b)!=null;
+ put('squad',!typed?'':sc.quadPass?`<div class="verdict good"><b>Matches the regression</b> · biggest miss ${money(sc.quadMiss.e)}</div>`:`<div class="verdict info"><b>Not matched yet</b> · biggest miss ${money(sc.quadMiss.e)} at year ${sc.quadMiss.t}. Goal: ${money(sc.quadGoal)} or less.</div>`);
+ $('#scrossrow').hidden=!sc.quadPass;
+ put('schart',ok?`${crossChart(sc)}${crossLegend}<div style="margin-top:10px">${wetVerdict(sc)}</div>`:'');
+}
+function stressSummary(){const x=S.stress,v=x.solved;return v?`${money(v.c)} at ${v.apr}% for ${v.term} months${x.down?`, ${money(x.down)} down`:', nothing down'}${x.old?`, including ${money(x.old)} from an old car`:''}`:'';}
 function fitScore(c){
  if(c.fitR2==null)return '';
  const s=c.fitR2.toFixed(3);
@@ -892,14 +1016,15 @@ function quadScore(c){
  if(c.quadPass)return `<div class="verdict good"><b>Matches the regression</b> · ${miss} · R² = ${c.quadR2?.toFixed(4)??'—'}</div>`;
  return `<div class="verdict info"><b>${S.quad.tried?'Not matched yet':'Starting guess'}</b> · ${miss}. <span class="small">Goal: ${money(c.quadGoal)} or less. A straight line can score R² near 0.98 here and still miss by hundreds of dollars.</span></div>`;
 }
+function crossOpen(c){return c.solved||(c.fitPass&&c.quadPass&&chkOk('vpt',c));}
 function crossGate(c){
  if(c.solved)return '';
  if(S.solved&&S.solved.key!==c.key)return '<div class="verdict info" style="margin-bottom:12px">Your value model changed, so solve for the crossing again.</div>';
- if(c.fitPass&&c.quadPass)return '';
+ if(crossOpen(c))return '';
  const row=(ok,t)=>`<p style="margin:6px 0">${ok?'✓':'○'} ${t}</p>`;
- return `<p class="muted" style="margin:4px 0">Match both regressions to unlock this.</p>${row(c.fitPass,'Exponential value model')}${row(c.quadPass,'Quadratic loan model')}`;
+ return `<p class="muted" style="margin:4px 0">Finish these to unlock this.</p>${row(c.fitPass,'Exponential value model')}${row(chkOk('vpt',c),'V(3) by hand')}${row(c.quadPass,'Quadratic loan model')}`;
 }
-function crossLocked(){return '<div class="verdict info">Your graph appears here after you match both regressions and solve for the crossing.</div>';}
+function crossLocked(){return '<div class="verdict info">Your graph appears here after you match both regressions, find V(3) and solve for the crossing.</div>';}
 function solvedLine(){const v=S.solved;if(!v)return '';return `<p class="eq" style="margin:6px 0">D(t) = <span class="n">${v.p.toFixed(1)}</span>t² ${v.q<0?'−':'+'} <span class="n">${Math.abs(v.q).toFixed(1)}</span>t + <span class="n">${Math.round(v.c)}</span> <span class="small muted" style="font-style:normal;font-family:var(--font)">loan · ${v.term} mo at ${v.apr}% · R² = ${v.r2?.toFixed(4)??'—'}</span></p>`;}
 function wetKpis(c){
  if(c.wetMonths==null)return '';
@@ -911,7 +1036,7 @@ function wetKpis(c){
 function decide(){
  const c=calc(),L=S.loan;
  if(!c.solved)return needs('Finish your model first','Match both regressions and solve for the crossing point. Your decision is based on that graph.','model');
- return `<p class="eyebrow">Step 7 of 7 · Decide</p><h1>Fix it &amp; defend it</h1>
+ return `${cpBanner('model')}${barely(c)&&!stressOk()?'<div class="verdict info no-print" style="margin-bottom:14px">Part 4 of step 6 isn’t finished: find a loan that would put you underwater. <button class="link" data-go="model">Go back to it</button></div>':''}<p class="eyebrow">Step 7 of 7 · Decide</p><h1>Fix it &amp; defend it</h1>
  <p class="lede">Can you change the plan so you’re underwater for less time, or not at all? Try each change, then make your call.</p>
  <div class="grid2"><div class="stack">
  <section class="card"><h2>Try a change</h2>
@@ -944,12 +1069,13 @@ function own5Box(c){
 
 /* ---- report (for grading) ---- */
 function report(){
- const c=calc();
+ const c=calc(),sc=barely(c)?stressCalc():null,sOk=sc&&stressOk(sc);
  const ansRow=(k,p)=>`<div class="qa-item"><b>${esc(p)}</b>${(S.ans[k]||'').trim()?`<p>${esc(S.ans[k])}</p>`:'<p class="blank">Not answered yet</p>'}</div>`;
  const ck=(id,l)=>`<div class="qa-item"><b>${esc(l)}</b><p>${S.chk[id]!=null&&S.chk[id]!==''?esc(S.chk[id]):'<span class="blank">—</span>'} ${S.chk[id+'Ok']?'✓':S.chk[id]?'✗':''}</p></div>`;
  return `<div class="no-print" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"><button class="btn alt sm" data-go="decide">← Back to step 7</button><button class="btn sm" data-go="board">Exhibition board →</button><button class="btn alt sm" data-act="print">Print or save as PDF</button></div>
  <article class="card report"><p class="eyebrow">Exponential Functions Project · Report</p><h1 style="font-size:32px">${esc(S.name||'Student name')}</h1>
  <p class="muted">${esc(S.job.title||'—')} · ${esc(carLabel())} · ${money(c.price)}${S.car.url?` · <a href="${esc(S.car.url)}">listing</a>`:''}</p>
+ <div class="qa-item"><b>Checkpoints</b>${Object.entries(CHECKPOINTS).map(([id,k])=>`<p>${k.n}. ${S.cp[id]?`Signed by ${esc(S.cp[id].by)}, ${esc(S.cp[id].at)}${S.cp[id].left?` (${S.cp[id].left} unfinished)`:''} <span class="muted small">${esc(S.cp[id].snap)}</span>`:'<span class="blank">Not signed</span>'}</p>`).join('')}</div>
  <h2>1. Paycheck</h2><p>Gross ${money(c.gross)}/mo · take-home ${money(c.takehome)}/mo · rent share ${money(c.rent)} · car payment is ${pct(c.payShare)} of take-home.</p>
  ${S.quiz.b?`<p>Budget from my habits: ${Object.entries(QUIZ_CATS).map(([k,l])=>`${l} ${money(S.quiz.b[k])}`).join(' · ')}.</p>${budgetChanges().length?`<div class="qa-item"><b>Numbers I changed</b><p>${budgetChanges().map(esc).join('<br>')}</p>${S.quiz.why?`<p>${esc(S.quiz.why)}</p>`:'<p class="blank">No reason given</p>'}</div>`:''}`:'<p class="blank">Habits quiz not taken</p>'}${QUESTIONS.paycheck.map(([k,p])=>ansRow(k,p)).join('')}
  <h2>2. Credit</h2><p>Simulated score <b>${c.score}</b> (${c.myTier.label}) → ${c.myTier.apr}% used-car APR.</p>
@@ -960,25 +1086,27 @@ function report(){
  ${ck('tanks','Tanks of gas per month')}${QUESTIONS.car.map(([k,p])=>ansRow(k,p)).join('')}
  <h2>4. Loan</h2><p>${money(c.financed)} at ${c.apr}% for ${c.n} months → ${money(c.pay,2)}/mo, ${money(c.interest)} interest.</p>
  ${c.terms.length?`<table class="tbl"><thead><tr><th>Years</th><th>Total interest</th><th>Total payments</th></tr></thead><tbody>${c.terms.map(t=>`<tr><td>${t.n/12}</td><td>${money(t.int)}</td><td>${money(t.total)}</td></tr>`).join('')}</tbody></table>`:''}
- ${ck('firstInt','Month 1 interest')}${QUESTIONS.loan.map(([k,p])=>ansRow(k,p)).join('')}
+ ${S.hand.rows?`<div class="qa-item"><b>First two months, by hand ✓ <span class="muted small">(${money(S.hand.rows.start,2)} at ${S.hand.rows.apr}%, ${S.hand.tries} ${S.hand.tries===1?'try':'tries'})</span></b>${handTable(S.hand.rows)}</div>`:'<p class="blank">First two months not worked yet</p>'}${QUESTIONS.loan.map(([k,p])=>ansRow(k,p)).join('')}
  <h2>5–6. Data &amp; models</h2><p>${c.pts.length} value listings${S.dataSource==='practice'?' (practice set)':''}.</p>
  <p class="eq">V(t) = <span class="n">${money(c.a)}</span>(<span class="n">${(+c.b).toFixed(3)}</span>)<sup>t</sup> <span class="small muted" style="font-style:normal">R² = ${c.fitR2?.toFixed(3)??'—'}</span></p>
  ${solvedLine()}
- ${ck('lose','Percent of value lost per year')}
+ ${ck('lose','Percent of value lost per year')}${ck('vpt','V(3), by hand')}
  <div class="qa-item"><b>Crossing I solved for (month above water for good)</b><p>${c.solved?esc(S.solved.month)+' ✓':'<span class="blank">Not solved yet</span>'}</p></div>
  ${c.solved?`${crossChart(c)}${crossLegend}<div style="margin-top:10px">${wetVerdict(c)}</div>`:''}
+ ${barely(c)?`<div class="qa-item"><b>Break it: a loan that would put me underwater</b>${sOk?`<p>${stressSummary()}. Solved: above water for good in month ${esc(S.stress.solved.month)} ✓</p>${crossChart(sc)}${crossLegend}<p>${wetVerdict(sc)}</p>`:'<p class="blank">Not solved yet</p>'}</div>${ansRow('broke','What broke?')}`:''}
  ${QUESTIONS.model.map(([k,p])=>ansRow(k,p)).join('')}
  <h2>7. Decision</h2><p><b>${{buy:'Buy it with this plan',save:'Save up first',change:'Choose a cheaper car',skip:'Skip the car for now'}[S.decision.choice]||'<span class="blank">Not chosen</span>'}</b></p>
  ${S.decision.why?`<p style="white-space:pre-wrap">${esc(S.decision.why)}</p>`:''}
  ${S.decision.visitor?`<div class="qa-item"><b>Why not a longer loan?</b><p>${esc(S.decision.visitor)}</p></div>`:''}
  ${c.own5&&c.solved?`<p>5-year true cost: <b>${money(c.own5.net)}</b></p>`:''}
+ <h2>Score</h2>${rubricTable(true)}
  <p class="small muted" style="margin-top:20px">Sources: Experian State of the Automotive Finance Market Q1 2026 (loan rates); myFICO (score categories); EPA (8,887 g CO₂ per gallon); San Diego sales tax ${SALES_TAX}%.</p>
  </article>`;
 }
 
 /* ---- exhibition board ---- */
 function board(){
- const c=calc(),d=S.decision,img=IMG[S.car.id];
+ const c=calc(),sc=barely(c)?stressCalc():null,sOk=sc&&stressOk(sc),d=S.decision,img=IMG[S.car.id];
  const choice={buy:'Buy it with this plan',save:'Save up first',change:'Choose a cheaper car',skip:'Skip the car for now'}[d.choice]||'Decision not made yet';
  return `<div class="no-print" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"><button class="btn alt sm" data-go="report">← My report</button><button class="btn sm" data-act="print">Print or save as PDF</button></div>
  <article class="board"><div class="board-head"><p class="eyebrow" style="color:#8fb2ff">Algebra 2 Exhibition${S.name?' · '+esc(S.name):''}</p><h2>Will I be underwater on my first car?</h2><p style="margin:6px 0 0;color:#c8d0dc">${esc(S.job.title||'—')} · ${esc(carLabel())} · ${money(c.price)}</p></div>
@@ -995,6 +1123,7 @@ function board(){
    ${d.visitor?`<div><h3>Visitor question</h3><p class="small muted" style="margin:0 0 4px">“Why not just get a longer loan to lower the payment?”</p><p class="quote" style="font-size:15px">${esc(d.visitor)}</p></div>`:''}
   </div>
   <div>${c.solved?`${crossChart(c)}${crossLegend}<div style="margin-top:12px">${wetVerdict(c)}</div><div style="margin-top:12px">${wetKpis(c)}</div>`:crossLocked()}
+  ${sOk?`<div style="margin-top:18px"><h3>What would put me underwater?</h3><p class="small muted" style="margin:0 0 6px">Same car, different loan: ${stressSummary()}.</p>${crossChart(sc)}<div style="margin-top:8px">${wetVerdict(sc)}</div>${S.ans.broke?`<p class="quote" style="font-size:15px">${esc(S.ans.broke)}</p>`:''}</div>`:''}
   ${c.own5&&c.solved?`<p class="small" style="margin-top:12px">True cost of owning it for 5 years: <b>${money(c.own5.net)}</b> (about ${money(c.own5.net/60)} a month). CO₂: ${c.co2Yr?.toFixed(1)} metric tons a year.</p>`:''}
   <p class="small muted" style="margin-top:10px">Data: car listing ${host(S.car.url)?`<a href="${esc(S.car.url)}">${esc(host(S.car.url))}</a>`:'(link not recorded)'}; ${c.pts.length} value listings${S.dataSource==='practice'?' (practice set)':''}; loan rates from Experian Q1 2026; San Diego sales tax ${SALES_TAX}%.</p></div>
  </div></article>`;
@@ -1007,13 +1136,14 @@ const CHECKS={
  interest:{want:()=>50,tol:.01,good:()=>`Right: $2,500 × 0.02 = $50.00 in one month. That’s $600 a year if you never pay it down.`,hint:g=>Math.abs(g-600)<1?'That’s a whole year of interest. Just one month.':Math.abs(g-2550)<1?'That’s the new balance. How much of it is interest?':'Multiply the balance by the monthly rate as a decimal (2% = 0.02).'},
  double:{want:()=>35,tol:1,good:()=>`Right: 1.02³⁵ ≈ 2.00, so in about 35 months (about 3 years) $2,500 becomes $5,000.`,hint:g=>g<35?`Not yet. 1.02^${Math.round(g)} = ${(1.02**g).toFixed(2)}. Keep going until it reaches 2.`:`Too far. 1.02^${Math.round(g)} = ${(1.02**g).toFixed(2)}. Find when it first reaches 2.`},
  tanks:{want:c=>c.tanks,tol:.1,good:c=>`Right: ${S.cc.miles} ÷ ${c.mpg} = ${c.gallons.toFixed(1)} gallons, ÷ ${c.tank} gal per tank = ${c.tanks.toFixed(1)} tanks.`,hint:(g,c)=>c.tank>0?`First find gallons: miles ÷ MPG. Then divide by the tank size (${c.tank} gal).`:'Enter your tank size in the listing first.'},
- firstInt:{want:c=>Math.round(c.financed*c.apr/1200*100)/100,tol:.011,good:c=>`Correct. ${money(c.financed,2)} × ${(c.apr/100).toFixed(4)} ÷ 12 = ${money(c.financed*c.apr/1200,2)}. Only ${money(c.pay-c.financed*c.apr/1200,2)} of your first ${money(c.pay,2)} payment pays down the loan.`,hint:(g,c)=>Math.abs(g-c.financed*c.apr/100)<1?'That’s a whole year of interest. The APR is yearly.':Math.abs(g-c.financed*c.apr/12)<1?'Close. Write the APR as a decimal before you multiply.':`Use the amount borrowed (${money(c.financed,2)}) and the APR (${c.apr}%).`},
+ vpt:{want:c=>c.V(3),tol:c=>Math.max(3,.0025*c.V(3)),good:c=>`Right: V(3) = ${money(c.a)}(${(+c.b).toFixed(4)})³ ≈ ${money(c.V(3))}.`,hint:(g,c)=>Math.abs(g-c.a*c.b*3)<c.a*.004?'That’s a · b · 3. The 3 is an exponent: b × b × b.':Math.abs(g-(c.a*c.b)**3)<(c.a*c.b)**3*.01?'Only b is raised to the 3rd power. Do b³ first, then multiply by a.':Math.abs(g-c.V(2))<c.V(2)*.004?'That’s V(2). Multiply by b one more time.':Math.abs(g-c.a*(1-3*(1-c.b)))<c.a*.004?'You took off the same dollar amount each year. It’s a percent of what’s left, so multiply by b three times.':'Find b³ first, then multiply by a.'},
+ scross:{tol:1,want:()=>{const r=crossRange(stressCalc()),v=num(S.chk.scross);return r==null?null:Math.min(r[1],Math.max(r[0],v??r[0]));},good:()=>{const sc=stressCalc();return `Yes. The models cross about ${(modelCross(sc)/12).toFixed(2)} years in, and the bank’s exact schedule says month ${sc.dryAt}.`;},hint:g=>CHECKS.cross.hint(g,stressCalc())},
  cross:{tol:1,want:c=>{const r=crossRange(c),v=num(S.chk.cross);return r==null?null:Math.min(r[1],Math.max(r[0],v??r[0]));},
   good:c=>c.dryAt?`Yes. The models cross about ${(modelCross(c)/12).toFixed(2)} years in, and the bank’s exact schedule says month ${c.dryAt}.`:'Yes. The car is always worth more than you owe.',
   hint:(g,c)=>{if(g<0||g>c.n)return `The loan lasts ${c.n} months. Pick a month from 0 to ${c.n}.`;const V=c.V(g/12),D=c.D(g/12);return `At month ${g}, V = ${money(V)} and D = ${money(D)}. ${D>V?'You’d still be underwater, so the last crossing is later.':'You’re above water there. Did you find the first month you stay that way? Remember: months = years × 12.'}`;}},
  lose:{want:c=>(1-c.b)*100,tol:.15,good:c=>`Yes. Keeping ${(+c.b).toFixed(3)} means losing ${((1-c.b)*100).toFixed(1)}% a year.`,hint:(g,c)=>Math.abs(g-c.b*100)<.2?'That’s the percent it keeps. How much does it lose?':'If it keeps b of its value, the fraction lost is 1 − b.'}
 };
-function fb(id,c){const v=num(S.chk[id]);if(v==null||!S.chk[id+'Tried'])return '';const ch=CHECKS[id],w=ch.want(c);if(w==null||!Number.isFinite(w))return '';return Math.abs(v-w)<=ch.tol?`<div class="verdict good">${ch.good(c)}</div>`:`<div class="verdict bad">${ch.hint(v,c)}</div>`;}
+function fb(id,c){const v=num(S.chk[id]);if(v==null||!S.chk[id+'Tried'])return '';const ch=CHECKS[id],w=ch.want(c);if(w==null||!Number.isFinite(w))return '';return Math.abs(v-w)<=tolOf(ch,c)?`<div class="verdict good">${ch.good(c)}</div>`:`<div class="verdict bad">${ch.hint(v,c)}</div>`;}
 function live(){
  const c=calc();
  for(const id of Object.keys(CHECKS))put('fb-'+id,fb(id,c));
@@ -1022,14 +1152,15 @@ function live(){
  put('yearwarn',c.year&&c.year<MIN_YEAR?`<div class="verdict bad" style="margin-top:12px">This project needs a car from ${MIN_YEAR} or newer.</div>`:'');
  if(S.step==='credit'){put('score',scoreBox(c));put('scoreTop',scoreTop());put('utilOut',`${S.credit.util}% · ${money(S.credit.util*10)}`);put('payAmtOut',money(S.credit.payAmt));put('payoff',payoffBox());}
  if(S.step==='loan'||S.step==='decide')put('downOut',money(c.down));
- if(S.step==='loan'){put('loanbox',loanBox(c));put('sched',schedTable(c));put('terms',termsTable(c));}
+ if(S.step==='loan'){put('loanbox',loanBox(c));put('sched',S.hand.done?schedTable(c):handLocked);put('terms',S.hand.done?termsTable(c):handLocked);put('handStart',money(c.financed,2));put('handPay',money(c.pay,2));put('fb-hand',handFb(c));const w=handWant(c);for(const [id] of HAND){const el=document.querySelector(`[data-hand][data-chk="${id}"]`);if(el)el.className=S.chk.handTried&&num(S.chk[id])!=null?(handOk(id,w)?'ok':'no'):'';}}
  if(S.step==='value'){put('scatter',scatter(c));put('count',`${S.data.length} listing${S.data.length===1?'':'s'}${S.data.length<6?' · aim for 6+':''}`);
    put('scatternote',c.pts.length>=3?`<p class="small muted" style="margin:10px 0 0">Do the points fall in a straight line or a curve? Does the price drop by the same <i>amount</i> each year, or the same <i>percent</i>?</p>`:'');
    S.data.forEach((r,i)=>{const el=document.querySelector(`[data-t="${i}"]`);if(el)el.textContent=c.year!=null&&num(r.year)!=null?c.year-num(r.year):'';});}
  if(S.step==='model'&&document.querySelector('#crossbody')){put('eq',`V(t) = <span class="n">${money(c.a)}</span>(<span class="n">${(+c.b).toFixed(3)}</span>)<sup>t</sup>`);put('aOut',money(c.a));put('bOut',(+c.b).toFixed(4));put('scatterfit',scatter(c,true));put('fitscore',fitScore(c));
    put('qeq',`D(t) = <span class="n">${(+c.qa).toFixed(1)}</span>t² ${c.qb<0?'−':'+'} <span class="n">${Math.abs(c.qb).toFixed(1)}</span>t + <span class="n">${Math.round(c.financed)}</span>`);put('qaOut',(+c.qa).toFixed(1));put('qbOut',money(c.qb));put('quadchart',quadChart(c));put('quadscore',quadScore(c));
-   put('crossgate',crossGate(c));$('#crossbody').hidden=!(c.fitPass&&c.quadPass);
-   put('cross',c.solved?crossChart(c):crossLocked());put('crosslegend',c.solved?crossLegend:'');put('wet',c.solved?wetVerdict(c):'');put('wetkpis',c.solved?wetKpis(c):'');}
+   put('crossgate',crossGate(c));$('#crossbody').hidden=!crossOpen(c);$('#vptrow').hidden=!c.fitPass;stressLive(c);
+   put('cross',c.solved?crossChart(c):crossLocked());put('crosslegend',c.solved?crossLegend:'');put('wet',c.solved?wetVerdict(c)+(barely(c)&&!stressOk()?'<p class="small" style="margin:10px 0 0">There’s one more part: <b>4. Break it</b>.</p>':''):'');put('wetkpis',c.solved?wetKpis(c):'');}
+ for(const id of Object.keys(CHECKPOINTS))if(S.step===id)put('cp-'+id,cpItems(id,c));
  if(S.step==='decide'&&c.solved){put('cross',crossChart(c));put('wet',wetVerdict(c));put('wetkpis',wetKpis(c));}
  if(S.step==='decide'){put('compare',compareTable());put('own5',own5Box(c));}
  const d=document.querySelectorAll('[data-dock]');if(d.length){const tmp=document.createElement('div');tmp.innerHTML=dock();tmp.querySelectorAll('[data-dock]').forEach((el,i)=>{if(d[i]){d[i].textContent=el.textContent;d[i].previousElementSibling.textContent=el.previousElementSibling.textContent;}});}
@@ -1041,9 +1172,11 @@ app.addEventListener('input',e=>{
  const t=e.target;
  if(t.dataset.k){setPath(t.dataset.k,'num' in t.dataset?(t.value===''?null:num(t.value)):t.value);if(t.dataset.fit){S[t.dataset.fit].tried=true;document.querySelectorAll(`[data-k="${t.dataset.k}"]`).forEach(el=>{if(el!==t)el.value=num(t.value)??'';});}save();live();return;}
  if(t.dataset.row!=null){S.data[+t.dataset.row][t.dataset.f]=t.value;if(S.dataSource==='practice')S.dataSource='edited';save();live();return;}
- if(t.dataset.chk){S.chk[t.dataset.chk]=t.value;S.chk[t.dataset.chk+'Tried']=false;save();}
+ if(t.dataset.chk){S.chk[t.dataset.chk]=t.value;S.chk[t.dataset.chk+'Tried']=false;if('hand' in t.dataset)S.chk.handTried=false;save();}
 });
-app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.chk){e.preventDefault();app.querySelector(`[data-act=check][data-id="${e.target.dataset.chk}"]`)?.click();}});
+app.addEventListener('keydown',e=>{if(e.key==='Enter'&&'hand' in e.target.dataset){e.preventDefault();app.querySelector('[data-act=checkhand]')?.click();}
+ else if(e.key==='Enter'&&e.target.id?.startsWith('init-')){e.preventDefault();app.querySelector(`[data-act=sign][data-id="${e.target.id.slice(5)}"]`)?.click();}
+ else if(e.key==='Enter'&&e.target.dataset.chk){e.preventDefault();app.querySelector(`[data-act=check][data-id="${e.target.dataset.chk}"]`)?.click();}});
 app.addEventListener('click',async e=>{
  const b=e.target.closest('button');if(!b)return;const d=b.dataset;
  if(d.go){go(d.go);return;}
@@ -1052,15 +1185,26 @@ app.addEventListener('click',async e=>{
  if(d.home){const r=RENTALS.find(x=>x.id===d.home);S.home={...S.home,id:r.id,total:r.total,url:r.url};save();render();return;}
  if(d.split){S.home.split=d.split;save();render();return;}
  if(d.cr){S.credit[d.cr]=d.v;save();render();return;}
- if(d.car){if(d.car==='own'){S.car={id:'own',name:'',year:null,price:null,mpg:null,tank:null,url:''};}else{const g=GARAGE.find(x=>x.id===d.car);S.car={id:g.id,name:g.name,year:g.year,price:g.price,mpg:g.mpg,tank:g.tank,url:''};}S.data=[];S.dataSource='';S.fit={a:null,b:.85,tried:false,shown:false};S.quad={a:null,b:null,tried:false,shown:false};S.solved=null;S.base=null;for(const k of ['tanks','cross','lose','firstInt']){S.chk[k+'Tried']=false;S.chk[k+'Ok']=false;}save();render();return;}
+ if(d.car){if(d.car===S.car.id)return;if((S.data.length||S.hand.done||S.cp.loan)&&!await ask('Switch cars? Your loan work, listings, models and sign-offs for checkpoints 2 and 3 will be erased.','Switch cars'))return;
+  S.hand=fresh().hand;S.stress=fresh().stress;delete S.cp.loan;delete S.cp.model;S.chk.handTried=false;for(const k of ['firstInt','p1','b1','i2','p2','b2','vpt','scross']){delete S.chk[k];delete S.chk[k+'Tried'];delete S.chk[k+'Ok'];}
+  if(d.car==='own'){S.car={id:'own',name:'',year:null,price:null,mpg:null,tank:null,url:''};}else{const g=GARAGE.find(x=>x.id===d.car);S.car={id:g.id,name:g.name,year:g.year,price:g.price,mpg:g.mpg,tank:g.tank,url:''};}S.data=[];S.dataSource='';S.fit={a:null,b:.85,tried:false,shown:false};S.quad={a:null,b:null,tried:false,shown:false};S.solved=null;S.base=null;for(const k of ['tanks','cross','lose']){S.chk[k+'Tried']=false;S.chk[k+'Ok']=false;}save();render();return;}
  if(d.term){S.loan.term=+d.term;S.quad={a:null,b:null,tried:false,shown:false};save();render();return;}
+ if(d.sterm){S.stress.term=+d.sterm;S.stress.quad={a:null,b:null};save();render();return;}
+ if(d.sovr){S.stress.ovr=d.sovr;save();render();return;}
+ if(d.sroll){S.stress.roll=d.sroll==='1';save();render();return;}
  if(d.ovr!=null){S.loan.override=d.ovr||null;save();render();return;}
  if(d.roll){S.loan.roll=d.roll==='1';save();render();return;}
  if(d.choice){S.decision.choice=d.choice;save();render();return;}
  if(d.del!=null){S.data.splice(+d.del,1);save();render();return;}
  const a=d.act;
- if(a==='check'){const id=d.id,c=calc(),v=num(S.chk[id]),w=CHECKS[id].want(c);S.chk[id+'Tried']=true;S.chk[id+'Ok']=v!=null&&w!=null&&Math.abs(v-w)<=CHECKS[id].tol;if(id==='cross'&&S.chk.crossOk&&c.fitPass&&c.quadPass){S.solved={key:c.key,month:v,p:c.qa,q:c.qb,c:c.financed,r2:c.quadR2,term:c.n,apr:c.apr};rebase();}
+ if(a==='check'){const id=d.id,c=calc(),v=num(S.chk[id]),w=CHECKS[id].want(c);S.chk[id+'Tried']=true;S.chk[id+'Ok']=v!=null&&w!=null&&Math.abs(v-w)<=tolOf(CHECKS[id],c);if(id==='cross'&&S.chk.crossOk&&c.fitPass&&c.quadPass&&chkOk('vpt',c)){S.solved={key:c.key,wet:c.wetMonths,month:v,p:c.qa,q:c.qb,c:c.financed,r2:c.quadR2,term:c.n,apr:c.apr};rebase();}
+  if(id==='scross'&&S.chk.scrossOk){const sc=stressCalc();if(sc.quadPass&&sc.wetMonths>=STRESS_MIN)S.stress.solved={key:stressKey(sc),month:v,p:sc.qa,q:sc.qb,c:sc.financed,term:sc.n,apr:sc.apr,wet:sc.wetMonths,r2:sc.quadR2};}
   save();live();const rail=app.querySelector('.rail');if(rail){const tmp=document.createElement('div');tmp.innerHTML=topBar();rail.replaceWith(tmp.querySelector('.rail'));}return;}
+ if(a==='checkhand'){const c=calc(),w=handWant(c);S.chk.handTried=true;S.hand.tries++;const ok=HAND.every(([id])=>handOk(id,w));if(ok)S.hand={...S.hand,done:true,rows:w};save();if(ok){render();toast('Both months are correct');}else live();return;}
+ if(a==='sign'){const by=($('#init-'+d.id)?.value||'').trim();if(by.length<2){toast('Type your initials first');return;}const c=calc(),k=CHECKPOINTS[d.id];S.cp[d.id]={by,at:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),left:k.items(c).filter(x=>!x[1]).length,snap:k.snap(c)};save();render();toast('Checkpoint signed');return;}
+ if(a==='unsign'){if(await ask('Remove this sign-off?','Remove')){delete S.cp[d.id];save();render();}return;}
+ if(a==='backup'){exportBackup();return;}
+ if(a==='copybals'){await copyText(stressCalc().balPts.map(p=>p.t+'\t'+p.v.toFixed(2)).join('\n'));return;}
  if(a==='quizback'){S.quiz.i=Math.max(0,S.quiz.i-1);save();render();$('#main')?.focus({preventScroll:true});return;}
  if(a==='addrow'){S.data.push({year:'',price:'',miles:''});save();render();document.querySelector('#datatable tbody tr:last-child input')?.focus();return;}
  if(a==='clearrows'){if(await ask('Remove all your listings?','Remove all')){S.data=[];S.dataSource='';save();render();}return;}
@@ -1071,6 +1215,7 @@ app.addEventListener('click',async e=>{
  if(a==='menu'){menu();return;}
  if(a==='example'){if((S.job.title||S.car.name)&&!await ask('Load the worked example? It replaces your current project. Download a backup first if you need it.','Load example'))return;S=example();save();go('paycheck');toast('Worked example loaded');return;}
 });
+function exportBackup(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download=`${intro()?'exhibition':'life-and-car'}-${(S.name||'project').replace(/\W+/g,'-').toLowerCase()}.json`;a.click();toast('Backup downloaded');}
 async function copyText(text){
  try{await navigator.clipboard.writeText(text);toast('Copied. Paste into a blank line in Desmos.');}
  catch{const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-label="Copy data"><p style="font-weight:600">Copying was blocked. Select this and copy it.</p><textarea class="inp" rows="10" readonly>${esc(text)}</textarea><button class="btn" data-x>Close</button></div>`;document.body.appendChild(m);m.querySelector('textarea').select();m.addEventListener('click',e=>{if(e.target===m||e.target.closest('[data-x]'))m.remove();});}
@@ -1086,16 +1231,16 @@ function example(){const s=fresh(),j=JOBS[0],g=GARAGE.find(x=>x.id==='niro'),r=R
  s.car={id:g.id,name:g.name,year:g.year,price:g.price,mpg:g.mpg,tank:g.tank,url:''};s.data=practiceData(s.car,true);s.dataSource='practice';s.step='paycheck';
  const fit=calc(s).best;s.fit={a:Math.round(fit.a),b:Math.round(fit.b*1e4)/1e4,tried:true,shown:false};
  const q=calc(s).qbest;s.quad={a:Math.round(q.a*10)/10,b:Math.round(q.b*10)/10,tried:true,shown:false};
- const c=calc(s);s.solved={key:c.key,month:c.dryAt,p:c.qa,q:c.qb,c:c.financed,r2:c.quadR2,term:c.n,apr:c.apr};s.chk={cross:String(c.dryAt),crossTried:true,crossOk:true};return s;}
+ const c=calc(s);s.solved={key:c.key,month:c.dryAt,p:c.qa,q:c.qb,c:c.financed,r2:c.quadR2,term:c.n,apr:c.apr};s.solved.wet=c.wetMonths;s.hand={done:true,tries:1,rows:handWant(c)};s.chk={cross:String(c.dryAt),crossTried:true,crossOk:true,vpt:String(Math.round(c.V(3))),vptTried:true,vptOk:true};return s;}
 function menu(){
  const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-label="Project menu"><h2>Your project</h2><p class="small muted">${saveFailed?'This browser isn’t saving. Download a backup now.':'Saved in this browser.'}</p>
  <label class="f" style="margin:10px 0"><span>Your name (for the report and board)</span><input class="inp" id="nm" value="${esc(S.name)}"></label>
- ${intro()?'':'<button class="btn" data-m="report">My report (for grading)</button><button class="btn alt" data-m="board">Exhibition board</button>'}<button class="btn alt" data-m="export">Download backup (.json)</button><button class="btn alt" data-m="import">Open a backup file</button><button class="btn alt" data-m="copy">Copy backup as text</button><button class="btn alt" data-m="paste">Paste a backup</button><div id="pastebox" hidden><textarea class="inp" placeholder="Paste backup text here"></textarea><button class="btn" data-m="load">Open pasted backup</button></div><button class="btn alt" data-m="new" style="color:var(--debt)">Start a new project</button><button class="btn alt" data-m="close">Close</button></div>`;
+ ${intro()?'':'<button class="btn" data-m="report">My report (for grading)</button><button class="btn alt" data-m="board">Exhibition board</button><button class="btn alt" data-m="rubric">How you’re graded</button>'}<button class="btn alt" data-m="export">Download backup (.json)</button><button class="btn alt" data-m="import">Open a backup file</button><button class="btn alt" data-m="copy">Copy backup as text</button><button class="btn alt" data-m="paste">Paste a backup</button><div id="pastebox" hidden><textarea class="inp" placeholder="Paste backup text here"></textarea><button class="btn" data-m="load">Open pasted backup</button></div><button class="btn alt" data-m="new" style="color:var(--debt)">Start a new project</button><button class="btn alt" data-m="close">Close</button></div>`;
  document.body.appendChild(m);
  m.querySelector('#nm').addEventListener('input',e=>{S.name=e.target.value;save();});
  m.addEventListener('click',async e=>{const b=e.target.closest('[data-m]');if(e.target===m||b?.dataset.m==='close'){m.remove();render();return;}if(!b)return;const k=b.dataset.m;
-  if(k==='report'||k==='board'){m.remove();go(k);}
-  if(k==='export'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download=`${intro()?'exhibition':'life-and-car'}-${(S.name||'project').replace(/\W+/g,'-').toLowerCase()}.json`;a.click();toast('Backup downloaded');}
+  if(k==='report'||k==='board'||k==='rubric'){m.remove();go(k);}
+  if(k==='export')exportBackup();
   if(k==='import')$('#import').click();
   if(k==='copy'){try{await navigator.clipboard.writeText(JSON.stringify(S));toast('Backup copied. Paste it into a note or doc.');}catch{toast('Copy was blocked here. Use Download backup.');}}
   if(k==='paste'){const box=m.querySelector('#pastebox');box.hidden=!box.hidden;if(!box.hidden)box.querySelector('textarea').focus();}
