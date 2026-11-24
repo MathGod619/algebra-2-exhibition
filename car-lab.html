@@ -15,6 +15,10 @@
 <h2>Fit the curves</h2><p>The red dots use the project’s ten-year depreciation schedule. Try fitting an exponential rule to them. The blue points are balances from the loan schedule. For a quadratic fit over the full ten years, select the ten-year loan.</p><label class="toggle"><input type="checkbox" id="fit">Overlay the fitted models</label><div id="formulas"></div>
 <div class="tablewrap"><table><thead><tr><th>Year</th><th>Car value</th><th>Loan balance</th><th>Value − debt</th></tr></thead><tbody id="years"></tbody></table></div>
 <p class="fine">Classroom estimates use a fixed annual loan rate divided by 12, monthly payments and no taxes, fees or trade-in. The price is the starting value. Sum-of-years’-digits depreciation distributes 75% of that price over ten years using weights 10, 9, …, 1. The remaining 25% is the assumed resale value in year ten. An actual offer may differ.</p></main>
+<section id="data-lab" hidden><h2>Your two data sets</h2>
+<p>Copy the 11 rows. Paste them into a blank expression in the <a href="https://www.desmos.com/calculator" target="_blank" rel="noopener">Desmos Graphing Calculator</a>. Use the project’s Desmos tab to fit both models and locate negative equity.</p>
+<button id="copy-desmos">Copy data for Desmos</button><p id="data-message" role="status"></p>
+<label>Year, estimated car value, remaining loan balance<textarea id="raw-data" readonly rows="12" style="font:1rem/1.5 monospace;white-space:pre;width:100%"></textarea></label></section>
 <script>
 function payment(principal,annualRate,months){if(principal===0)return 0;const r=annualRate/1200;return r===0?principal/months:principal*r/(1-(1+r)**(-months));}
 function amortize(principal,annualRate,months){const r=annualRate/1200,p=payment(principal,annualRate,months),rows=[{month:0,opening:principal,interest:0,payment:0,principal:0,balance:principal}];let balance=principal;for(let m=1;m<=120;m++){const interest=balance*r,paid=Math.min(p,balance+interest),repaid=paid-interest;rows.push({month:m,opening:balance,interest,payment:paid,principal:repaid,balance:Math.max(0,balance-repaid)});balance=rows.at(-1).balance;}return rows;}
@@ -52,7 +56,16 @@ function draw(rows,model,year,term,show){
  if(show){for(const [fn,end,color] of [[model.exp,10,'#ad4034'],[model.debt,term,'#20548a']])curve(Array.from({length:end*10+1},(_,i)=>[i/10,fn(i/10)]),color,true);}
  g.strokeStyle='#31463d';g.lineWidth=2;g.setLineDash([4,5]);g.beginPath();g.moveTo(X(year),T);g.lineTo(X(year),B);g.stroke();g.setLineDash([]);g.restore();g.textAlign='left';
 }
+const desmosMode=new URLSearchParams(location.search).get('desmos')==='1';
+function desmosData(rows){return rows.map(r=>[r.t,r.value.toFixed(2),r.debt.toFixed(2)].join('\t')).join('\n');}
 function update(){
+ if(desmosMode){
+  const price=+$('price').value,valid=price>0&&$('price').validity.valid;
+  $('data-lab').hidden=!valid;$('results').hidden=true;
+  $('guide').textContent=valid?'The first column is time in years. Both other columns are in dollars.':'Enter your car’s asking price to generate the data.';
+  $('raw-data').value=valid?desmosData(schedule(price,5,0,10)):'';
+  $('data-message').textContent='';return;
+ }
  const invalid=['price','apr','down'].some(k=>!$(k).value||!$(k).validity.valid);
  $('results').hidden=invalid;$('guide').textContent=invalid?'Enter a positive price, an annual rate from 0–40%, and a down payment from 0–100%.':'Changes update the same graph. Your figures stay in this browser.';
  if(invalid)return;
@@ -67,12 +80,21 @@ function update(){
  $('formulas').innerHTML=$('fit').checked?'<p><b>Car value</b> V(t) ≈ '+m.a.toFixed(2)+'('+m.b.toFixed(4)+')<sup>t</sup> &nbsp; R² ≈ '+m.r2.toFixed(3)+'. Each year the model keeps '+(m.b*100).toFixed(1)+'% of the previous value.</p><p><b>Debt fit</b> D(t) ≈ '+m.q2.toFixed(2)+'t²'+signed(m.q1)+'t'+signed(m.q0)+', for years 0 through '+term+'. Use the actual loan balance from the table for a sale.</p>':'';
  draw(current,m,year,term,$('fit').checked);
 }
-const storage='exhibition-car-lab-v1';
+const storage=desmosMode?'exhibition-desmos-data-v1':'exhibition-car-lab-v1';
 try{const saved=JSON.parse(localStorage.getItem(storage)||'{}');for(const id of ids)if(Object.hasOwn(saved,id)){if(id==='fit')$(id).checked=saved[id]===true;else $(id).value=saved[id];}}catch{}
 function changed(){try{localStorage.setItem(storage,JSON.stringify(Object.fromEntries(ids.map(id=>[id,id==='fit'?$(id).checked:$(id).value]))));}catch{}$('message').textContent='';update();}
 ids.forEach(id=>$(id).addEventListener('input',changed));
 $('example').onclick=()=>{if($('price').value&&$('price').value!=='20000'&&!confirm('Replace the current car figures with the worked example?'))return;Object.assign($('car'),{value:'Example car'});for(const [id,v] of Object.entries({price:20000,apr:7,down:10,term:5,year:3}))$(id).value=v;changed();};
 $('savegraph').onclick=()=>{const a=document.createElement('a');a.download='my-car-value-and-loan.png';a.href=$('graph').toDataURL('image/png');a.click();};
 $('copydata').onclick=async()=>{try{await navigator.clipboard.writeText(['Year\tCar value\tLoan balance\tValue less debt',...current.map(r=>[r.t,r.value.toFixed(2),r.debt.toFixed(2),(r.value-r.debt).toFixed(2)].join('\t'))].join('\n'));$('message').textContent='Table copied.';}catch{$('message').textContent='Select the yearly table below and copy it.';}};
+if(desmosMode){
+ document.title='Car data for Desmos | Algebra 2 Exhibition';
+ document.querySelector('header h1').textContent='Car data for Desmos';
+ document.querySelector('header p').textContent='Build your graph from the same ten-year comparison used in the project: 5% annual interest, 0% down, and 25% of the starting car value remaining in year ten.';
+ for(const [id,value] of Object.entries({apr:5,down:0,term:10})){$(id).value=value;$(id).disabled=true;}
+ $('example').hidden=true;
+ try{if(!$('price').value){const prior=JSON.parse(localStorage.getItem('exhibition-car-lab-v1')||'{}');$('price').value=prior.price||'';$('car').value=prior.car||'';}}catch{}
+}
+$('copy-desmos').onclick=async()=>{try{await navigator.clipboard.writeText($('raw-data').value);$('data-message').textContent='Copied. Paste into a blank Desmos expression.';}catch{$('raw-data').focus();$('raw-data').select();$('data-message').textContent='Rows selected. Use Ctrl+C or Command+C, then paste into Desmos.';}};
 update();
 </script></html>
