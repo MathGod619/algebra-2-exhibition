@@ -8,7 +8,7 @@ An interactive Algebra 2 exhibition (Exponential Functions Project) about buying
 3. **Car**: a real listing from 2016 or newer, plus an insurance quote, tanks of gas, CO₂ (EPA 8,887 g/gal), and maintenance
 4. **Loan**: down payment, term, and tax and fees; a first-interest check; a 3/5/7/10-year comparison; 20% down; and leasing, balloon and upside-down explainers. The payoff schedule is data set #1
 5. **Value data**: asking prices for older model years of the same car. This is data set #2
-6. **Model it**: exponential V(t) = a·bᵗ for value and quadratic D(t) = at² + bt + c for the balance, each with R² and a best-fit comparison, overlaid to find the underwater months
+6. **Model it**: exponential V(t) = a·bᵗ for value and quadratic D(t) = pt² + qt + c for the balance. Students guess with sliders, run both regressions in Desmos, enter the results, and solve for the crossing before the site shows the underwater graph. The value model must match the regression on their own data; the loan model is judged by its biggest miss in dollars
 7. **Fix it & defend it**: what-if changes, original vs. now, a five-year true cost, a decision, and a visitor question
 
 The written questions from the original Google Doc are built into each step. **Project ▾ → My report** prints every answer and check for grading. **Exhibition board** is the poster.
