@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Life &amp; Car · Will you be underwater?</title>
+<title>Algebra 2 Exhibition</title>
 <meta name="theme-color" content="#0e1a2b">
 <style>
 :root{
@@ -273,7 +273,7 @@ function fresh(){return{v:3,step:'welcome',name:'',lastStep:'',
  job:{id:'',title:'',salary:null,url:''},
  home:{id:'',total:null,split:'2',custom:null,url:''},
  b:{ded:25,utilities:120,food:350,phone:80,health:100,fun:150,other:100,save:200},
- quiz:{i:0,a:{},done:false,b:null,why:''},
+ quiz:{v:2,i:0,a:{},done:false,b:null,why:''},
  credit:{pay:'ontime',util:20,apps:'1',mix:'card',payAmt:100,card:{name:'',url:'',apr:'',fee:''}},
  car:{id:'',name:'',year:null,price:null,mpg:null,tank:null,url:''},
  cc:{miles:1000,gas:4.50,premium:1200,maintenance:100},
@@ -283,7 +283,7 @@ function fresh(){return{v:3,step:'welcome',name:'',lastStep:'',
  quad:{a:null,b:null,tried:false,shown:false},
  chk:{},ans:{},
  solved:null,base:null,decision:{choice:'',why:'',visitor:''}};}
-function merge(d){const f=fresh();for(const k of Object.keys(f))if(d&&k in d)f[k]=(f[k]&&typeof f[k]==='object'&&!Array.isArray(f[k])&&d[k]&&typeof d[k]==='object')?{...f[k],...d[k]}:d[k];if(d?.credit?.card)f.credit.card={...fresh().credit.card,...d.credit.card};return f;}
+function merge(d){const f=fresh();for(const k of Object.keys(f))if(d&&k in d)f[k]=(f[k]&&typeof f[k]==='object'&&!Array.isArray(f[k])&&d[k]&&typeof d[k]==='object')?{...f[k],...d[k]}:d[k];if(d?.quiz&&d.quiz.v!==2){f.quiz.v=2;f.quiz.a={};f.quiz.i=0;}if(d?.credit?.card)f.credit.card={...fresh().credit.card,...d.credit.card};return f;}
 let S;try{S=merge(JSON.parse(localStorage.getItem(KEY)||'null')||{});}catch{S=fresh();}
 let saveFailed=false;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));saveFailed=false;}catch{saveFailed=true;}}
@@ -507,7 +507,10 @@ function done(id){const c=calc();return{
  value:c.pts.length>=5,
  model:c.solved,
  decide:!!S.decision.choice&&S.decision.why.trim().length>20}[id];}
+// Before the quiz, nothing on the page may hint at what the project is about (title, logo, step names, example).
+function intro(){return !S.quiz.done&&!S.job.title&&!S.car.name;}
 function topBar(){
+ if(intro())return `<header class="top"><div class="top-in"><div class="top-row"><button class="brand" data-go="welcome" aria-label="Home"><span>Algebra 2 Exhibition</span></button><button class="menu-btn" data-act="menu">Project ▾</button></div></div></header>`;
  const i=stepIndex();
  return `<header class="top"><div class="top-in"><div class="top-row"><button class="brand" data-go="welcome" aria-label="Life and Car home">${logo()}<span>Life &amp; Car</span></button><button class="menu-btn" data-act="menu">Project ▾</button></div>
  ${i>=0?`<nav class="rail" aria-label="Project steps">${STEPS.map(([id,short],k)=>`<button data-go="${id}" class="${k===i?'here':done(id)?'done':''}" ${k===i?'aria-current="step"':''}><span></span><b data-n="${k+1}">${k+1}. ${short}</b></button>`).join('')}</nav>`:''}</div></header>`;
@@ -521,6 +524,8 @@ function dock(){
  return `<div class="dock no-print"><div class="dock-in"><div class="dock-stats">${stats.map(([k,v])=>`<div><span>${k}</span><b data-dock>${v}</b></div>`).join('')}</div>${i>0?`<button class="back" data-go="${STEPS[i-1][0]}">Back</button>`:''}${next?`<button class="btn" data-go="${next[0]}">Next: ${next[1]} →</button>`:`<button class="btn" data-go="report">My report →</button>`}</div></div>`;
 }
 function render(){
+ if(intro()&&!['welcome','paycheck'].includes(S.step))S.step='welcome';
+ document.title=intro()?'Algebra 2 Exhibition':'Life & Car · Will you be underwater?';
  const view={welcome,paycheck,credit,car,loan,value,model,decide,report,board}[S.step]||welcome;
  app.innerHTML=topBar()+`<main id="main" tabindex="-1">${view()}</main>`+dock();
  live();
@@ -533,8 +538,13 @@ function checkRow(id,label,prefix='money',btn='Check'){return `<div class="check
 
 /* ---- welcome ---- */
 function welcome(){
- const started=S.job.title||S.car.name;
+ if(intro())return `<section style="max-width:640px;margin:24px 0"><p class="eyebrow">Algebra 2 · Exhibition project</p><h1>First, a few questions about you.</h1>
+ <p class="lede">${QUIZ.length} quick questions about a normal week. No math yet, and no right answers. After that, you’ll find out what your project is.</p>
+ <div style="margin-top:22px"><button class="btn blue" data-go="paycheck">${Object.keys(S.quiz.a).length?'Keep going':'Start'} →</button></div>
+ <p class="small muted" style="margin-top:14px">Your answers save in this browser.</p></section>`;
+ const started=S.job.title||S.car.name,fromQuiz=S.quiz.done&&!started;
  return `<section class="hero"><div>
+ ${fromQuiz?'<div class="verdict info" style="margin-bottom:18px">Thanks. Your answers are saved, and here’s your project. Step 1 shows what your answers turned into.</div>':''}
  <p class="eyebrow">Algebra 2 · Exponential Functions Project</p>
  <h1>Your first car.<br>Will you be <em>underwater</em>?</h1>
  <p class="lede">Being underwater means you owe more on the loan than the car is worth. If it breaks down or you need to sell, you still owe the difference. You’ll use real listings to find out if your plan puts you there, and for how long.</p>
@@ -565,27 +575,30 @@ function demoChart(){
 /* ---- 1. paycheck ---- */
 // Habits quiz. No prices, no category names, and options are not in cheap-to-expensive order, so students answer honestly.
 // Amounts are classroom estimates in dollars a month, added to QUIZ_BASE. Taxes and health costs are not asked about.
-const QUIZ_BASE={utilities:75,food:200,phone:60,fun:20,other:30,save:0};
+const QUIZ_BASE={utilities:70,food:170,phone:70,fun:10,other:20,save:0};
 const QUIZ_CATS={food:'Groceries',fun:'Fun & eating out',phone:'Phone & internet',utilities:'Utilities',other:'Other needs',save:'Savings each month'};
 const QUIZ=[
- ['night','late-night food','It’s 9 pm on a school night and you’re hungry. What usually happens?',[['I make something in the kitchen',{food:30}],['I order something or go out and get it',{fun:70}],['I wait until morning',{}],['I snack on whatever is there',{food:15}]]],
- ['sat','free Saturdays','You have a free Saturday. What are you most likely doing?',[['Going to a concert, a game or an event',{fun:100}],['Hanging out at the beach, a park or the skatepark',{fun:15}],['Gaming or watching shows at home',{fun:20}],['Going to the mall, the movies or an arcade',{fun:70}]]],
- ['hot','hot days','It’s 90° out and you’re home all day. What do you do?',[['Turn on a fan',{utilities:10}],['Run the AC until it feels good, and leave it on',{utilities:60}],['Open windows and find shade',{}],['Run the AC just to sleep',{utilities:30}]]],
- ['drink','drinks you buy','How often do you have a drink you didn’t make, like coffee, boba, soda or an energy drink?',[['A few times a week',{fun:45}],['Almost never',{}],['Most days',{fun:90}],['About once a week',{fun:20}]]],
- ['phone','your phone','Your phone screen cracks, but it still works. What would you do?',[['Get the newest model I can',{phone:45}],['Keep using it cracked',{}],['Get a used or older phone',{phone:15}],['Get the screen fixed',{phone:10}]]],
- ['store','how you shop for food','You’re getting a week of food at the store. Which sounds most like you?',[['I get the list, plus a few things that look good',{food:80}],['I get organic or specialty stuff',{food:170}],['I get the brands I like',{food:120}],['I get whatever version is on sale',{food:30}]]],
- ['clothes','clothes and shoes','When do you usually get new clothes or shoes?',[['When something wears out',{other:20}],['When something I like drops',{other:130}],['Around the start of a school year or season',{other:40}],['Something new most months',{other:80}]]],
- ['bus','using data','You have a long ride with no Wi-Fi. What do you do?',[['Talk, sleep or look out the window',{}],['Stream or scroll the whole time',{phone:25}],['Message people now and then',{phone:10}],['Listen to stuff I already downloaded',{phone:5}]]],
- ['lunch','weekend lunch','Where does lunch usually come from on a weekend?',[['Fast food or a taco shop',{fun:60}],['Cooked at home',{food:60}],['A café or a sit-down place',{fun:100}],['Leftovers',{food:30}]]],
+ ['lunch','school lunch','It’s lunch on a school day. What are you eating?',[['Something I went off campus to get',{fun:90}],['Food I brought',{food:50}],['Something I got delivered',{fun:120}],['The school lunch',{food:30}],['Chips or snacks',{fun:30}]]],
+ ['sat','weekends','It’s Saturday and you’re free. What are you most likely doing?',[['Going to a concert, a game or an event',{fun:90}],['Hanging out at the beach, a park or the skatepark',{fun:15}],['Gaming, or on my phone at home',{fun:10}],['Going to the mall, the movies or an arcade',{fun:60}]]],
+ ['drink','drinks','How often do you get boba, Starbucks, Dutch Bros or an energy drink?',[['A few times a week',{fun:55}],['Almost never',{}],['Most days',{fun:110}],['About once a week',{fun:25}]]],
+ ['clothes','clothes and shoes','Think about the last few clothes or shoes you got. Where were they mostly from?',[['Shein, Temu or TikTok Shop',{other:45}],['A sneaker drop or a designer brand',{other:140}],['Thrift stores or Depop',{other:25}],['Mall stores or brands like Nike, PacSun or Zumiez',{other:80}],['Hand-me-downs, or I don’t really get new clothes',{other:10}]]],
+ ['dash','delivery','How often do you eat DoorDash, Uber Eats or other delivery?',[['Once or twice a month',{fun:35,food:15}],['A few times a week',{fun:160}],['Almost never',{food:40}],['About once a week',{fun:80}]]],
+ ['room','your room at night','What’s on in your room when you fall asleep?',[['TV or LED lights',{utilities:10}],['Nothing',{}],['My PC or console, plus lights',{utilities:25}],['A fan',{utilities:5}]]],
+ ['games','skins and in-game stuff','A game or app you like has new skins, coins or a pass. How often do you get stuff like that?',[['Every month or so',{fun:25}],['Never',{}],['All the time',{fun:60}],['Once in a while',{fun:10}]]],
+ ['look','hair, skin and style','Hair, skin, nails, cologne: which sounds most like you?',[['Regular cuts, braids, nails, lashes or Sephora trips',{other:100}],['The basics',{other:10}],['A haircut now and then, plus some skincare',{other:45}],['A couple of products I restock',{other:25}]]],
+ ['dinner','dinner on your own','Nobody made dinner tonight. What do you eat?',[['Ramen, frozen food or something microwaved',{food:40}],['I order something',{fun:60}],['Cereal or snacks',{food:25}],['I cook something',{food:70}]]],
+ ['subs','subscriptions','Spotify, Netflix, PS Plus, iCloud, Snapchat+… how many paid apps do you use?',[['2 or 3',{other:30}],['6 or more',{other:85}],['0 or 1',{other:10}],['4 or 5',{other:55}]]],
+ ['phone','your phone','If it were up to you, when would you get a new phone?',[['When mine totally stops working',{}],['When the newest one comes out',{phone:45}],['Every couple of years',{phone:25}],['Whenever I find a good used one',{phone:15}]]],
+ ['lost','lost or broken stuff','Earbuds, chargers, water bottles: how often do you lose or break them?',[['A couple of times a year',{other:15}],['Constantly',{other:40}],['Almost never',{}]]],
+ ['hot','hot days','It’s 90° out and you’re home all day. What do you do?',[['Turn on a fan',{utilities:10}],['Blast the AC all day',{utilities:60}],['Open a window and deal with it',{}],['Turn the AC on just to sleep',{utilities:30}]]],
  ['shower','showers','How long is your usual shower?',[['10 to 20 minutes',{utilities:25}],['Under 5 minutes',{}],['More than 20 minutes',{utilities:40}],['5 to 10 minutes',{utilities:10}]]],
- ['apps','apps and subscriptions','How many paid apps, games and streaming services do you use, no matter who pays?',[['2 or 3',{other:30}],['6 or more',{other:85}],['0 or 1',{other:10}],['4 or 5',{other:55}]]],
- ['gift','gift money','You get some money for your birthday. A month later, where is it?',[['It went to one thing I’d been wanting',{save:100}],['I still have most of it',{save:250}],['It went to lots of small things',{save:50}],['I spent some and still have some',{save:150}]]]
+ ['gift','birthday money','Someone sends you birthday money on Cash App. A month later, where is it?',[['It went to one thing I’d been wanting',{save:100}],['I still have most of it',{save:250}],['It’s gone, and I’m not sure where',{save:40}],['I spent some and still have some',{save:150}]]]
 ];
 function quizBudget(a=S.quiz.a){const b={...QUIZ_BASE},why={};for(const [id,label,,opts] of QUIZ){const o=opts[a[id]];if(!o)continue;for(const [k,v] of Object.entries(o[1])){b[k]+=v;(why[k]??=[]).push([v,label]);}}return{b,why};}
 function quizView(){
  const i=Math.min(Math.max(0,S.quiz.i),QUIZ.length-1),[id,,q,opts]=QUIZ[i];
- return `<p class="eyebrow">Step 1 of 7 · About you</p><h1>A normal week</h1>
- <p class="lede">Answer for a normal week, not your best one. There are no right answers, and your choices aren’t graded or printed. At the end you’ll see how they’re used, and you can’t retake it.</p>
+ return `<p class="eyebrow">About you</p><h1>A normal week</h1>
+ <p class="lede">Answer for what you really do, not what you think you should do. Count things even if someone else pays. Your choices aren’t graded or printed, and you can’t retake this.</p>
  <section class="card" style="max-width:640px"><div class="card-head"><h2 style="margin:0">${esc(q)}</h2></div><p class="small muted" style="margin:0 0 12px" aria-live="polite">Question ${i+1} of ${QUIZ.length}</p>
  <div style="display:grid;gap:10px">${opts.map(([l],k)=>`<button class="pick" style="width:100%;box-sizing:border-box;text-align:left" data-quiz="${k}" aria-pressed="${S.quiz.a[id]===k}"><b>${esc(l)}</b></button>`).join('')}</div>
  ${i>0?'<p style="margin:14px 0 0"><button class="link" data-act="quizback">← Previous question</button></p>':''}</section>`;
@@ -1028,7 +1041,7 @@ app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.chk){e.p
 app.addEventListener('click',async e=>{
  const b=e.target.closest('button');if(!b)return;const d=b.dataset;
  if(d.go){go(d.go);return;}
- if(d.quiz!=null){const z=S.quiz;z.a[QUIZ[z.i][0]]=+d.quiz;if(z.i<QUIZ.length-1)z.i++;else{z.done=true;z.b=quizBudget().b;Object.assign(S.b,z.b);}save();render();scrollTo({top:0,behavior:'instant'});$('#main')?.focus({preventScroll:true});return;}
+ if(d.quiz!=null){const z=S.quiz;z.a[QUIZ[z.i][0]]=+d.quiz;if(z.i<QUIZ.length-1)z.i++;else{const was=intro();z.done=true;z.b=quizBudget().b;Object.assign(S.b,z.b);if(was)S.step='welcome';}save();render();scrollTo({top:0,behavior:'instant'});$('#main')?.focus({preventScroll:true});return;}
  if(d.job){if(d.job==='own'){if(S.job.id!=='own')S.job={id:'own',title:'',salary:null,url:''};}else{const j=JOBS.find(x=>x.id===d.job);S.job={id:j.id,title:j.title,salary:jobSalary(j),url:j.url};}save();render();return;}
  if(d.home){const r=RENTALS.find(x=>x.id===d.home);S.home={...S.home,id:r.id,total:r.total,url:r.url};save();render();return;}
  if(d.split){S.home.split=d.split;save();render();return;}
@@ -1063,7 +1076,7 @@ function practiceData(car=S.car){
 }
 function example(){const s=fresh(),j=JOBS[0],g=GARAGE[0],r=RENTALS[1];
  s.name='Worked example';s.job={id:j.id,title:j.title,salary:jobSalary(j),url:j.url};s.home={id:r.id,total:r.total,split:'2',custom:null,url:r.url};
- s.quiz.a={night:0,sat:1,hot:3,drink:0,phone:3,store:0,clothes:2,bus:1,lunch:0,shower:3,apps:0,gift:3};s.quiz.done=true;s.quiz.b=quizBudget(s.quiz.a).b;Object.assign(s.b,s.quiz.b);
+ s.quiz.a={lunch:3,sat:1,drink:3,clothes:3,dash:3,room:0,games:3,look:1,dinner:0,subs:0,phone:2,lost:0,hot:3,shower:3,gift:3};s.quiz.done=true;s.quiz.b=quizBudget(s.quiz.a).b;Object.assign(s.b,s.quiz.b);
  s.car={id:g.id,name:g.name,year:g.year,price:g.price,mpg:g.mpg,tank:g.tank,url:''};s.data=practiceData(s.car);s.dataSource='practice';s.step='paycheck';
  const fit=calc(s).best;s.fit={a:Math.round(fit.a),b:Math.round(fit.b*1e4)/1e4,tried:true,shown:false};
  const q=calc(s).qbest;s.quad={a:Math.round(q.a*10)/10,b:Math.round(q.b*10)/10,tried:true,shown:false};
@@ -1071,20 +1084,20 @@ function example(){const s=fresh(),j=JOBS[0],g=GARAGE[0],r=RENTALS[1];
 function menu(){
  const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-label="Project menu"><h2>Your project</h2><p class="small muted">${saveFailed?'This browser isn’t saving. Download a backup now.':'Saved in this browser.'}</p>
  <label class="f" style="margin:10px 0"><span>Your name (for the report and board)</span><input class="inp" id="nm" value="${esc(S.name)}"></label>
- <button class="btn" data-m="report">My report (for grading)</button><button class="btn alt" data-m="board">Exhibition board</button><button class="btn alt" data-m="export">Download backup (.json)</button><button class="btn alt" data-m="import">Open a backup file</button><button class="btn alt" data-m="copy">Copy backup as text</button><button class="btn alt" data-m="paste">Paste a backup</button><div id="pastebox" hidden><textarea class="inp" placeholder="Paste backup text here"></textarea><button class="btn" data-m="load">Open pasted backup</button></div><button class="btn alt" data-m="new" style="color:var(--debt)">Start a new project</button><button class="btn alt" data-m="close">Close</button></div>`;
+ ${intro()?'':'<button class="btn" data-m="report">My report (for grading)</button><button class="btn alt" data-m="board">Exhibition board</button>'}<button class="btn alt" data-m="export">Download backup (.json)</button><button class="btn alt" data-m="import">Open a backup file</button><button class="btn alt" data-m="copy">Copy backup as text</button><button class="btn alt" data-m="paste">Paste a backup</button><div id="pastebox" hidden><textarea class="inp" placeholder="Paste backup text here"></textarea><button class="btn" data-m="load">Open pasted backup</button></div><button class="btn alt" data-m="new" style="color:var(--debt)">Start a new project</button><button class="btn alt" data-m="close">Close</button></div>`;
  document.body.appendChild(m);
  m.querySelector('#nm').addEventListener('input',e=>{S.name=e.target.value;save();});
  m.addEventListener('click',async e=>{const b=e.target.closest('[data-m]');if(e.target===m||b?.dataset.m==='close'){m.remove();render();return;}if(!b)return;const k=b.dataset.m;
   if(k==='report'||k==='board'){m.remove();go(k);}
-  if(k==='export'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download=`life-and-car-${(S.name||'project').replace(/\W+/g,'-').toLowerCase()}.json`;a.click();toast('Backup downloaded');}
+  if(k==='export'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download=`${intro()?'exhibition':'life-and-car'}-${(S.name||'project').replace(/\W+/g,'-').toLowerCase()}.json`;a.click();toast('Backup downloaded');}
   if(k==='import')$('#import').click();
   if(k==='copy'){try{await navigator.clipboard.writeText(JSON.stringify(S));toast('Backup copied. Paste it into a note or doc.');}catch{toast('Copy was blocked here. Use Download backup.');}}
   if(k==='paste'){const box=m.querySelector('#pastebox');box.hidden=!box.hidden;if(!box.hidden)box.querySelector('textarea').focus();}
-  if(k==='load'){try{const d=JSON.parse(m.querySelector('#pastebox textarea').value);if(!(d.v>=3))throw 0;S=merge(d);save();m.remove();render();toast('Backup opened');}catch{toast('That text isn’t a Life & Car backup');}}
+  if(k==='load'){try{const d=JSON.parse(m.querySelector('#pastebox textarea').value);if(!(d.v>=3))throw 0;S=merge(d);save();m.remove();render();toast('Backup opened');}catch{toast('That text isn’t a project backup');}}
   if(k==='new'){m.remove();if(await ask('Start over? Your current work in this browser will be erased.','Start over')){S=fresh();save();go('welcome');}}
  });
 }
-$('#import').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!(d.v>=3))throw 0;S=merge(d);save();document.querySelector('.modal')?.remove();render();toast('Backup opened');}catch{toast('That file isn’t a Life & Car backup');}e.target.value='';});
+$('#import').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!(d.v>=3))throw 0;S=merge(d);save();document.querySelector('.modal')?.remove();render();toast('Backup opened');}catch{toast('That file isn’t a project backup');}e.target.value='';});
 render();
 </script>
 </body>

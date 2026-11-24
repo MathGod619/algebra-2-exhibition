@@ -3,7 +3,7 @@ An interactive Algebra 2 exhibition (Exponential Functions Project) about buying
 
 **index.html** is the 7-step project, built around one question: *will you be underwater on your first car?*
 
-1. **Paycheck**: a 12-question habits quiz with no dollar amounts sets living costs, then a real San Diego job and rental give take-home pay and a monthly budget. The report shows any number a student changes afterward
+1. **Paycheck**: a 15-question habits quiz about teen spending, with no dollar amounts and no mention of the car until it is finished, sets living costs, then a real San Diego job and rental give take-home pay and a monthly budget. The report shows any number a student changes afterward
 2. **Credit**: a simplified score simulator using FICO's five published category weights (the simulated tier sets the loan APR), 24% APR credit card checks, a doubling-time question, a payoff simulator, and research on a real card
 3. **Car**: a real listing from 2016 or newer, plus an insurance quote, tanks of gas, CO₂ (EPA 8,887 g/gal), and maintenance
 4. **Loan**: down payment, term, and tax and fees; a first-interest check; a 3/5/7/10-year comparison; 20% down; and leasing, balloon and upside-down explainers. The payoff schedule is data set #1
